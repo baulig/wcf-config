@@ -53,7 +53,7 @@ namespace WCF.Config {
 
 		public override Value GetValue (object instance)
 		{
-			return new BindingList (this, (IList<Binding>)instance);
+			return new _Value (this, (IList<Binding>)instance);
 		}
 
 		protected override void CreateSchema (XmlSchemaElement element)
@@ -74,6 +74,35 @@ namespace WCF.Config {
 		public override IList<Module> Children {
 			get { return children; }
 		}
+
+		class _Value : Value<BindingsModule, IList<Binding>> {
+			public _Value (BindingsModule module, IList<Binding> bindings)
+				: base (module, bindings)
+			{
+			}
+			
+			#region implemented abstract members of Value
+			public override bool HasChildren {
+				get { return true; }
+			}
+			
+			public override IList<Value> GetChildren ()
+			{
+				var list = new List<Value> ();
+				
+				foreach (var binding in Instance) {
+					foreach (var child in Module.Children) {
+						if (!child.IsSupported (binding))
+							continue;
+						list.Add (child.GetValue (binding));
+					}
+				}
+				
+				return list;
+			}
+			#endregion
+		}
+
 	}
 }
 

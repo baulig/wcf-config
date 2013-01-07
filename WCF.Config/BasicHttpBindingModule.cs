@@ -48,7 +48,7 @@ namespace WCF.Config {
 
 		public override Value GetValue (object instance)
 		{
-			return new BasicHttpBindingValue (this, (BasicHttpBinding)instance);
+			return new _Value (this, (BasicHttpBinding)instance);
 		}
 
 		protected override void CreateSchema (XmlSchemaElement element)
@@ -69,6 +69,34 @@ namespace WCF.Config {
 		{
 			throw new NotImplementedException ();
 		}
+
+		class _Value : Value<BasicHttpBindingModule, BasicHttpBinding> {
+			
+			public _Value (BasicHttpBindingModule module, BasicHttpBinding binding)
+				: base (module, binding)
+			{
+			}
+			
+			#region implemented abstract members of Value
+			
+			public override IList<Value> GetChildren ()
+			{
+				throw new InvalidOperationException ();
+			}
+			
+			public override bool HasChildren {
+				get { return false; }
+			}
+			
+			#endregion
+			
+			protected override void DoSerialize (XmlWriter writer)
+			{
+				writer.WriteAttributeString ("name", Instance.Name);
+				base.DoSerialize (writer);
+			}
+		}
+
 	}
 }
 
