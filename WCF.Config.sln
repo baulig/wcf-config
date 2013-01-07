@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WCF.Config", "WCF.Config\WCF.Config.csproj", "{2720F0E6-84F7-4D89-83AD-568D6423522A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2720F0E6-84F7-4D89-83AD-568D6423522A}.Debug|x86.ActiveCfg = Debug|x86
+		{2720F0E6-84F7-4D89-83AD-568D6423522A}.Debug|x86.Build.0 = Debug|x86
+		{2720F0E6-84F7-4D89-83AD-568D6423522A}.Release|x86.ActiveCfg = Release|x86
+		{2720F0E6-84F7-4D89-83AD-568D6423522A}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = WCF.Config\WCF.Config.csproj
+	EndGlobalSection
+EndGlobal
