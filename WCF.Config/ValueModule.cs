@@ -44,14 +44,14 @@ namespace WCF.Config {
 				if (attrs != null)
 					return attrs;
 
-				var list = new List<Attribute<T>> ();
+				var list = new AttributeList<T> ();
 				GetAttributes (list);
 				attrs = list.AsReadOnly ();
 				return attrs;
 			}
 		}
 
-		protected virtual void GetAttributes (List<Attribute<T>> list)
+		protected virtual void GetAttributes (AttributeList<T> list)
 		{
 		}
 
@@ -68,16 +68,6 @@ namespace WCF.Config {
 			value.Serialize (writer);
 		}
 
-		static XmlTypeCode GetTypeCode (object value)
-		{
-			if (value is string)
-				return XmlTypeCode.String;
-			else if (value is TimeSpan)
-				return XmlTypeCode.Time;
-			else
-				throw new ArgumentException ();
-		}
-			
 		protected override void CreateSchema (XmlSchemaComplexType type)
 		{
 			var defInstance = new T ();
@@ -88,9 +78,9 @@ namespace WCF.Config {
 
 				var value = attr.Func (defInstance);
 				if (!attr.IsRequired)
-					xsa.DefaultValue = value.ToString ();
+					xsa.DefaultValue = Value.SerializeValue (value);
 
-				var tc = GetTypeCode (value);
+				var tc = Value.GetTypeCode (value);
 				xsa.SchemaTypeName = XmlSchemaSimpleType.GetBuiltInSimpleType (tc).QualifiedName;
 
 				type.Attributes.Add (xsa);

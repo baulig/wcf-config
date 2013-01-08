@@ -26,27 +26,26 @@
 using System;
 using System.IO;
 using System.Text;
+using System.Configuration;
+using System.Reflection;
 using System.Xml;
 using System.Xml.Schema;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
+using System.ServiceModel.Configuration;
 
 namespace WCF.Config {
 
 	class MainClass {
 
-		public static void Validate ()
+		static T CreateConfigElement<T> (Binding binding)
+			where T : StandardBindingElement, new()
 		{
-			var schema = new XmlSchemaSet ();
-			schema.Add (Generator.Namespace, "test.xsd");
-
-			var settings = new XmlReaderSettings ();
-			settings.ValidationType = ValidationType.Schema;
-			settings.Schemas = schema;
-
-			var reader = XmlReader.Create ("test.xml", settings);
-			while (reader.Read ())
-				;
+			var element = new T ();
+			var bf = BindingFlags.Instance | BindingFlags.NonPublic;
+			var initFrom = typeof (T).GetMethod ("InitializeFrom", bf);
+			initFrom.Invoke (element, new object[] { binding });
+			return element;
 		}
 
 		public static void Main (string[] args)
@@ -60,6 +59,9 @@ namespace WCF.Config {
 
 			var http = new BasicHttpBinding ();
 			http.OpenTimeout = TimeSpan.FromHours (3);
+			http.MaxBufferSize = 8192;
+			http.HostNameComparisonMode = HostNameComparisonMode.StrongWildcard;
+			http.AllowCookies = true;
 
 			var netTcp = new NetTcpBinding ();
 			var custom = new CustomBinding ();
@@ -80,6 +82,24 @@ namespace WCF.Config {
 				;
 
 			Console.WriteLine ();
+
+			if (File.Exists ("test.config"))
+				File.Delete ("test.config");
+
+			var map = new ExeConfigurationFileMap ();
+			map.ExeConfigFilename = "test.config";
+
+			var config = ConfigurationManager.OpenMappedExeConfiguration (
+				map, ConfigurationUserLevel.None);
+
+			var httpElement = CreateConfigElement<BasicHttpBindingElement> (http);
+
+			var bindings = BindingsSection.GetSection (config);
+			bindings.BasicHttpBinding.Bindings.Add (httpElement);
+
+			config.Save (ConfigurationSaveMode.Modified);
+
+			Utils.Dump ("test.config");
 		}
 	}
 }

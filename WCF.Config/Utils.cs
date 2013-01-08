@@ -1,10 +1,10 @@
 //
-// BasicHttpBindingModule.cs
+// Utils.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
 //
-// Copyright (c) 2012 Xamarin Inc. (http://www.xamarin.com)
+// Copyright (c) 2013 Xamarin Inc. (http://www.xamarin.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,23 +24,51 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.IO;
 using System.Xml;
 using System.Xml.Schema;
-using System.Collections.Generic;
-using System.ServiceModel;
 
 namespace WCF.Config {
 
-	public class BasicHttpBindingModule : HttpBindingBaseModule<BasicHttpBinding> {
+	public static class Utils {
 
-		public override string Name {
-			get { return "basicHttpBinding"; }
-		}
-
-		protected override void GetAttributes (AttributeList<BasicHttpBinding> list)
+		public static void Dump (string filename)
 		{
-			base.GetAttributes (list);
+			if (!File.Exists (filename)) {
+				Console.WriteLine ("ERROR: File does not exist!");
+				return;
+			}
+			using (var reader = new StreamReader (filename)) {
+				Console.WriteLine (reader.ReadToEnd ());
+				Console.WriteLine ();
+			}
 		}
+		
+		public static void PrettyPrintXML (string filename)
+		{
+			var doc = new XmlDocument ();
+			doc.Load (filename);
+			
+			using (var writer = new XmlTextWriter (new StreamWriter (filename))) {
+				writer.Formatting = Formatting.Indented;
+				doc.WriteTo (writer);
+			}
+		}
+
+		public static void ValidateSchema (string xmlFilename, string schemaFilename)
+		{
+			var schema = new XmlSchemaSet ();
+			schema.Add (Generator.Namespace, schemaFilename);
+			
+			var settings = new XmlReaderSettings ();
+			settings.ValidationType = ValidationType.Schema;
+			settings.Schemas = schema;
+			
+			var reader = XmlReader.Create (xmlFilename, settings);
+			while (reader.Read ())
+				;
+		}
+		
 
 	}
 }

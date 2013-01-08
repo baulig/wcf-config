@@ -26,6 +26,7 @@
 using System;
 using System.Collections.Generic;
 using System.Xml;
+using System.Xml.Schema;
 
 namespace WCF.Config {
 
@@ -40,6 +41,32 @@ namespace WCF.Config {
 		}
 
 		public abstract void Serialize (XmlWriter writer);
+
+		internal static XmlTypeCode GetTypeCode (object value)
+		{
+			if (value is string)
+				return XmlTypeCode.String;
+			else if (value is bool)
+				return XmlTypeCode.Boolean;
+			else if (value is int)
+				return XmlTypeCode.Int;
+			else if (value is long)
+				return XmlTypeCode.Long;
+			else if (value is TimeSpan)
+				return XmlTypeCode.Time;
+			else
+				throw new ArgumentException (string.Format (
+					"Unknown attribute type `{0}'", value.GetType ()));
+		}
+		
+		internal static string SerializeValue (object value)
+		{
+			if (value == null)
+				return null;
+			if (value is bool)
+				return (bool)value ? "true" : "false";
+			return value.ToString ();
+		}
 	}
 
 	public abstract class Value<TInstance> : Value
@@ -83,7 +110,7 @@ namespace WCF.Config {
 						if (object.Equals (value, defaultValue))
 							continue;
 					}
-					writer.WriteAttributeString (attr.Name, value.ToString ());
+					writer.WriteAttributeString (attr.Name, SerializeValue (value));
 				}
 			}
 			DoSerialize (writer);

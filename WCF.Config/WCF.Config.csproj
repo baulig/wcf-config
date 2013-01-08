@@ -36,6 +36,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
@@ -49,6 +50,9 @@
     <Compile Include="Value.cs" />
     <Compile Include="ListModule.cs" />
     <Compile Include="ValueModule.cs" />
+    <Compile Include="Utils.cs" />
+    <Compile Include="HttpBindingBaseModule.cs" />
+    <Compile Include="AttributeList.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
