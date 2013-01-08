@@ -31,14 +31,28 @@ using System.Collections.Generic;
 namespace WCF.Config {
 
 	public abstract class ValueModule<T> : Module
-		where T : class
+		where T : class, new()
 	{
-		public abstract bool HasAttributes {
-			get;
+		IList<Attribute<T>> attrs;
+
+		public bool HasAttributes {
+			get { return Attributes.Count > 0; }
 		}
 			
-		public abstract IList<Attribute<T>> Attributes {
-			get;
+		public IList<Attribute<T>> Attributes {
+			get {
+				if (attrs != null)
+					return attrs;
+
+				var list = new List<Attribute<T>> ();
+				GetAttributes (list);
+				attrs = list.AsReadOnly ();
+				return attrs;
+			}
+		}
+
+		protected virtual void GetAttributes (List<Attribute<T>> list)
+		{
 		}
 
 		public override bool IsSupported (object instance)
@@ -53,17 +67,32 @@ namespace WCF.Config {
 			var value = GetValue ((T)instance);
 			value.Serialize (writer);
 		}
+
+		static XmlTypeCode GetTypeCode (object value)
+		{
+			if (value is string)
+				return XmlTypeCode.String;
+			else if (value is TimeSpan)
+				return XmlTypeCode.Time;
+			else
+				throw new ArgumentException ();
+		}
 			
 		protected override void CreateSchema (XmlSchemaComplexType type)
 		{
-			if (!HasAttributes)
-				return;
-				
+			var defInstance = new T ();
 			foreach (var attr in Attributes) {
 				var xsa = new XmlSchemaAttribute ();
 				xsa.Name = attr.Name;
 				xsa.Use = attr.IsRequired ? XmlSchemaUse.Required : XmlSchemaUse.Optional;
-					
+
+				var value = attr.Func (defInstance);
+				if (!attr.IsRequired)
+					xsa.DefaultValue = value.ToString ();
+
+				var tc = GetTypeCode (value);
+				xsa.SchemaTypeName = XmlSchemaSimpleType.GetBuiltInSimpleType (tc).QualifiedName;
+
 				type.Attributes.Add (xsa);
 			}
 		}

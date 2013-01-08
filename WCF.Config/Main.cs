@@ -59,6 +59,8 @@ namespace WCF.Config {
 			Console.WriteLine ();
 
 			var http = new BasicHttpBinding ();
+			http.OpenTimeout = TimeSpan.FromHours (3);
+
 			var netTcp = new NetTcpBinding ();
 			var custom = new CustomBinding ();
 

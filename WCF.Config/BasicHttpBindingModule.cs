@@ -32,26 +32,14 @@ using System.ServiceModel;
 namespace WCF.Config {
 
 	public class BasicHttpBindingModule : BindingModule<BasicHttpBinding> {
-		static IList<Attribute<BasicHttpBinding>> attrs;
-
-		static BasicHttpBindingModule ()
-		{
-			var list = new List<Attribute<BasicHttpBinding>> ();
-			list.Add (new Attribute<BasicHttpBinding> ("name", v => v.Name));
-			list.Add (new Attribute<BasicHttpBinding> ("openTimeout", v => v.OpenTimeout.ToString ()));
-			attrs = list.AsReadOnly ();
-		}
 
 		public override string Name {
 			get { return "basicHttpBinding"; }
 		}
 
-		public override bool HasAttributes {
-			get { return true; }
-		}
-
-		public override IList<Attribute<BasicHttpBinding>> Attributes {
-			get { return attrs; }
+		protected override void GetAttributes (List<Attribute<BasicHttpBinding>> list)
+		{
+			base.GetAttributes (list);
 		}
 
 		public override Value<BasicHttpBinding> GetValue (BasicHttpBinding instance)

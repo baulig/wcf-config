@@ -43,7 +43,7 @@ namespace WCF.Config {
 	}
 
 	public abstract class Value<TInstance> : Value
-		where TInstance : class
+		where TInstance : class, new()
 	{
 		public ValueModule<TInstance> Module {
 			get;
@@ -72,9 +72,18 @@ namespace WCF.Config {
 		public override void Serialize (XmlWriter writer)
 		{
 			writer.WriteStartElement ("test", Module.Name, Generator.Namespace);
+			var defaultInstance = new TInstance ();
 			if (Module.HasAttributes) {
 				foreach (var attr in Module.Attributes) {
-					writer.WriteAttributeString (attr.Name, attr.GetValue (Instance));
+					var value = attr.Func (Instance);
+					if (value == null)
+						continue;
+					if (!attr.IsRequired) {
+						var defaultValue = attr.Func (defaultInstance);
+						if (object.Equals (value, defaultValue))
+							continue;
+					}
+					writer.WriteAttributeString (attr.Name, value.ToString ());
 				}
 			}
 			DoSerialize (writer);
