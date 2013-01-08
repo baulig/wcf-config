@@ -47,6 +47,8 @@
     <Compile Include="BindingModule.cs" />
     <Compile Include="Attribute.cs" />
     <Compile Include="Value.cs" />
+    <Compile Include="ListModule.cs" />
+    <Compile Include="ValueModule.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

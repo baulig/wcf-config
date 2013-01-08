@@ -1,10 +1,10 @@
 //
-// BindingModule.cs
+// ListModule.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
 //
-// Copyright (c) 2012 Xamarin Inc. (http://www.xamarin.com)
+// Copyright (c) 2013 Xamarin Inc. (http://www.xamarin.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -32,10 +32,41 @@ using System.ServiceModel.Channels;
 
 namespace WCF.Config {
 
-	public abstract class BindingModule<T> : ValueModule<T>
-		where T : Binding
+	public abstract class ListModule<T> : Module
+		where T : class
 	{
-	}
+		public override bool IsSupported (object instance)
+		{
+			return instance is IList<T>;
+		}
 
+		protected override void CreateSchema (XmlSchemaComplexType type)
+		{
+			var all = new XmlSchemaAll ();
+			foreach (var child in Children) {
+				all.Items.Add (child.CreateSchema ());
+			}
+			type.Particle = all;
+			
+			base.CreateSchema (type);
+		}
+		
+		public override bool HasChildren {
+			get { return true; }
+		}
+		
+		public override void Serialize (XmlWriter writer, object instance)
+		{
+			writer.WriteStartElement ("test", Name, Generator.Namespace);
+			foreach (var item in (IList<T>)instance) {
+				foreach (var child in Children) {
+					if (!child.IsSupported (item))
+						continue;
+					child.Serialize (writer, item);
+				}
+			}
+			writer.WriteEndElement ();
+		}
+	}
 }
 

@@ -32,7 +32,7 @@ using System.ServiceModel.Channels;
 
 namespace WCF.Config {
 
-	public class BindingsModule : Module {
+	public class BindingsModule : ListModule<Binding> {
 		static IList<Module> children;
 
 		static BindingsModule ()
@@ -46,63 +46,9 @@ namespace WCF.Config {
 			get { return "bindings"; }
 		}
 
-		public override bool IsSupported (object instance)
-		{
-			return instance is IList<Binding>;
-		}
-
-		public override Value GetValue (object instance)
-		{
-			return new _Value (this, (IList<Binding>)instance);
-		}
-
-		protected override void CreateSchema (XmlSchemaElement element)
-		{
-			var complex = new XmlSchemaComplexType ();
-			var all = new XmlSchemaAll ();
-			foreach (var child in Children) {
-				all.Items.Add (child.CreateSchema ());
-			}
-			complex.Particle = all;
-			element.SchemaType = complex;
-		}
-
-		public override bool HasChildren {
-			get { return true; }
-		}
-
 		public override IList<Module> Children {
 			get { return children; }
 		}
-
-		class _Value : Value<BindingsModule, IList<Binding>> {
-			public _Value (BindingsModule module, IList<Binding> bindings)
-				: base (module, bindings)
-			{
-			}
-			
-			#region implemented abstract members of Value
-			public override bool HasChildren {
-				get { return true; }
-			}
-			
-			public override IList<Value> GetChildren ()
-			{
-				var list = new List<Value> ();
-				
-				foreach (var binding in Instance) {
-					foreach (var child in Module.Children) {
-						if (!child.IsSupported (binding))
-							continue;
-						list.Add (child.GetValue (binding));
-					}
-				}
-				
-				return list;
-			}
-			#endregion
-		}
-
 	}
 }
 

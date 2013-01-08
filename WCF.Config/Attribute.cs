@@ -27,7 +27,7 @@ using System;
 
 namespace WCF.Config {
 
-	public abstract class Attribute<T> {
+	public abstract class Attribute {
 		public string Name {
 			get;
 			set;
@@ -38,7 +38,31 @@ namespace WCF.Config {
 			set;
 		}
 
-		public abstract bool HasAttribute (T instance);
+		public abstract string GetValue (object instance);
+	}
+
+	public class Attribute<T> : Attribute
+		where T : class
+	{
+		Func<T, string> func;
+
+		public Attribute (string name, Func<T, string> func)
+			: this (name, func, true)
+		{ }
+
+		public Attribute (string name, Func<T, string> func, bool required)
+		{
+			this.Name = name;
+			this.IsRequired = required;
+			this.func = func;
+		}
+
+		public override string GetValue (object instance)
+		{
+			T value = instance as T;
+			if (value == null)
+				return null;
+			return func (value);
+		}
 	}
 }
-

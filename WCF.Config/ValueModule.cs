@@ -1,10 +1,10 @@
 //
-// BindingModule.cs
+// ValueModule.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
 //
-// Copyright (c) 2012 Xamarin Inc. (http://www.xamarin.com)
+// Copyright (c) 2013 Xamarin Inc. (http://www.xamarin.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -27,15 +27,46 @@ using System;
 using System.Xml;
 using System.Xml.Schema;
 using System.Collections.Generic;
-using System.ServiceModel;
-using System.ServiceModel.Channels;
 
 namespace WCF.Config {
 
-	public abstract class BindingModule<T> : ValueModule<T>
-		where T : Binding
+	public abstract class ValueModule<T> : Module
+		where T : class
 	{
-	}
+		public abstract bool HasAttributes {
+			get;
+		}
+			
+		public abstract IList<Attribute<T>> Attributes {
+			get;
+		}
 
+		public override bool IsSupported (object instance)
+		{
+			return instance is T;
+		}
+
+		public abstract Value<T> GetValue (T instance);
+
+		public override void Serialize (XmlWriter writer, object instance)
+		{
+			var value = GetValue ((T)instance);
+			value.Serialize (writer);
+		}
+			
+		protected override void CreateSchema (XmlSchemaComplexType type)
+		{
+			if (!HasAttributes)
+				return;
+				
+			foreach (var attr in Attributes) {
+				var xsa = new XmlSchemaAttribute ();
+				xsa.Name = attr.Name;
+				xsa.Use = attr.IsRequired ? XmlSchemaUse.Required : XmlSchemaUse.Optional;
+					
+				type.Attributes.Add (xsa);
+			}
+		}
+	}
 }
 

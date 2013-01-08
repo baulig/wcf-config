@@ -32,69 +32,40 @@ using System.ServiceModel;
 namespace WCF.Config {
 
 	public class BasicHttpBindingModule : BindingModule<BasicHttpBinding> {
+		static IList<Attribute<BasicHttpBinding>> attrs;
+
+		static BasicHttpBindingModule ()
+		{
+			var list = new List<Attribute<BasicHttpBinding>> ();
+			list.Add (new Attribute<BasicHttpBinding> ("name", v => v.Name));
+			list.Add (new Attribute<BasicHttpBinding> ("openTimeout", v => v.OpenTimeout.ToString ()));
+			attrs = list.AsReadOnly ();
+		}
+
 		public override string Name {
 			get { return "basicHttpBinding"; }
 		}
 
-		public override bool HasChildren {
-			get { return false; }
+		public override bool HasAttributes {
+			get { return true; }
 		}
 
-		public override IList<Module> Children {
-			get {
-				throw new InvalidOperationException ();
-			}
+		public override IList<Attribute<BasicHttpBinding>> Attributes {
+			get { return attrs; }
 		}
 
-		public override Value GetValue (object instance)
+		public override Value<BasicHttpBinding> GetValue (BasicHttpBinding instance)
 		{
-			return new _Value (this, (BasicHttpBinding)instance);
+			return new _Value (this, instance);
 		}
 
-		protected override void CreateSchema (XmlSchemaElement element)
-		{
-			var type = new XmlSchemaComplexType ();
-
-			var attr = new XmlSchemaAttribute ();
-			attr.Name = "name";
-			attr.Use = XmlSchemaUse.Required;
-
-			type.Attributes.Add (attr);
-
-			element.SchemaType = type;
-			element.MinOccurs = 0;
-		}
-
-		public override void Serialize (XmlWriter writer, BasicHttpBinding instance)
-		{
-			throw new NotImplementedException ();
-		}
-
-		class _Value : Value<BasicHttpBindingModule, BasicHttpBinding> {
+		class _Value : Value<BasicHttpBinding> {
 			
 			public _Value (BasicHttpBindingModule module, BasicHttpBinding binding)
 				: base (module, binding)
 			{
 			}
-			
-			#region implemented abstract members of Value
-			
-			public override IList<Value> GetChildren ()
-			{
-				throw new InvalidOperationException ();
-			}
-			
-			public override bool HasChildren {
-				get { return false; }
-			}
-			
-			#endregion
-			
-			protected override void DoSerialize (XmlWriter writer)
-			{
-				writer.WriteAttributeString ("name", Instance.Name);
-				base.DoSerialize (writer);
-			}
+
 		}
 
 	}

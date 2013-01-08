@@ -38,19 +38,30 @@ namespace WCF.Config {
 			get;
 		}
 
+		public virtual bool HasChildren {
+			get { return false; }
+		}
+
+		public virtual IList<Module> Children {
+			get {
+				throw new InvalidOperationException ();
+			}
+		}
+
 		public abstract bool IsSupported (object instance);
 
-		public abstract Value GetValue (object instance);
+		protected virtual void CreateSchema (XmlSchemaElement element)
+		{
+			var type = new XmlSchemaComplexType ();
 
-		public abstract bool HasChildren {
-			get;
+			CreateSchema (type);
+
+			element.SchemaType = type;
 		}
 
-		public abstract IList<Module> Children {
-			get;
+		protected virtual void CreateSchema (XmlSchemaComplexType type)
+		{
 		}
-
-		protected abstract void CreateSchema (XmlSchemaElement element);
 
 		public XmlSchemaElement CreateSchema ()
 		{
@@ -62,13 +73,7 @@ namespace WCF.Config {
 			return element;
 		}
 
-		public void Serialize (XmlWriter writer, object instance)
-		{
-			if (!IsSupported (instance))
-				throw new InvalidOperationException ();
-			var value = GetValue (instance);
-			value.Serialize (writer);
-		}
+		public abstract void Serialize (XmlWriter writer, object instance);
 	}
 }
 
