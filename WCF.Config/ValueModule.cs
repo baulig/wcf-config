@@ -81,7 +81,17 @@ namespace WCF.Config {
 					xsa.DefaultValue = Value.SerializeValue (value);
 
 				var tc = Value.GetTypeCode (value);
-				xsa.SchemaTypeName = XmlSchemaSimpleType.GetBuiltInSimpleType (tc).QualifiedName;
+				var builtin = XmlSchemaSimpleType.GetBuiltInSimpleType (tc);
+
+				var restriction = attr.Content as XmlSchemaSimpleTypeRestriction;
+				if (restriction != null) {
+					var simple = new XmlSchemaSimpleType ();
+					restriction.BaseTypeName = builtin.QualifiedName;
+					simple.Content = restriction;
+					xsa.SchemaType = simple;
+				} else {
+					xsa.SchemaTypeName = builtin.QualifiedName;
+				}
 
 				type.Attributes.Add (xsa);
 			}

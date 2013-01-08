@@ -24,6 +24,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Xml.Schema;
 
 namespace WCF.Config {
 
@@ -43,6 +44,30 @@ namespace WCF.Config {
 		public Func<T, object> Func {
 			get;
 			private set;
+		}
+
+		public XmlSchemaSimpleTypeContent Content {
+			get;
+			set;
+		}
+
+		public Attribute<T> SetContent (XmlSchemaSimpleTypeContent content)
+		{
+			this.Content = content;
+			return this;
+		}
+
+		public Attribute<T> SetMinMax (string min, string max)
+		{
+			var restriction = new XmlSchemaSimpleTypeRestriction ();
+			var minFacet = new XmlSchemaMinInclusiveFacet ();
+			minFacet.Value = min;
+			var maxFacet = new XmlSchemaMaxInclusiveFacet ();
+			maxFacet.Value = max;
+			restriction.Facets.Add (minFacet);
+			restriction.Facets.Add (maxFacet);
+			Content = restriction;
+			return this;
 		}
 
 		public Attribute (string name, Func<T, object> func)

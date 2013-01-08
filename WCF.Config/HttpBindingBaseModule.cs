@@ -39,9 +39,14 @@ namespace WCF.Config {
 			list.Add ("allowCookies", i => i.AllowCookies);
 			list.Add ("bypassProxyOnLocal", i => i.BypassProxyOnLocal);
 			// list.Add ("hostNameComparisonMode", i => i.HostNameComparisonMode);
-			list.Add ("maxBufferPoolSize", i => i.MaxBufferPoolSize);
-			list.Add ("maxBufferSize", i => i.MaxBufferSize);
-			list.Add ("maxReceivedMessageSize", i => i.MaxReceivedMessageSize);
+			list.Add ("maxBufferPoolSize", i => i.MaxBufferPoolSize).SetMinMax (
+				"0", "9223372036854775807");
+			list.Add ("maxBufferSize", i => i.MaxBufferSize).SetMinMax (
+				"1", int.MaxValue.ToString ());
+			list.Add ("maxReceivedMessageSize", i => i.MaxReceivedMessageSize).SetMinMax (
+				"1", "9223372036854775807");
+			list.Add ("useDefaultWebProxy", i => i.UseDefaultWebProxy);
+
 			base.GetAttributes (list);
 		}
 
