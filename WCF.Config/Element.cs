@@ -51,61 +51,6 @@ namespace WCF.Config {
 			this.Module = module;
 			this.Type = type;
 		}
-	}
 
-	public class ValueElement<T,U,V> : Element<T>
-		where U : class, new()
-		where V : Module<U>, new()
-	{
-		public ValueElement (Func<T, U> getter)
-			: base (new V (), typeof (U))
-		{
-			this.Getter = getter;
-		}
-
-		public Func<T, U> Getter {
-			get;
-			private set;
-		}
-
-		public override void Serialize (XmlWriter writer, T instance)
-		{
-			var value = Getter (instance);
-			if (value == null)
-				return;
-			Module.Serialize (writer, value);
-		}
-
-		public override void Deserialize (XmlReader reader, T instance)
-		{
-			Module.Deserialize (reader, Getter (instance));
-		}
-	}
-
-	public class CollectionElement<T,U,V> : Element<List<T>>
-		where U : class, T, new()
-		where V : Module<U>, new()
-	{
-		public CollectionElement ()
-			: base (new V (), typeof (U))
-		{
-		}
-
-		public override void Serialize (XmlWriter writer, List<T> instance)
-		{
-			foreach (var item in instance) {
-				var value = item as U;
-				if (value == null)
-					continue;
-				Module.Serialize (writer, value);
-			}
-		}
-
-		public override void Deserialize (XmlReader reader, List<T> instance)
-		{
-			var item = new U ();
-			instance.Add (item);
-			Module.Deserialize (reader, item);
-		}
 	}
 }

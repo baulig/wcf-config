@@ -36,11 +36,38 @@ namespace WCF.Config {
 
 	public abstract class CollectionModule<T> : Module<List<T>>
 	{
-		protected CollectionElement<T,U,V> AddElement<U,V> ()
+		protected class CollectionElement<U,V> : Element<List<T>>
 			where U : class, T, new()
 			where V : Module<U>, new()
 		{
-			var element = new CollectionElement<T,U,V> ();
+			public CollectionElement ()
+				: base (new V (), typeof (U))
+			{
+			}
+			
+			public override void Serialize (XmlWriter writer, List<T> instance)
+			{
+				foreach (var item in instance) {
+					var value = item as U;
+					if (value == null)
+						continue;
+					Module.Serialize (writer, value);
+				}
+			}
+			
+			public override void Deserialize (XmlReader reader, List<T> instance)
+			{
+				var item = new U ();
+				instance.Add (item);
+				Module.Deserialize (reader, item);
+			}
+		}
+
+		protected CollectionElement<U,V> AddElement<U,V> ()
+			where U : class, T, new()
+			where V : Module<U>, new()
+		{
+			var element = new CollectionElement<U,V> ();
 			AddElement (element);
 			return element;
 		}

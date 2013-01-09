@@ -35,11 +35,40 @@ namespace WCF.Config {
 	public abstract class ValueModule<T> : Module<T>
 		where T : class, new()
 	{
-		protected virtual ValueElement<T,U,V> AddElement<U,V> (Func<T, U> getter)
+		protected class ValueElement<U,V> : Element<T>
 			where U : class, new()
-				where V : Module<U>, new()
+			where V : Module<U>, new()
 		{
-			var element = new ValueElement<T,U,V> (getter);
+			public ValueElement (Func<T, U> getter)
+				: base (new V (), typeof (U))
+			{
+				this.Getter = getter;
+			}
+			
+			public Func<T, U> Getter {
+				get;
+				private set;
+			}
+			
+			public override void Serialize (XmlWriter writer, T instance)
+			{
+				var value = Getter (instance);
+				if (value == null)
+					return;
+				Module.Serialize (writer, value);
+			}
+			
+			public override void Deserialize (XmlReader reader, T instance)
+			{
+				Module.Deserialize (reader, Getter (instance));
+			}
+		}
+		
+		protected virtual ValueElement<U,V> AddElement<U,V> (Func<T, U> getter)
+			where U : class, new()
+			where V : Module<U>, new()
+		{
+			var element = new ValueElement<U,V> (getter);
 			AddElement (element);
 			return element;
 		}
