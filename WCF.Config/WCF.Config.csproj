@@ -53,7 +53,6 @@
     <Compile Include="AttributeList.cs" />
     <Compile Include="BasicHttpSecurityModule.cs" />
     <Compile Include="Element.cs" />
-    <Compile Include="ElementList.cs" />
     <Compile Include="CollectionModule.cs" />
     <Compile Include="HttpTransportSecurityModule.cs" />
     <Compile Include="RootModule.cs" />

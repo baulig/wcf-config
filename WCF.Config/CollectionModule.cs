@@ -36,33 +36,13 @@ namespace WCF.Config {
 
 	public abstract class CollectionModule<T> : Module<List<T>>
 	{
-		static IList<Element<List<T>>> elements;
-		
-		protected class CollectionElementList : ElementList<List<T>> {
-			public Element<List<T>> Add<U,V> ()
-				where U : ValueModule<V>, new()
-				where V : class, T, new()
-			{
-				var element = new Element<List<T>> (new U (), typeof (V), (c,a) => c.OfType<V> ());
-				base.Add (element);
-				return element;
-			}
-		}
-
-		public override IList<Element<List<T>>> Elements {
-			get {
-				if (elements != null)
-					return elements;
-				
-				var list = new CollectionElementList ();
-				GetElements (list);
-				elements = list.AsReadOnly ();
-				return elements;
-			}
-		}
-		
-		protected virtual void GetElements (CollectionElementList list)
+		protected CollectionElement<T,U,V> AddElement<U,V> ()
+			where U : class, T, new()
+			where V : Module<U>, new()
 		{
+			var element = new CollectionElement<T,U,V> ();
+			AddElement (element);
+			return element;
 		}
 
 		protected override void CreateSchema (XmlSchemaComplexType type)
@@ -78,23 +58,6 @@ namespace WCF.Config {
 
 			base.CreateSchema (type);
 		}
-
-		protected override void Serialize (XmlWriter writer, List<T> instance)
-		{
-			foreach (var element in Elements) {
-				foreach (var item in (IEnumerable)element.Getter (instance, false)) {
-					element.Module.Serialize (writer, item);
-				}
-			}
-		}
-
-		protected override void Deserialize (XmlReader reader, List<T> instance, Element<List<T>> element)
-		{
-			var item = (T)Activator.CreateInstance (element.Type);
-			instance.Add (item);
-			element.Module.Deserialize (reader, item);
-		}
-		
 	}
 }
 

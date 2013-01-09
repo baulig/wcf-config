@@ -28,7 +28,7 @@ using System.Xml.Schema;
 
 namespace WCF.Config {
 
-	public class Attribute<T> {
+	public abstract class Attribute<T> {
 
 		public string Name {
 			get;
@@ -45,15 +45,9 @@ namespace WCF.Config {
 			private set;
 		}
 
-		public Func<T, object> Getter {
-			get;
-			private set;
-		}
+		public abstract object GetValue (T instance);
 
-		public Action<T, object> Setter {
-			get;
-			private set;
-		}
+		public abstract void SetValue (T instance, object value);
 
 		public XmlSchemaSimpleTypeContent Content {
 			get;
@@ -73,18 +67,51 @@ namespace WCF.Config {
 			return this;
 		}
 
-		public Attribute (string name, Type type, Func<T, object> getter, Action<T, object> setter)
-			: this (name, type, false, getter, setter)
+		public Attribute (string name, Type type)
+			: this (name, type, false)
 		{ }
 
-		public Attribute (string name, Type type, bool required,
-		                  Func<T, object> getter, Action<T, object> setter)
+		public Attribute (string name, Type type, bool required)
 		{
 			this.Name = name;
 			this.Type = type;
-			this.Getter = getter;
-			this.Setter = setter;
 			this.IsRequired = required;
 		}
+	}
+
+	public class Attribute<T,U> : Attribute<T> {
+
+		public Attribute (string name, Func<T, U> getter, Action<T, U> setter)
+			: this (name, false, getter, setter)
+		{ }
+		
+		public Attribute (string name, bool required,
+		                  Func<T, U> getter, Action<T, U> setter)
+			: base (name, typeof (U), required)
+		{
+			this.Getter = getter;
+			this.Setter = setter;
+		}
+
+		public Func<T, U> Getter {
+			get;
+			private set;
+		}
+		
+		public Action<T, U> Setter {
+			get;
+			private set;
+		}
+
+		public override object GetValue (T instance)
+		{
+			return Getter (instance);
+		}
+
+		public override void SetValue (T instance, object value)
+		{
+			Setter (instance, (U)value);
+		}
+
 	}
 }

@@ -35,22 +35,13 @@ namespace WCF.Config {
 	public abstract class ValueModule<T> : Module<T>
 		where T : class, new()
 	{
-		static IList<Element<T>> elements;
-
-		public override IList<Element<T>> Elements {
-			get {
-				if (elements != null)
-					return elements;
-				
-				var list = new ElementList<T> ();
-				GetElements (list);
-				elements = list.AsReadOnly ();
-				return elements;
-			}
-		}
-		
-		protected virtual void GetElements (ElementList<T> list)
+		protected virtual ValueElement<T,U,V> AddElement<U,V> (Func<T, U> getter)
+			where U : class, new()
+				where V : Module<U>, new()
 		{
+			var element = new ValueElement<T,U,V> (getter);
+			AddElement (element);
+			return element;
 		}
 		
 		internal static XmlTypeCode GetTypeCode (Type type)
@@ -76,46 +67,6 @@ namespace WCF.Config {
 					"Unknown attribute type `{0}'", type));
 		}
 		
-		internal static string SerializeValue (object value)
-		{
-			if (value == null)
-				return null;
-			if (value is bool)
-				return (bool)value ? "true" : "false";
-			else if (value is Encoding)
-				return ((Encoding)value).WebName;
-			return value.ToString ();
-		}
-
-		protected override void Serialize (XmlWriter writer, T instance)
-		{
-			var defaultInstance = new T ();
-
-			foreach (var attr in Attributes) {
-				var value = attr.Getter (instance);
-				if (value == null)
-					continue;
-				if (!attr.IsRequired) {
-					var defaultValue = attr.Getter (defaultInstance);
-					if (object.Equals (value, defaultValue))
-						continue;
-				}
-				writer.WriteAttributeString (attr.Name, SerializeValue (value));
-			}
-
-			foreach (var element in Elements) {
-				var value = element.Getter (instance, false);
-				if (value == null)
-					continue;
-				element.Module.Serialize (writer, value);
-			}
-		}
-
-		protected override void Deserialize (XmlReader reader, T instance, Element<T> element)
-		{
-			element.Module.Deserialize (reader, element.Getter (instance, true));
-		}
-
 		XmlSchemaSimpleType CreateEnumerationType (XmlSchemaSimpleType baseType, Type type)
 		{
 			var simple = new XmlSchemaSimpleType ();
@@ -144,7 +95,7 @@ namespace WCF.Config {
 
 				type.Attributes.Add (xsa);
 
-				var value = attr.Getter (defInstance);
+				var value = attr.GetValue (defInstance);
 				if (!attr.IsRequired)
 					xsa.DefaultValue = SerializeValue (value);
 

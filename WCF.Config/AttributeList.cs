@@ -38,13 +38,10 @@ namespace WCF.Config {
 		public Attribute<T> Add<U> (string name, bool required,
 		                         Func<T, U> getter, Action<T, U> setter)
 		{
-			var attr = new Attribute<T> (name, typeof (U), required, i => {
-				return (object)getter (i);
-			}, (i,v) => {
-				setter (i, (U)v);
-			});
+			var attr = new Attribute<T,U> (name, required, getter, setter);
 			base.Add (attr);
 			return attr;
 		}
+
 	}
 }

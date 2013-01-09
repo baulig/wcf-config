@@ -38,10 +38,10 @@ namespace WCF.Config {
 			get { return "bindings"; }
 		}
 
-		protected override void GetElements (CollectionElementList list)
+		protected override void Populate ()
 		{
-			list.Add<BasicHttpBindingModule, BasicHttpBinding> ();
-			base.GetElements (list);
+			AddElement<BasicHttpBinding, BasicHttpBindingModule> ();
+			base.Populate ();
 		}
 
 	}

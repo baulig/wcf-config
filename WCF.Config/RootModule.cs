@@ -35,11 +35,10 @@ namespace WCF.Config {
 			get { return "wcf-config"; }
 		}
 
-		protected override void GetElements (ElementList<Configuration> list)
+		protected override void Populate ()
 		{
-			list.Add (new Element<Configuration> (
-				new BindingsModule (), typeof (List<Binding>), (i,d) => i.Bindings));
-			base.GetElements (list);
+			AddElement<List<Binding>,BindingsModule> (i => i.Bindings);
+			base.Populate ();
 		}
 	}
 }

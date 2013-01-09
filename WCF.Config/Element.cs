@@ -24,10 +24,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Xml;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace WCF.Config {
 
-	public class Element<T> {
+	public abstract class Element<T> {
 
 		public Module Module {
 			get;
@@ -38,17 +41,71 @@ namespace WCF.Config {
 			get;
 			private set;
 		}
+
+		public abstract void Serialize (XmlWriter writer, T instance);
 		
-		public Func<T, bool, object> Getter {
+		public abstract void Deserialize (XmlReader reader, T instance);
+
+		public Element (Module module, Type type)
+		{
+			this.Module = module;
+			this.Type = type;
+		}
+	}
+
+	public class ValueElement<T,U,V> : Element<T>
+		where U : class, new()
+		where V : Module<U>, new()
+	{
+		public ValueElement (Func<T, U> getter)
+			: base (new V (), typeof (U))
+		{
+			this.Getter = getter;
+		}
+
+		public Func<T, U> Getter {
 			get;
 			private set;
 		}
 
-		public Element (Module module, Type type, Func<T, bool, object> getter)
+		public override void Serialize (XmlWriter writer, T instance)
 		{
-			this.Module = module;
-			this.Type = type;
-			this.Getter = getter;
+			var value = Getter (instance);
+			if (value == null)
+				return;
+			Module.Serialize (writer, value);
+		}
+
+		public override void Deserialize (XmlReader reader, T instance)
+		{
+			Module.Deserialize (reader, Getter (instance));
+		}
+	}
+
+	public class CollectionElement<T,U,V> : Element<List<T>>
+		where U : class, T, new()
+		where V : Module<U>, new()
+	{
+		public CollectionElement ()
+			: base (new V (), typeof (U))
+		{
+		}
+
+		public override void Serialize (XmlWriter writer, List<T> instance)
+		{
+			foreach (var item in instance) {
+				var value = item as U;
+				if (value == null)
+					continue;
+				Module.Serialize (writer, value);
+			}
+		}
+
+		public override void Deserialize (XmlReader reader, List<T> instance)
+		{
+			var item = new U ();
+			instance.Add (item);
+			Module.Deserialize (reader, item);
 		}
 	}
 }

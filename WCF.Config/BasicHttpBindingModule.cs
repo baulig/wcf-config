@@ -43,10 +43,10 @@ namespace WCF.Config {
 			base.GetAttributes (list);
 		}
 
-		protected override void GetElements (ElementList<BasicHttpBinding> list)
+		protected override void Populate ()
 		{
-			list.Add<BasicHttpSecurityModule,BasicHttpSecurity> ((i,m) => i.Security);
-			base.GetElements (list);
+			AddElement<BasicHttpSecurity,BasicHttpSecurityModule> (i => i.Security);
+			base.Populate ();
 		}
 	}
 }

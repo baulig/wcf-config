@@ -65,15 +65,35 @@ namespace WCF.Config {
 		where T : class, new()
 	{
 		static IList<Attribute<T>> attrs;
-
+		List<Element<T>> elements;
+		bool populated;
+		
 		public bool HasElements {
 			get { return Elements.Count > 0; }
 		}
 		
-		public abstract IList<Element<T>> Elements {
-			get;
+		public IList<Element<T>> Elements {
+			get { return elements.AsReadOnly (); }
+		}
+
+		protected Module ()
+		{
+			elements = new List<Element<T>> ();
+			Populate ();
+			populated = true;
 		}
 		
+		protected virtual void Populate ()
+		{
+		}
+
+		protected void AddElement (Element<T> element)
+		{
+			if (populated)
+				throw new InvalidOperationException ();
+			elements.Add (element);
+		}
+
 		public bool HasAttributes {
 			get { return Attributes.Count > 0; }
 		}
@@ -94,43 +114,61 @@ namespace WCF.Config {
 		{
 		}
 
+		internal static string SerializeValue (object value)
+		{
+			if (value == null)
+				return null;
+			if (value is bool)
+				return (bool)value ? "true" : "false";
+			else if (value is Encoding)
+				return ((Encoding)value).WebName;
+			return value.ToString ();
+		}
+		
 		public override void Serialize (XmlWriter writer, object obj)
 		{
 			writer.WriteStartElement ("test", Name, Generator.Namespace);
 
-			Serialize (writer, (T) obj);
+			var instance = (T) obj;
+			var defaultInstance = new T ();
+				
+			foreach (var attr in Attributes) {
+				var value = attr.GetValue (instance);
+				if (value == null)
+					continue;
+				if (!attr.IsRequired) {
+					var defaultValue = attr.GetValue (defaultInstance);
+					if (object.Equals (value, defaultValue))
+						continue;
+				}
+				writer.WriteAttributeString (attr.Name, SerializeValue (value));
+			}
+				
+			foreach (var element in Elements) {
+				element.Serialize (writer, instance);
+			}
 
 			writer.WriteEndElement ();
 		}
 
-		protected static bool Deserialize (Type type, string value, out object result)
+		protected static object Deserialize (Type type, string value)
 		{
-			if (type == typeof(bool)) {
-				result = bool.Parse (value);
-				return true;
-			} else if (type == typeof(int)) {
-				result = int.Parse (value);
-				return true;
-			} else if (type == typeof(long)) {
-				result = long.Parse (value);
-				return true;
-			} else if (type == typeof(TimeSpan)) {
-				result = TimeSpan.Parse (value);
-				return true;
-			} else if (type == typeof(string)) {
-				result = value;
-				return true;
-			} else if (type.IsEnum) {
-				result = Enum.Parse (type, value);
-				return true;
-			} else if (type == typeof(Encoding)) {
-				result = Encoding.GetEncoding (value);
-				return true;
-			}
-
-			Console.WriteLine ("UNKNOWN TYPE: {0}", type);
-			result = null;
-			return false;
+			if (type == typeof(bool))
+				return bool.Parse (value);
+			else if (type == typeof(int))
+				return int.Parse (value);
+			else if (type == typeof(long))
+				return long.Parse (value);
+			else if (type == typeof(TimeSpan))
+				return TimeSpan.Parse (value);
+			else if (type == typeof(string))
+				return value;
+			else if (type.IsEnum)
+				return Enum.Parse (type, value);
+			else if (type == typeof(Encoding))
+				return Encoding.GetEncoding (value);
+			else
+				throw new InvalidOperationException ();
 		}
 
 		public override void Deserialize (XmlReader reader, object obj)
@@ -143,9 +181,8 @@ namespace WCF.Config {
 		{
 			while (reader.MoveToNextAttribute ()) {
 				var attr = Attributes.First (t => t.Name.Equals (reader.LocalName));
-				object value;
-				if (Deserialize (attr.Type, reader.Value, out value))
-					attr.Setter (instance, value);
+				object value = Deserialize (attr.Type, reader.Value);
+				attr.SetValue (instance, value);
 			}
 
 			reader.ReadStartElement (Name, Generator.Namespace);
@@ -162,16 +199,11 @@ namespace WCF.Config {
 				}
 
 				var element = Elements.First (t => t.Module.Name.Equals (reader.LocalName));
-				Deserialize (reader, instance, element);
+				element.Deserialize (reader, instance);
 			} while (reader.MoveToContent () != XmlNodeType.EndElement);
 
 			reader.ReadEndElement ();
 		}
-
-		protected abstract void Deserialize (XmlReader reader, T instance, Element<T> element);
-
-		protected abstract void Serialize (XmlWriter writer, T instance);
-
 	}
 }
 

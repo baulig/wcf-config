@@ -40,17 +40,21 @@ namespace WCF.Config {
 			base.GetAttributes (list);
 		}
 
-		protected override void GetElements (ElementList<BasicHttpSecurity> list)
+		protected override void Populate ()
 		{
-			list.Add<HttpTransportSecurityModule, HttpTransportSecurity> ((i,d) => {
+			AddElement<HttpTransportSecurity, HttpTransportSecurityModule> (i => i.Transport);
+			base.Populate ();
+		}
+
+#if FIXME
+			(i,d) => {
 				if (d || (i.Transport.ClientCredentialType != HttpClientCredentialType.None) ||
 				    (i.Transport.ProxyCredentialType != HttpProxyCredentialType.None) ||
 				    !string.IsNullOrEmpty (i.Transport.Realm))
 					return i.Transport;
 				return null;
 			});
-			base.GetElements (list);
-		}
+#endif
 
 	}
 }
