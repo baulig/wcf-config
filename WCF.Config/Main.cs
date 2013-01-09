@@ -60,7 +60,7 @@ namespace WCF.Config {
 			var http = new BasicHttpBinding ();
 			http.OpenTimeout = TimeSpan.FromHours (3);
 			http.MaxBufferSize = 8192;
-			http.HostNameComparisonMode = HostNameComparisonMode.StrongWildcard;
+			http.HostNameComparisonMode = HostNameComparisonMode.WeakWildcard;
 			http.AllowCookies = true;
 
 			var netTcp = new NetTcpBinding ();

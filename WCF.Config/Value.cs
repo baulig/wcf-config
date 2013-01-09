@@ -24,6 +24,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Text;
 using System.Collections.Generic;
 using System.Xml;
 using System.Xml.Schema;
@@ -42,21 +43,27 @@ namespace WCF.Config {
 
 		public abstract void Serialize (XmlWriter writer);
 
-		internal static XmlTypeCode GetTypeCode (object value)
+		internal static XmlTypeCode GetTypeCode (Type type)
 		{
-			if (value is string)
+			if (type == typeof (string))
 				return XmlTypeCode.String;
-			else if (value is bool)
+			else if (type == typeof (bool))
 				return XmlTypeCode.Boolean;
-			else if (value is int)
+			else if (type == typeof (int))
 				return XmlTypeCode.Int;
-			else if (value is long)
+			else if (type == typeof (long))
 				return XmlTypeCode.Long;
-			else if (value is TimeSpan)
+			else if (type == typeof (TimeSpan))
 				return XmlTypeCode.Time;
+			else if (type == typeof (Uri))
+				return XmlTypeCode.AnyUri;
+			else if (type.IsEnum)
+				return XmlTypeCode.String;
+			else if (type == typeof (Encoding))
+				return XmlTypeCode.String;
 			else
 				throw new ArgumentException (string.Format (
-					"Unknown attribute type `{0}'", value.GetType ()));
+					"Unknown attribute type `{0}'", type));
 		}
 		
 		internal static string SerializeValue (object value)
@@ -65,6 +72,8 @@ namespace WCF.Config {
 				return null;
 			if (value is bool)
 				return (bool)value ? "true" : "false";
+			else if (value is Encoding)
+				return ((Encoding)value).WebName;
 			return value.ToString ();
 		}
 	}

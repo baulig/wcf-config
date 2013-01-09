@@ -35,6 +35,11 @@ namespace WCF.Config {
 			get;
 			private set;
 		}
+
+		public Type Type {
+			get;
+			private set;
+		}
 		
 		public bool IsRequired {
 			get;
@@ -69,13 +74,15 @@ namespace WCF.Config {
 			return this;
 		}
 
-		public Attribute (string name, Func<T, object> getter, Action<T, object> setter)
-			: this (name, false, getter, setter)
+		public Attribute (string name, Type type, Func<T, object> getter, Action<T, object> setter)
+			: this (name, type, false, getter, setter)
 		{ }
 
-		public Attribute (string name, bool required, Func<T, object> getter, Action<T, object> setter)
+		public Attribute (string name, Type type, bool required,
+		                  Func<T, object> getter, Action<T, object> setter)
 		{
 			this.Name = name;
+			this.Type = type;
 			this.Getter = getter;
 			this.Setter = setter;
 			this.IsRequired = required;

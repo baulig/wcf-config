@@ -37,8 +37,12 @@ namespace WCF.Config {
 		protected override void GetAttributes (AttributeList<T> list)
 		{
 			list.Add ("allowCookies", i => i.AllowCookies, (i,v) => i.AllowCookies = v);
-			list.Add ("bypassProxyOnLocal", i => i.BypassProxyOnLocal, (i,v) => i.BypassProxyOnLocal = v);
-			// list.Add ("hostNameComparisonMode", i => i.HostNameComparisonMode);
+			list.Add (
+				"bypassProxyOnLocal", i => i.BypassProxyOnLocal,
+				(i,v) => i.BypassProxyOnLocal = v);
+			list.Add (
+				"hostNameComparisonMode", i => i.HostNameComparisonMode,
+				(i,v) => i.HostNameComparisonMode = v);
 			list.Add (
 				"maxBufferPoolSize", i => i.MaxBufferPoolSize,
 				(i,v) => i.MaxBufferPoolSize = v).SetMinMax ("0", "9223372036854775807");
@@ -48,7 +52,12 @@ namespace WCF.Config {
 			list.Add (
 				"maxReceivedMessageSize", i => i.MaxReceivedMessageSize,
 				(i,v) => i.MaxReceivedMessageSize = v).SetMinMax ("1", "9223372036854775807");
-			list.Add ("useDefaultWebProxy", i => i.UseDefaultWebProxy, (i,v) => i.UseDefaultWebProxy = v);
+			list.Add (
+				"useDefaultWebProxy", i => i.UseDefaultWebProxy,
+				(i,v) => i.UseDefaultWebProxy = v);
+			list.Add ("proxyAddress", i => i.ProxyAddress, (i,v) => i.ProxyAddress = v);
+			list.Add ("textEncoding", i => i.TextEncoding, (i,v) => i.TextEncoding = v);
+			list.Add ("transferMode", i => i.TransferMode, (i,v) => i.TransferMode = v);
 
 			base.GetAttributes (list);
 		}

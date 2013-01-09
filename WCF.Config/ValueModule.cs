@@ -68,6 +68,24 @@ namespace WCF.Config {
 			value.Serialize (writer);
 		}
 
+		XmlSchemaSimpleType CreateEnumerationType (XmlSchemaSimpleType baseType, Type type)
+		{
+			var simple = new XmlSchemaSimpleType ();
+
+			var restriction = new XmlSchemaSimpleTypeRestriction ();
+			restriction.BaseTypeName = baseType.QualifiedName;
+
+			simple.Content = restriction;
+
+			foreach (var member in Enum.GetNames (type)) {
+				var facet = new XmlSchemaEnumerationFacet ();
+				facet.Value = member;
+				restriction.Facets.Add (facet);
+			}
+
+			return simple;
+		}
+
 		protected override void CreateSchema (XmlSchemaComplexType type)
 		{
 			var defInstance = new T ();
@@ -76,24 +94,26 @@ namespace WCF.Config {
 				xsa.Name = attr.Name;
 				xsa.Use = attr.IsRequired ? XmlSchemaUse.Required : XmlSchemaUse.Optional;
 
+				type.Attributes.Add (xsa);
+
 				var value = attr.Getter (defInstance);
 				if (!attr.IsRequired)
 					xsa.DefaultValue = Value.SerializeValue (value);
 
-				var tc = Value.GetTypeCode (value);
+				var tc = Value.GetTypeCode (attr.Type);
 				var builtin = XmlSchemaSimpleType.GetBuiltInSimpleType (tc);
-
+				
 				var restriction = attr.Content as XmlSchemaSimpleTypeRestriction;
 				if (restriction != null) {
 					var simple = new XmlSchemaSimpleType ();
 					restriction.BaseTypeName = builtin.QualifiedName;
 					simple.Content = restriction;
 					xsa.SchemaType = simple;
+				} else if (attr.Type.IsEnum) {
+					xsa.SchemaType = CreateEnumerationType (builtin, attr.Type);
 				} else {
 					xsa.SchemaTypeName = builtin.QualifiedName;
 				}
-
-				type.Attributes.Add (xsa);
 			}
 		}
 	}
