@@ -24,6 +24,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Xml.Schema;
@@ -103,7 +104,7 @@ namespace WCF.Config {
 			}
 
 			foreach (var element in Elements) {
-				var value = element.Getter (instance);
+				var value = element.Getter (instance, false);
 				if (value == null)
 					continue;
 				element.Module.Serialize (writer, value);
@@ -112,7 +113,7 @@ namespace WCF.Config {
 
 		protected override void Deserialize (XmlReader reader, T instance, Element<T> element)
 		{
-			element.Module.Deserialize (reader, element.Getter (instance));
+			element.Module.Deserialize (reader, element.Getter (instance, true));
 		}
 
 		XmlSchemaSimpleType CreateEnumerationType (XmlSchemaSimpleType baseType, Type type)

@@ -45,7 +45,7 @@ namespace WCF.Config {
 
 		protected override void GetElements (ElementList<BasicHttpBinding> list)
 		{
-			list.Add<BasicHttpSecurityModule,BasicHttpSecurity> (i => i.Security);
+			list.Add<BasicHttpSecurityModule,BasicHttpSecurity> ((i,m) => i.Security);
 			base.GetElements (list);
 		}
 	}

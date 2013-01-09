@@ -103,7 +103,7 @@ namespace WCF.Config {
 			writer.WriteEndElement ();
 		}
 
-		static bool Deserialize (Type type, string value, out object result)
+		protected static bool Deserialize (Type type, string value, out object result)
 		{
 			if (type == typeof(bool)) {
 				result = bool.Parse (value);
@@ -150,15 +150,20 @@ namespace WCF.Config {
 
 			reader.ReadStartElement (Name, Generator.Namespace);
 
-			for (reader.MoveToContent (); reader.NodeType != XmlNodeType.EndElement; reader.MoveToContent ()) {
-				if (reader.NodeType != XmlNodeType.Element || reader.IsEmptyElement) {
+			if (reader.MoveToContent () == XmlNodeType.EndElement)
+				return;
+
+			do {
+				if (reader.NodeType == XmlNodeType.EndElement)
+					break;
+				if (reader.NodeType != XmlNodeType.Element) {
 					reader.Skip ();
 					continue;
 				}
 
 				var element = Elements.First (t => t.Module.Name.Equals (reader.LocalName));
 				Deserialize (reader, instance, element);
-			}
+			} while (reader.MoveToContent () != XmlNodeType.EndElement);
 
 			reader.ReadEndElement ();
 		}

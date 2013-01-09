@@ -38,7 +38,7 @@ namespace WCF.Config {
 		protected override void GetElements (ElementList<Configuration> list)
 		{
 			list.Add (new Element<Configuration> (
-				new BindingsModule (), typeof (List<Binding>), i => i.Bindings));
+				new BindingsModule (), typeof (List<Binding>), (i,d) => i.Bindings));
 			base.GetElements (list);
 		}
 	}

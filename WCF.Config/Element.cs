@@ -39,12 +39,12 @@ namespace WCF.Config {
 			private set;
 		}
 		
-		public Func<T, object> Getter {
+		public Func<T, bool, object> Getter {
 			get;
 			private set;
 		}
 
-		public Element (Module module, Type type, Func<T, object> getter)
+		public Element (Module module, Type type, Func<T, bool, object> getter)
 		{
 			this.Module = module;
 			this.Type = type;

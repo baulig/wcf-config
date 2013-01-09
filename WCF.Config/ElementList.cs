@@ -30,7 +30,7 @@ namespace WCF.Config {
 
 	public class ElementList<T> : List<Element<T>> {
 
-		public Element<T> Add<U,V> (Func<T, V> valueGetter)
+		public Element<T> Add<U,V> (Func<T, bool, V> valueGetter)
 			where U : ValueModule<V>, new()
 			where V : class, new()
 		{

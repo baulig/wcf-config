@@ -43,7 +43,7 @@ namespace WCF.Config {
 				where U : ValueModule<V>, new()
 				where V : class, T, new()
 			{
-				var element = new Element<List<T>> (new U (), typeof (V), c => c.OfType<V> ());
+				var element = new Element<List<T>> (new U (), typeof (V), (c,a) => c.OfType<V> ());
 				base.Add (element);
 				return element;
 			}
@@ -82,7 +82,7 @@ namespace WCF.Config {
 		protected override void Serialize (XmlWriter writer, List<T> instance)
 		{
 			foreach (var element in Elements) {
-				foreach (var item in (IEnumerable)element.Getter (instance)) {
+				foreach (var item in (IEnumerable)element.Getter (instance, false)) {
 					element.Module.Serialize (writer, item);
 				}
 			}

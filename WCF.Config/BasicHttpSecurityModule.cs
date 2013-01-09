@@ -42,8 +42,8 @@ namespace WCF.Config {
 
 		protected override void GetElements (ElementList<BasicHttpSecurity> list)
 		{
-			list.Add<HttpTransportSecurityModule, HttpTransportSecurity> (i => {
-				if ((i.Transport.ClientCredentialType != HttpClientCredentialType.None) ||
+			list.Add<HttpTransportSecurityModule, HttpTransportSecurity> ((i,d) => {
+				if (d || (i.Transport.ClientCredentialType != HttpClientCredentialType.None) ||
 				    (i.Transport.ProxyCredentialType != HttpProxyCredentialType.None) ||
 				    !string.IsNullOrEmpty (i.Transport.Realm))
 					return i.Transport;
