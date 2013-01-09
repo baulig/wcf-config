@@ -24,6 +24,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.IO;
 using System.Text;
 using System.Linq;
 using System.Collections.Generic;
@@ -35,30 +36,27 @@ using System.ServiceModel.Channels;
 namespace WCF.Config {
 
 	public class Generator {
-		static readonly IList<Module> modules;
-		static readonly BindingsModule bindingsModule;
+		static readonly RootModule rootModule = new RootModule ();
 
 		public const string Namespace = "https://github.com/baulig/wcf-config/schema";
-
-		static Generator ()
-		{
-			var list = new List<Module> ();
-			bindingsModule = new BindingsModule ();
-			list.Add (bindingsModule);
-			modules = list.AsReadOnly ();
-		}
 
 		public static XmlSchema CreateSchema ()
 		{
 			var schema = new XmlSchema ();
 			schema.TargetNamespace = Namespace;
-			foreach (var module in modules) {
-				schema.Items.Add (module.CreateSchema ());
-			}
+			schema.Items.Add (rootModule.CreateSchema ());
 			return schema;
 		}
 
 		public static string Serialize (params Binding[] bindings)
+		{
+			var config = new Configuration ();
+			config.Bindings.AddRange (bindings);
+
+			return Serialize (config);
+		}
+
+		public static string Serialize (Configuration config)
 		{
 			var settings = new XmlWriterSettings ();
 			settings.ConformanceLevel = ConformanceLevel.Document;
@@ -67,10 +65,25 @@ namespace WCF.Config {
 
 			var output = new StringBuilder ();
 			using (var writer = XmlTextWriter.Create (output, settings)) {
-				bindingsModule.Serialize (writer, bindings);
+				rootModule.Serialize (writer, config);
 			}
 
 			return output.ToString ();
+		}
+
+		public static void Deserialize (XmlSchema schema, string xml)
+		{
+			var settings = new XmlReaderSettings ();
+			settings.ValidationType = ValidationType.Schema;
+			settings.Schemas.Add (schema);
+
+			var reader = XmlReader.Create (new StringReader (xml), settings);
+
+			reader.MoveToContent ();
+			if (reader.IsEmptyElement)
+				return;
+
+			rootModule.Deserialize (reader);
 		}
 	}
 }

@@ -158,6 +158,15 @@ namespace WCF.Config {
 				}
 			}
 
+			if (HasElements) {
+				var all = new XmlSchemaAll ();
+				all.MinOccurs = 0;
+				foreach (var element in Elements) {
+					all.Items.Add (element.Module.CreateSchema ());
+				}
+				type.Particle = all;
+			}
+				
 			base.CreateSchema (type);
 		}
 	}

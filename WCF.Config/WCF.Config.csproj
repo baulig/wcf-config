@@ -56,6 +56,8 @@
     <Compile Include="ElementList.cs" />
     <Compile Include="CollectionModule.cs" />
     <Compile Include="HttpTransportSecurityModule.cs" />
+    <Compile Include="RootModule.cs" />
+    <Compile Include="Configuration.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

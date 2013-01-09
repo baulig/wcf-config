@@ -56,6 +56,8 @@ namespace WCF.Config {
 		}
 
 		public abstract void Serialize (XmlWriter writer, object obj);
+
+		public abstract void Deserialize (XmlReader reader);
 	}
 
 	public abstract class Module<T> : Module {
@@ -89,20 +91,6 @@ namespace WCF.Config {
 		{
 		}
 
-		protected override void CreateSchema (XmlSchemaComplexType type)
-		{
-			if (HasElements) {
-				var all = new XmlSchemaAll ();
-				all.MinOccurs = 0;
-				foreach (var element in Elements) {
-					all.Items.Add (element.Module.CreateSchema ());
-				}
-				type.Particle = all;
-			}
-			
-			base.CreateSchema (type);
-		}
-
 		public override void Serialize (XmlWriter writer, object obj)
 		{
 			writer.WriteStartElement ("test", Name, Generator.Namespace);
@@ -110,6 +98,32 @@ namespace WCF.Config {
 			Serialize (writer, (T) obj);
 
 			writer.WriteEndElement ();
+		}
+
+		public override void Deserialize (XmlReader reader)
+		{
+			Console.WriteLine ("DESERIALIZE: {0}", this);
+			reader.ReadStartElement (Name, Generator.Namespace);
+			
+			for (reader.MoveToContent (); reader.NodeType != XmlNodeType.EndElement; reader.MoveToContent ()) {
+				if (reader.NodeType != XmlNodeType.Element || reader.IsEmptyElement) {
+					reader.Skip ();
+					continue;
+				}
+
+				var element = Elements.FirstOrDefault (t => t.Module.Name.Equals (reader.LocalName));
+				if (element == null) {
+					Console.WriteLine ("UNKNOWN ELEMENT: {0}", reader.Name);
+					return;
+				}
+
+				Console.WriteLine ("ELEMENT: {0}", reader.Name);
+				element.Module.Deserialize (reader);
+				break;
+			}
+
+			reader.ReadEndElement ();
+			Console.WriteLine ("DESERIALIZE DONE: {0}", this);
 		}
 
 		protected abstract void Serialize (XmlWriter writer, T instance);

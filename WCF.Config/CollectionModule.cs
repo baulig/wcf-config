@@ -65,6 +65,20 @@ namespace WCF.Config {
 		{
 		}
 
+		protected override void CreateSchema (XmlSchemaComplexType type)
+		{
+			var sequence = new XmlSchemaSequence ();
+			foreach (var element in Elements) {
+				var item = element.Module.CreateSchema ();
+				item.MinOccurs = 0;
+				item.MaxOccursString = "unbounded";
+				sequence.Items.Add (item);
+			}
+			type.Particle = sequence;
+
+			base.CreateSchema (type);
+		}
+
 		protected override void Serialize (XmlWriter writer, ICollection<T> instance)
 		{
 			foreach (var element in Elements) {

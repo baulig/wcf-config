@@ -72,7 +72,7 @@ namespace WCF.Config {
 			custom.Name = "myCustomBinding";
 			custom.Elements.Add (new TextMessageEncodingBindingElement ());
 
-			var xml = Generator.Serialize (http, netTcp, custom);
+			var xml = Generator.Serialize (http, http, netTcp, custom);
 			Console.WriteLine (xml);
 			Console.WriteLine ();
 
@@ -111,6 +111,10 @@ namespace WCF.Config {
 			config.Save (ConfigurationSaveMode.Modified);
 
 			Utils.Dump ("test.config");
+
+			Console.WriteLine ();
+
+			Generator.Deserialize (schema, xml);
 		}
 	}
 }
