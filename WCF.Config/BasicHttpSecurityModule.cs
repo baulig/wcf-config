@@ -37,19 +37,16 @@ namespace WCF.Config {
 		protected override void Populate ()
 		{
 			AddAttribute ("mode", i => i.Mode, (i,v) => i.Mode = v);
-			AddElement<HttpTransportSecurity, HttpTransportSecurityModule> (i => i.Transport);
+			AddElement<HttpTransportSecurity, HttpTransportSecurityModule> (
+				i => i.Transport).IsModified (i => !IsDefault (i.Transport));
 			base.Populate ();
 		}
 
-#if FIXME
-			(i,d) => {
-				if (d || (i.Transport.ClientCredentialType != HttpClientCredentialType.None) ||
-				    (i.Transport.ProxyCredentialType != HttpProxyCredentialType.None) ||
-				    !string.IsNullOrEmpty (i.Transport.Realm))
-					return i.Transport;
-				return null;
-			});
-#endif
-
+		static bool IsDefault (HttpTransportSecurity t)
+		{
+			return t.ClientCredentialType == HttpClientCredentialType.None &&
+				t.ProxyCredentialType == HttpProxyCredentialType.None &&
+				string.IsNullOrEmpty (t.Realm);
+		}
 	}
 }

@@ -64,7 +64,7 @@ namespace WCF.Config {
 			http.AllowCookies = true;
 			http.Security.Mode = BasicHttpSecurityMode.Transport;
 			http.TransferMode = TransferMode.StreamedRequest;
-			http.Security.Transport.ProxyCredentialType = HttpProxyCredentialType.Digest;
+			// http.Security.Transport.ProxyCredentialType = HttpProxyCredentialType.Digest;
 
 			var netTcp = new NetTcpBinding ();
 

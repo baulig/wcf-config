@@ -42,25 +42,40 @@ namespace WCF.Config {
 			public ValueElement (Func<T, U> getter)
 				: base (new V (), typeof (U))
 			{
-				this.Getter = getter;
+				this.ValueGetter = getter;
 			}
 			
-			public Func<T, U> Getter {
+			public Func<T, U> ValueGetter {
 				get;
 				private set;
 			}
-			
+
+			public Func<T, bool> IsModifiedFunc {
+				get;
+				private set;
+			}
+
+			public ValueElement<U,V> IsModified (Func<T, bool> func)
+			{
+				IsModifiedFunc = func;
+				return this;
+			}
+
 			public override void Serialize (XmlWriter writer, T instance)
 			{
-				var value = Getter (instance);
+				var value = ValueGetter (instance);
 				if (value == null)
 					return;
+
+				if (IsModifiedFunc != null && !IsModifiedFunc (instance))
+					return;
+
 				Module.Serialize (writer, value);
 			}
 			
 			public override void Deserialize (XmlReader reader, T instance)
 			{
-				Module.Deserialize (reader, Getter (instance));
+				Module.Deserialize (reader, ValueGetter (instance));
 			}
 		}
 		
