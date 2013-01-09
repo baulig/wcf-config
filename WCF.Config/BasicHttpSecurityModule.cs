@@ -34,14 +34,9 @@ namespace WCF.Config {
 			get { return "security"; }
 		}
 
-		protected override void GetAttributes (AttributeList<BasicHttpSecurity> list)
-		{
-			list.Add ("mode", i => i.Mode, (i,v) => i.Mode = v);
-			base.GetAttributes (list);
-		}
-
 		protected override void Populate ()
 		{
+			AddAttribute ("mode", i => i.Mode, (i,v) => i.Mode = v);
 			AddElement<HttpTransportSecurity, HttpTransportSecurityModule> (i => i.Transport);
 			base.Populate ();
 		}

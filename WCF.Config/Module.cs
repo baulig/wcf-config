@@ -64,12 +64,12 @@ namespace WCF.Config {
 	public abstract class Module<T> : Module
 		where T : class, new()
 	{
-		static IList<Attribute<T>> attrs;
 		List<Element<T>> elements;
+		List<Attribute<T>> attributes;
 		bool populated;
 		
 		public bool HasElements {
-			get { return Elements.Count > 0; }
+			get { return elements.Count > 0; }
 		}
 		
 		public IList<Element<T>> Elements {
@@ -79,6 +79,7 @@ namespace WCF.Config {
 		protected Module ()
 		{
 			elements = new List<Element<T>> ();
+			attributes = new List<Attribute<T>> ();
 			Populate ();
 			populated = true;
 		}
@@ -94,26 +95,34 @@ namespace WCF.Config {
 			elements.Add (element);
 		}
 
+		protected void AddAttribute (Attribute<T> attribute)
+		{
+			if (populated)
+				throw new InvalidOperationException ();
+			attributes.Add (attribute);
+		}
+
+		public Attribute<T> AddAttribute<U> (string name, Func<T, U> getter, Action<T, U> setter)
+		{
+			return AddAttribute (name, false, getter, setter);
+		}
+		
+		public Attribute<T> AddAttribute<U> (string name, bool required,
+		                                     Func<T, U> getter, Action<T, U> setter)
+		{
+			var attribute = new Attribute<T,U> (name, required, getter, setter);
+			AddAttribute (attribute);
+			return attribute;
+		}
+
 		public bool HasAttributes {
-			get { return Attributes.Count > 0; }
+			get { return attributes.Count > 0; }
 		}
 		
 		public IList<Attribute<T>> Attributes {
-			get {
-				if (attrs != null)
-					return attrs;
-				
-				var list = new AttributeList<T> ();
-				GetAttributes (list);
-				attrs = list.AsReadOnly ();
-				return attrs;
-			}
+			get { return attributes.AsReadOnly (); }
 		}
 		
-		protected virtual void GetAttributes (AttributeList<T> list)
-		{
-		}
-
 		internal static string SerializeValue (object value)
 		{
 			if (value == null)

@@ -35,13 +35,14 @@ namespace WCF.Config {
 	public abstract class BindingModule<T> : ValueModule<T>
 		where T : Binding, new()
 	{
-		protected override void GetAttributes (AttributeList<T> list)
+		protected override void Populate ()
 		{
-			list.Add ("name", true, v => v.Name, (i,v) => i.Name = v);
-			list.Add ("openTimeout", v => v.OpenTimeout, (i,v) => i.OpenTimeout = v);
-			list.Add ("closeTimeout", v => v.CloseTimeout, (i,v) => i.CloseTimeout = v);
-			list.Add ("receiveTimeout", v => v.ReceiveTimeout, (i,v) => i.ReceiveTimeout = v);
-			list.Add ("sendTimeout", v => v.SendTimeout, (i,v) => i.SendTimeout = v);
+			AddAttribute ("name", true, v => v.Name, (i,v) => i.Name = v);
+			AddAttribute ("openTimeout", v => v.OpenTimeout, (i,v) => i.OpenTimeout = v);
+			AddAttribute ("closeTimeout", v => v.CloseTimeout, (i,v) => i.CloseTimeout = v);
+			AddAttribute ("receiveTimeout", v => v.ReceiveTimeout, (i,v) => i.ReceiveTimeout = v);
+			AddAttribute ("sendTimeout", v => v.SendTimeout, (i,v) => i.SendTimeout = v);
+			base.Populate ();
 		}
 	}
 }

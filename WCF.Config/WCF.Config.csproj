@@ -50,7 +50,6 @@
     <Compile Include="ValueModule.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="HttpBindingBaseModule.cs" />
-    <Compile Include="AttributeList.cs" />
     <Compile Include="BasicHttpSecurityModule.cs" />
     <Compile Include="Element.cs" />
     <Compile Include="CollectionModule.cs" />

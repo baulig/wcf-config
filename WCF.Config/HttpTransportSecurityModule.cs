@@ -33,17 +33,17 @@ namespace WCF.Config {
 		public override string Name {
 			get { return "transport"; }
 		}
-		
-		protected override void GetAttributes (AttributeList<HttpTransportSecurity> list)
+
+		protected override void Populate ()
 		{
-			list.Add (
+			AddAttribute (
 				"clientCredentialType", i => i.ClientCredentialType,
 				(i,v) => i.ClientCredentialType = v);
-			list.Add (
+			AddAttribute (
 				"proxyCredentialType", i => i.ProxyCredentialType,
 				(i,v) => i.ProxyCredentialType = v);
-			list.Add ("realm", i => i.Realm, (i,v) => i.Realm = v);
-			base.GetAttributes (list);
+			AddAttribute ("realm", i => i.Realm, (i,v) => i.Realm = v);
+			base.Populate ();
 		}
 		
 	}

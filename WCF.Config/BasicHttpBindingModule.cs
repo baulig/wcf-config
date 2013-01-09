@@ -37,14 +37,9 @@ namespace WCF.Config {
 			get { return "basicHttpBinding"; }
 		}
 
-		protected override void GetAttributes (AttributeList<BasicHttpBinding> list)
-		{
-			list.Add ("messageEncoding", i => i.MessageEncoding, (i,v) => i.MessageEncoding = v);
-			base.GetAttributes (list);
-		}
-
 		protected override void Populate ()
 		{
+			AddAttribute ("messageEncoding", i => i.MessageEncoding, (i,v) => i.MessageEncoding = v);
 			AddElement<BasicHttpSecurity,BasicHttpSecurityModule> (i => i.Security);
 			base.Populate ();
 		}
