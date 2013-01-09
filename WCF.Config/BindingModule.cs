@@ -37,11 +37,11 @@ namespace WCF.Config {
 	{
 		protected override void GetAttributes (AttributeList<T> list)
 		{
-			list.Add ("name", true, v => v.Name);
-			list.Add ("openTimeout", v => v.OpenTimeout);
-			list.Add ("closeTimeout", v => v.CloseTimeout);
-			list.Add ("receiveTimeout", v => v.ReceiveTimeout);
-			list.Add ("sendTimeout", v => v.SendTimeout);
+			list.Add ("name", true, v => v.Name, (i,v) => i.Name = v);
+			list.Add ("openTimeout", v => v.OpenTimeout, (i,v) => i.OpenTimeout = v);
+			list.Add ("closeTimeout", v => v.CloseTimeout, (i,v) => i.CloseTimeout = v);
+			list.Add ("receiveTimeout", v => v.ReceiveTimeout, (i,v) => i.ReceiveTimeout = v);
+			list.Add ("sendTimeout", v => v.SendTimeout, (i,v) => i.SendTimeout = v);
 		}
 	}
 }

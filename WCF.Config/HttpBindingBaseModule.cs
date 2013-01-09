@@ -36,16 +36,19 @@ namespace WCF.Config {
 	{
 		protected override void GetAttributes (AttributeList<T> list)
 		{
-			list.Add ("allowCookies", i => i.AllowCookies);
-			list.Add ("bypassProxyOnLocal", i => i.BypassProxyOnLocal);
+			list.Add ("allowCookies", i => i.AllowCookies, (i,v) => i.AllowCookies = v);
+			list.Add ("bypassProxyOnLocal", i => i.BypassProxyOnLocal, (i,v) => i.BypassProxyOnLocal = v);
 			// list.Add ("hostNameComparisonMode", i => i.HostNameComparisonMode);
-			list.Add ("maxBufferPoolSize", i => i.MaxBufferPoolSize).SetMinMax (
-				"0", "9223372036854775807");
-			list.Add ("maxBufferSize", i => i.MaxBufferSize).SetMinMax (
-				"1", int.MaxValue.ToString ());
-			list.Add ("maxReceivedMessageSize", i => i.MaxReceivedMessageSize).SetMinMax (
-				"1", "9223372036854775807");
-			list.Add ("useDefaultWebProxy", i => i.UseDefaultWebProxy);
+			list.Add (
+				"maxBufferPoolSize", i => i.MaxBufferPoolSize,
+				(i,v) => i.MaxBufferPoolSize = v).SetMinMax ("0", "9223372036854775807");
+			list.Add (
+				"maxBufferSize", i => i.MaxBufferSize,
+				(i,v) => i.MaxBufferSize = v).SetMinMax ("1", int.MaxValue.ToString ());
+			list.Add (
+				"maxReceivedMessageSize", i => i.MaxReceivedMessageSize,
+				(i,v) => i.MaxReceivedMessageSize = v).SetMinMax ("1", "9223372036854775807");
+			list.Add ("useDefaultWebProxy", i => i.UseDefaultWebProxy, (i,v) => i.UseDefaultWebProxy = v);
 
 			base.GetAttributes (list);
 		}

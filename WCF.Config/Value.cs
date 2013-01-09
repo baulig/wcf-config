@@ -102,11 +102,11 @@ namespace WCF.Config {
 			var defaultInstance = new TInstance ();
 			if (Module.HasAttributes) {
 				foreach (var attr in Module.Attributes) {
-					var value = attr.Func (Instance);
+					var value = attr.Getter (Instance);
 					if (value == null)
 						continue;
 					if (!attr.IsRequired) {
-						var defaultValue = attr.Func (defaultInstance);
+						var defaultValue = attr.Getter (defaultInstance);
 						if (object.Equals (value, defaultValue))
 							continue;
 					}

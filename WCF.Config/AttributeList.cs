@@ -35,14 +35,19 @@ namespace WCF.Config {
 		{
 		}
 
-		public Attribute<T> Add (string name, Func<T, object> func)
+		public Attribute<T> Add<U> (string name, Func<T, U> getter, Action<T, U> setter)
 		{
-			return Add (name, false, func);
+			return Add (name, false, getter, setter);
 		}
 
-		public Attribute<T> Add (string name, bool required, Func<T, object> func)
+		public Attribute<T> Add<U> (string name, bool required,
+		                         Func<T, U> getter, Action<T, U> setter)
 		{
-			var attr = new Attribute<T> (name, required, func);
+			var attr = new Attribute<T> (name, required, i => {
+				return (object)getter (i);
+			}, (i,v) => {
+				throw new NotImplementedException ();
+			});
 			base.Add (attr);
 			return attr;
 		}

@@ -41,7 +41,12 @@ namespace WCF.Config {
 			private set;
 		}
 
-		public Func<T, object> Func {
+		public Func<T, object> Getter {
+			get;
+			private set;
+		}
+
+		public Action<T, object> Setter {
 			get;
 			private set;
 		}
@@ -49,12 +54,6 @@ namespace WCF.Config {
 		public XmlSchemaSimpleTypeContent Content {
 			get;
 			set;
-		}
-
-		public Attribute<T> SetContent (XmlSchemaSimpleTypeContent content)
-		{
-			this.Content = content;
-			return this;
 		}
 
 		public Attribute<T> SetMinMax (string min, string max)
@@ -70,14 +69,15 @@ namespace WCF.Config {
 			return this;
 		}
 
-		public Attribute (string name, Func<T, object> func)
-			: this (name, false, func)
+		public Attribute (string name, Func<T, object> getter, Action<T, object> setter)
+			: this (name, false, getter, setter)
 		{ }
 
-		public Attribute (string name, bool required, Func<T, object> func)
+		public Attribute (string name, bool required, Func<T, object> getter, Action<T, object> setter)
 		{
 			this.Name = name;
-			this.Func = func;
+			this.Getter = getter;
+			this.Setter = setter;
 			this.IsRequired = required;
 		}
 	}

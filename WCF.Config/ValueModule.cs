@@ -76,7 +76,7 @@ namespace WCF.Config {
 				xsa.Name = attr.Name;
 				xsa.Use = attr.IsRequired ? XmlSchemaUse.Required : XmlSchemaUse.Optional;
 
-				var value = attr.Func (defInstance);
+				var value = attr.Getter (defInstance);
 				if (!attr.IsRequired)
 					xsa.DefaultValue = Value.SerializeValue (value);
 
