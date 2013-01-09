@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ServiceModel.Channels;
 using System.Xml;
 
@@ -37,7 +38,7 @@ namespace WCF.Config {
 
 		protected override void Populate ()
 		{
-			AddElement<List<Binding>,BindingsModule> (i => i.Bindings);
+			AddElement<Collection<Binding>,BindingsModule> (i => i.Bindings);
 			base.Populate ();
 		}
 	}

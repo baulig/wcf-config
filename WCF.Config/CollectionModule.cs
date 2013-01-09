@@ -29,14 +29,15 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 
 namespace WCF.Config {
 
-	public abstract class CollectionModule<T> : Module<List<T>>
+	public abstract class CollectionModule<T> : Module<Collection<T>>
 	{
-		protected class CollectionElement<U,V> : Element<List<T>>
+		protected class CollectionElement<U,V> : Element<Collection<T>>
 			where U : class, T, new()
 			where V : Module<U>, new()
 		{
@@ -45,7 +46,7 @@ namespace WCF.Config {
 			{
 			}
 			
-			public override void Serialize (XmlWriter writer, List<T> instance)
+			public override void Serialize (XmlWriter writer, Collection<T> instance)
 			{
 				foreach (var item in instance) {
 					var value = item as U;
@@ -55,7 +56,7 @@ namespace WCF.Config {
 				}
 			}
 			
-			public override void Deserialize (XmlReader reader, List<T> instance)
+			public override void Deserialize (XmlReader reader, Collection<T> instance)
 			{
 				var item = new U ();
 				instance.Add (item);

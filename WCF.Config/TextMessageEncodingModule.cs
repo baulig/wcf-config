@@ -1,5 +1,5 @@
 //
-// Configuration.cs
+// TextMessageBindingElementModule.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,21 +24,34 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 
 namespace WCF.Config {
 
-	public class Configuration {
+	public class TextMessageEncodingModule : ValueModule<TextMessageEncodingBindingElement>{
 
-		Collection<Binding> bindings = new Collection<Binding> ();
-
-		public Collection<Binding> Bindings {
-			get { return bindings; }
+		public override string Name {
+			get { return "textMessageEncoding"; }
 		}
 
+		protected override void Populate ()
+		{
+#if FIXME
+			AddAttribute (
+				"messageVersion", i => i.MessageVersion, (i,v) => i.MessageVersion = v);
+#endif
+			AddAttribute (
+				"maxReadPoolSize", i => i.MaxReadPoolSize, (i,v) => i.MaxReadPoolSize = v).
+				SetMinMax ("1", int.MaxValue.ToString ());
+			AddAttribute (
+				"maxWritePoolSize", i => i.MaxWritePoolSize, (i,v) => i.MaxWritePoolSize = v).
+				SetMinMax ("1", int.MaxValue.ToString ());
+			AddAttribute (
+				"writeEncoding", i => i.WriteEncoding, (i,v) => i.WriteEncoding = v);
+
+			base.Populate ();
+		}
 	}
 }
 

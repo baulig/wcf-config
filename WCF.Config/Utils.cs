@@ -85,6 +85,30 @@ namespace WCF.Config {
 			return element;
 		}
 
+		static void HandleExtension<T> (CustomBindingElement custom, BindingElement element)
+			where T : BindingElementExtensionElement, new()
+		{
+			var ext = new T ();
+			if (!ext.BindingElementType.Equals (element.GetType ()))
+				return;
+			var bf = BindingFlags.Instance | BindingFlags.NonPublic;
+			var initFrom = typeof (T).GetMethod ("InitializeFrom", bf);
+			initFrom.Invoke (ext, new object[] { element });
+			custom.Add (ext);
+		}
+
+		static CustomBindingElement CreateCustomElement (CustomBinding binding)
+		{
+			var custom = new CustomBindingElement ();
+			custom.Name = binding.Name;
+
+			foreach (var element in binding.Elements) {
+				HandleExtension<TextMessageEncodingElement> (custom, element);
+			}
+
+			return custom;
+		}
+
 		public static void SaveConfig (Configuration root, string name)
 		{
 			if (File.Exists (name))
@@ -103,6 +127,12 @@ namespace WCF.Config {
 				if (http != null) {
 					var httpElement = CreateConfigElement<BasicHttpBindingElement> (http);
 					bindings.BasicHttpBinding.Bindings.Add (httpElement);
+				}
+
+				var custom = binding as CustomBinding;
+				if (custom != null) {
+					var customElement = CreateCustomElement (custom);
+					bindings.CustomBinding.Bindings.Add (customElement);
 				}
 			}
 			

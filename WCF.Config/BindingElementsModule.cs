@@ -1,5 +1,5 @@
 //
-// Configuration.cs
+// BindingElementsModule.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,21 +24,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 
 namespace WCF.Config {
 
-	public class Configuration {
+	public class BindingElementsModule : CollectionModule<BindingElement> {
 
-		Collection<Binding> bindings = new Collection<Binding> ();
-
-		public Collection<Binding> Bindings {
-			get { return bindings; }
+		public override string Name {
+			get { return "elements"; }
 		}
 
+		protected override void Populate ()
+		{
+			AddElement<TextMessageEncodingBindingElement,TextMessageEncodingModule> ();
+			base.Populate ();
+		}
+		
 	}
 }
 

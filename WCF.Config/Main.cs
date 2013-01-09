@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Reflection;
 using System.Xml;
@@ -52,6 +53,7 @@ namespace WCF.Config {
 		{
 			var schema = Generator.CreateSchema ();
 			schema.ElementFormDefault = XmlSchemaForm.Qualified;
+			schema.AttributeFormDefault = XmlSchemaForm.Unqualified;
 
 			schema.Write (Console.Out);
 			Console.WriteLine ();
@@ -73,7 +75,10 @@ namespace WCF.Config {
 			custom.Elements.Add (new TextMessageEncodingBindingElement ());
 
 			var root = new Configuration ();
-			root.Bindings.AddRange (new Binding[] { http, http, netTcp, custom });
+			root.Bindings.Add (http);
+			root.Bindings.Add (http);
+			root.Bindings.Add (netTcp);
+			root.Bindings.Add (custom);
 
 			var xml = Generator.Serialize (root);
 			Console.WriteLine (xml);
@@ -95,6 +100,8 @@ namespace WCF.Config {
 			Utils.SaveConfig (root, "test.config");
 			
 			var deserialized = Generator.Deserialize (schema, xml);
+			var test = deserialized.Bindings.OfType<CustomBinding> ().First ();
+			Console.WriteLine (test.Elements.Count);
 			Utils.SaveConfig (deserialized, "test2.config");
 		}
 	}
