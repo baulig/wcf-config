@@ -45,11 +45,12 @@ namespace WCF.Config {
 			private set;
 		}
 
-		public abstract object GetValue (T instance);
-
-		public abstract void SetValue (T instance, object value);
-
 		public XmlSchemaSimpleTypeContent Content {
+			get;
+			set;
+		}
+
+		public XmlSchemaSimpleType SchemaType {
 			get;
 			set;
 		}
@@ -66,6 +67,16 @@ namespace WCF.Config {
 			Content = restriction;
 			return this;
 		}
+
+		public Attribute<T> SetSchemaType (XmlSchemaSimpleType type)
+		{
+			SchemaType = type;
+			return this;
+		}
+
+		public abstract void Deserialize (T instance, string text);
+
+		public abstract string Serialize (T instance);
 
 		public Attribute (string name, Type type)
 			: this (name, type, false)
@@ -103,15 +114,38 @@ namespace WCF.Config {
 			private set;
 		}
 
-		public override object GetValue (T instance)
+		public ValueSerializer<U> CustomSerializer {
+			get;
+			set;
+		}
+		
+		public Attribute<T,U> SetCustomSerializer<V> ()
+			where V : ValueSerializer<U>, new()
 		{
-			return Getter (instance);
+			CustomSerializer = new V ();
+			SchemaType = CustomSerializer.SchemaType;
+			return this;
 		}
 
-		public override void SetValue (T instance, object value)
+		public override string Serialize (T instance)
 		{
-			Setter (instance, (U)value);
+			var value = Getter (instance);
+			if (CustomSerializer != null)
+				return CustomSerializer.Serialize (value);
+			else
+				return Generator.SerializeValue (value);
 		}
+
+		public override void Deserialize (T instance, string text)
+		{
+			U value;
+			if (CustomSerializer != null)
+				value = CustomSerializer.Deserialize (text);
+			else
+				value = Generator.DeserializeValue<U> (text);
+			Setter (instance, value);
+		}
+		
 
 	}
 }

@@ -102,13 +102,13 @@ namespace WCF.Config {
 			attributes.Add (attribute);
 		}
 
-		public Attribute<T> AddAttribute<U> (string name, Func<T, U> getter, Action<T, U> setter)
+		public Attribute<T,U> AddAttribute<U> (string name, Func<T, U> getter, Action<T, U> setter)
 		{
 			return AddAttribute (name, false, getter, setter);
 		}
 		
-		public Attribute<T> AddAttribute<U> (string name, bool required,
-		                                     Func<T, U> getter, Action<T, U> setter)
+		public Attribute<T,U> AddAttribute<U> (string name, bool required,
+		                                       Func<T, U> getter, Action<T, U> setter)
 		{
 			var attribute = new Attribute<T,U> (name, required, getter, setter);
 			AddAttribute (attribute);
@@ -123,17 +123,6 @@ namespace WCF.Config {
 			get { return attributes.AsReadOnly (); }
 		}
 		
-		internal static string SerializeValue (object value)
-		{
-			if (value == null)
-				return null;
-			if (value is bool)
-				return (bool)value ? "true" : "false";
-			else if (value is Encoding)
-				return ((Encoding)value).WebName;
-			return value.ToString ();
-		}
-		
 		public override void Serialize (XmlWriter writer, object obj)
 		{
 			writer.WriteStartElement ("test", Name, Generator.Namespace);
@@ -142,15 +131,15 @@ namespace WCF.Config {
 			var defaultInstance = new T ();
 				
 			foreach (var attr in Attributes) {
-				var value = attr.GetValue (instance);
+				var value = attr.Serialize (instance);
 				if (value == null)
 					continue;
 				if (!attr.IsRequired) {
-					var defaultValue = attr.GetValue (defaultInstance);
+					var defaultValue = attr.Serialize (defaultInstance);
 					if (object.Equals (value, defaultValue))
 						continue;
 				}
-				writer.WriteAttributeString (attr.Name, SerializeValue (value));
+				writer.WriteAttributeString (attr.Name, value);
 			}
 				
 			foreach (var element in Elements) {
@@ -158,26 +147,6 @@ namespace WCF.Config {
 			}
 
 			writer.WriteEndElement ();
-		}
-
-		protected static object Deserialize (Type type, string value)
-		{
-			if (type == typeof(bool))
-				return bool.Parse (value);
-			else if (type == typeof(int))
-				return int.Parse (value);
-			else if (type == typeof(long))
-				return long.Parse (value);
-			else if (type == typeof(TimeSpan))
-				return TimeSpan.Parse (value);
-			else if (type == typeof(string))
-				return value;
-			else if (type.IsEnum)
-				return Enum.Parse (type, value);
-			else if (type == typeof(Encoding))
-				return Encoding.GetEncoding (value);
-			else
-				throw new InvalidOperationException ();
 		}
 
 		public override void Deserialize (XmlReader reader, object obj)
@@ -190,8 +159,7 @@ namespace WCF.Config {
 		{
 			while (reader.MoveToNextAttribute ()) {
 				var attr = Attributes.First (t => t.Name.Equals (reader.LocalName));
-				object value = Deserialize (attr.Type, reader.Value);
-				attr.SetValue (instance, value);
+				attr.Deserialize (instance, reader.Value);
 			}
 
 			reader.ReadStartElement (Name, Generator.Namespace);

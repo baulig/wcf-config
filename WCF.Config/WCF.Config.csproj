@@ -59,6 +59,8 @@
     <Compile Include="CustomBindingModule.cs" />
     <Compile Include="BindingElementsModule.cs" />
     <Compile Include="TextMessageEncodingModule.cs" />
+    <Compile Include="ValueSerializer.cs" />
+    <Compile Include="MessageVersionSerializer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

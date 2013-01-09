@@ -111,24 +111,6 @@ namespace WCF.Config {
 					"Unknown attribute type `{0}'", type));
 		}
 		
-		XmlSchemaSimpleType CreateEnumerationType (XmlSchemaSimpleType baseType, Type type)
-		{
-			var simple = new XmlSchemaSimpleType ();
-
-			var restriction = new XmlSchemaSimpleTypeRestriction ();
-			restriction.BaseTypeName = baseType.QualifiedName;
-
-			simple.Content = restriction;
-
-			foreach (var member in Enum.GetNames (type)) {
-				var facet = new XmlSchemaEnumerationFacet ();
-				facet.Value = member;
-				restriction.Facets.Add (facet);
-			}
-
-			return simple;
-		}
-
 		protected override void CreateSchema (XmlSchemaComplexType type)
 		{
 			var defInstance = new T ();
@@ -139,9 +121,13 @@ namespace WCF.Config {
 
 				type.Attributes.Add (xsa);
 
-				var value = attr.GetValue (defInstance);
 				if (!attr.IsRequired)
-					xsa.DefaultValue = SerializeValue (value);
+					xsa.DefaultValue = attr.Serialize (defInstance);
+
+				if (attr.SchemaType != null) {
+					xsa.SchemaType = attr.SchemaType;
+					continue;
+				}
 
 				var tc = GetTypeCode (attr.Type);
 				var builtin = XmlSchemaSimpleType.GetBuiltInSimpleType (tc);
@@ -153,7 +139,7 @@ namespace WCF.Config {
 					simple.Content = restriction;
 					xsa.SchemaType = simple;
 				} else if (attr.Type.IsEnum) {
-					xsa.SchemaType = CreateEnumerationType (builtin, attr.Type);
+					xsa.SchemaType = Generator.CreateEnumerationType (attr.Type);
 				} else {
 					xsa.SchemaTypeName = builtin.QualifiedName;
 				}

@@ -77,6 +77,63 @@ namespace WCF.Config {
 			rootModule.Deserialize (reader, config);
 			return config;
 		}
+
+		internal static string SerializeValue (object value)
+		{
+			if (value == null)
+				return null;
+			if (value is bool)
+				return (bool)value ? "true" : "false";
+			else if (value is Encoding)
+				return ((Encoding)value).WebName;
+			return value.ToString ();
+		}
+		
+		internal static T DeserializeValue<T> (string value)
+		{
+			return (T)DeserializeValue (typeof (T), value);
+		}
+
+		internal static object DeserializeValue (Type type, string value)
+		{
+			if (type == typeof(bool))
+				return bool.Parse (value);
+			else if (type == typeof(int))
+				return int.Parse (value);
+			else if (type == typeof(long))
+				return long.Parse (value);
+			else if (type == typeof(TimeSpan))
+				return TimeSpan.Parse (value);
+			else if (type == typeof(string))
+				return value;
+			else if (type.IsEnum)
+				return Enum.Parse (type, value);
+			else if (type == typeof(Encoding))
+				return Encoding.GetEncoding (value);
+			else
+				throw new InvalidOperationException ();
+		}
+
+		internal static XmlSchemaSimpleType CreateEnumerationType (Type type)
+		{
+			var simple = new XmlSchemaSimpleType ();
+			
+			var baseType = XmlSchemaSimpleType.GetBuiltInSimpleType (XmlTypeCode.String);
+			
+			var restriction = new XmlSchemaSimpleTypeRestriction ();
+			restriction.BaseTypeName = baseType.QualifiedName;
+			
+			simple.Content = restriction;
+			
+			foreach (var member in Enum.GetNames (type)) {
+				var facet = new XmlSchemaEnumerationFacet ();
+				facet.Value = member;
+				restriction.Facets.Add (facet);
+			}
+			
+			return simple;
+		}
+		
 	}
 }
 

@@ -72,7 +72,9 @@ namespace WCF.Config {
 
 			var custom = new CustomBinding ();
 			custom.Name = "myCustomBinding";
-			custom.Elements.Add (new TextMessageEncodingBindingElement ());
+			var text = new TextMessageEncodingBindingElement ();
+			text.MessageVersion = MessageVersion.Soap12WSAddressingAugust2004;
+			custom.Elements.Add (text);
 
 			var root = new Configuration ();
 			root.Bindings.Add (http);

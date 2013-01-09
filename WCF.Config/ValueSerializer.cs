@@ -1,5 +1,5 @@
 //
-// TextMessageBindingElementModule.cs
+// ValueSerializer.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,33 +24,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.ServiceModel;
-using System.ServiceModel.Channels;
+using System.Xml.Schema;
 
 namespace WCF.Config {
 
-	public class TextMessageEncodingModule : ValueModule<TextMessageEncodingBindingElement>{
+	public abstract class ValueSerializer<T> {
 
-		public override string Name {
-			get { return "textMessageEncoding"; }
+		public abstract string Serialize (T instance);
+
+		public abstract T Deserialize (string text);
+
+		public abstract XmlSchemaSimpleType SchemaType {
+			get;
 		}
 
-		protected override void Populate ()
-		{
-			AddAttribute (
-				"messageVersion", i => i.MessageVersion, (i,v) => i.MessageVersion = v).
-				SetCustomSerializer<MessageVersionSerializer> ();
-			AddAttribute (
-				"maxReadPoolSize", i => i.MaxReadPoolSize, (i,v) => i.MaxReadPoolSize = v).
-				SetMinMax ("1", int.MaxValue.ToString ());
-			AddAttribute (
-				"maxWritePoolSize", i => i.MaxWritePoolSize, (i,v) => i.MaxWritePoolSize = v).
-				SetMinMax ("1", int.MaxValue.ToString ());
-			AddAttribute (
-				"writeEncoding", i => i.WriteEncoding, (i,v) => i.WriteEncoding = v);
-
-			base.Populate ();
-		}
 	}
 }
 
