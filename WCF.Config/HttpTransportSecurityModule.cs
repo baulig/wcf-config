@@ -1,5 +1,5 @@
 //
-// BasicHttpSecurityModule.cs
+// HttpTransportSecurityModule.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -28,29 +28,25 @@ using System.ServiceModel;
 
 namespace WCF.Config {
 
-	public class BasicHttpSecurityModule : ValueModule<BasicHttpSecurity> {
-
+	public class HttpTransportSecurityModule : ValueModule<HttpTransportSecurity> {
+		
 		public override string Name {
-			get { return "security"; }
+			get { return "transport"; }
 		}
-
-		protected override void GetAttributes (AttributeList<BasicHttpSecurity> list)
+		
+		protected override void GetAttributes (AttributeList<HttpTransportSecurity> list)
 		{
-			list.Add ("mode", i => i.Mode, (i,v) => i.Mode = v);
+			list.Add (
+				"clientCredentialType", i => i.ClientCredentialType,
+				(i,v) => i.ClientCredentialType = v);
+			list.Add (
+				"proxyCredentialType", i => i.ProxyCredentialType,
+				(i,v) => i.ProxyCredentialType = v);
+			list.Add ("realm", i => i.Realm, (i,v) => i.Realm = v);
 			base.GetAttributes (list);
 		}
-
-		protected override void GetElements (ElementList<BasicHttpSecurity> list)
-		{
-			list.Add<HttpTransportSecurityModule, HttpTransportSecurity> (i => {
-				if ((i.Transport.ClientCredentialType != HttpClientCredentialType.None) ||
-				    (i.Transport.ProxyCredentialType != HttpProxyCredentialType.None) ||
-				    !string.IsNullOrEmpty (i.Transport.Realm))
-					return i.Transport;
-				return null;
-			});
-			base.GetElements (list);
-		}
-
+		
 	}
+
 }
+

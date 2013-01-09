@@ -63,6 +63,8 @@ namespace WCF.Config {
 			http.HostNameComparisonMode = HostNameComparisonMode.WeakWildcard;
 			http.AllowCookies = true;
 			http.Security.Mode = BasicHttpSecurityMode.Transport;
+			http.TransferMode = TransferMode.StreamedRequest;
+			http.Security.Transport.ProxyCredentialType = HttpProxyCredentialType.Digest;
 
 			var netTcp = new NetTcpBinding ();
 			var custom = new CustomBinding ();
