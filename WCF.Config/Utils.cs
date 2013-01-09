@@ -27,6 +27,11 @@ using System;
 using System.IO;
 using System.Xml;
 using System.Xml.Schema;
+using System.Reflection;
+using System.ServiceModel;
+using System.ServiceModel.Channels;
+using System.ServiceModel.Configuration;
+using SysConfig = System.Configuration;
 
 namespace WCF.Config {
 
@@ -40,6 +45,7 @@ namespace WCF.Config {
 			}
 			using (var reader = new StreamReader (filename)) {
 				Console.WriteLine (reader.ReadToEnd ());
+				Console.WriteLine ();
 				Console.WriteLine ();
 			}
 		}
@@ -68,8 +74,42 @@ namespace WCF.Config {
 			while (reader.Read ())
 				;
 		}
-		
 
+		static T CreateConfigElement<T> (Binding binding)
+			where T : StandardBindingElement, new()
+		{
+			var element = new T ();
+			var bf = BindingFlags.Instance | BindingFlags.NonPublic;
+			var initFrom = typeof (T).GetMethod ("InitializeFrom", bf);
+			initFrom.Invoke (element, new object[] { binding });
+			return element;
+		}
+
+		public static void SaveConfig (Configuration root, string name)
+		{
+			if (File.Exists (name))
+				File.Delete (name);
+
+			var map = new SysConfig.ExeConfigurationFileMap ();
+			map.ExeConfigFilename = name;
+			
+			var config = SysConfig.ConfigurationManager.OpenMappedExeConfiguration (
+				map, SysConfig.ConfigurationUserLevel.None);
+
+			var bindings = BindingsSection.GetSection (config);
+
+			foreach (var binding in root.Bindings) {
+				var http = binding as BasicHttpBinding;
+				if (http != null) {
+					var httpElement = CreateConfigElement<BasicHttpBindingElement> (http);
+					bindings.BasicHttpBinding.Bindings.Add (httpElement);
+				}
+			}
+			
+			config.Save (SysConfig.ConfigurationSaveMode.Modified);
+			
+			Utils.Dump (name);
+		}
 	}
 }
 

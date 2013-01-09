@@ -35,7 +35,7 @@ namespace WCF.Config {
 			where V : class, new()
 		{
 			var module = new U ();
-			var element = new Element<T> (module, valueGetter);
+			var element = new Element<T> (module, typeof (V), valueGetter);
 			base.Add (element);
 			return element;
 		}

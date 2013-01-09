@@ -26,13 +26,13 @@
 using System;
 using System.IO;
 using System.Text;
-using System.Configuration;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Schema;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Configuration;
+using SysConfig = System.Configuration;
 
 namespace WCF.Config {
 
@@ -72,7 +72,10 @@ namespace WCF.Config {
 			custom.Name = "myCustomBinding";
 			custom.Elements.Add (new TextMessageEncodingBindingElement ());
 
-			var xml = Generator.Serialize (http, http, netTcp, custom);
+			var root = new Configuration ();
+			root.Bindings.AddRange (new Binding[] { http, http, netTcp, custom });
+
+			var xml = Generator.Serialize (root);
 			Console.WriteLine (xml);
 			Console.WriteLine ();
 
@@ -89,32 +92,10 @@ namespace WCF.Config {
 
 			Console.WriteLine ();
 
-			if (File.Exists ("test.config"))
-				File.Delete ("test.config");
-
-			var map = new ExeConfigurationFileMap ();
-			map.ExeConfigFilename = "test.config";
-
-			var config = ConfigurationManager.OpenMappedExeConfiguration (
-				map, ConfigurationUserLevel.None);
-
-			var httpElement = CreateConfigElement<BasicHttpBindingElement> (http);
-
-			var customElement = new CustomBindingElement ();
-			customElement.Name = custom.Name;
-			customElement.Add (new TextMessageEncodingElement ());
-
-			var bindings = BindingsSection.GetSection (config);
-			bindings.BasicHttpBinding.Bindings.Add (httpElement);
-			bindings.CustomBinding.Bindings.Add (customElement);
-
-			config.Save (ConfigurationSaveMode.Modified);
-
-			Utils.Dump ("test.config");
-
-			Console.WriteLine ();
-
-			Generator.Deserialize (schema, xml);
+			Utils.SaveConfig (root, "test.config");
+			
+			var deserialized = Generator.Deserialize (schema, xml);
+			Utils.SaveConfig (deserialized, "test2.config");
 		}
 	}
 }

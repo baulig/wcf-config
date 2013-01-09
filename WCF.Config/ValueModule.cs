@@ -110,6 +110,11 @@ namespace WCF.Config {
 			}
 		}
 
+		protected override void Deserialize (XmlReader reader, T instance, Element<T> element)
+		{
+			element.Module.Deserialize (reader, element.Getter (instance));
+		}
+
 		XmlSchemaSimpleType CreateEnumerationType (XmlSchemaSimpleType baseType, Type type)
 		{
 			var simple = new XmlSchemaSimpleType ();

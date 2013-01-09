@@ -24,6 +24,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Text;
 using System.Linq;
 using System.Collections.Generic;
 using System.Xml;
@@ -57,10 +58,12 @@ namespace WCF.Config {
 
 		public abstract void Serialize (XmlWriter writer, object obj);
 
-		public abstract void Deserialize (XmlReader reader);
+		public abstract void Deserialize (XmlReader reader, object obj);
 	}
 
-	public abstract class Module<T> : Module {
+	public abstract class Module<T> : Module
+		where T : class, new()
+	{
 		static IList<Attribute<T>> attrs;
 
 		public bool HasElements {
@@ -100,31 +103,67 @@ namespace WCF.Config {
 			writer.WriteEndElement ();
 		}
 
-		public override void Deserialize (XmlReader reader)
+		static bool Deserialize (Type type, string value, out object result)
 		{
-			Console.WriteLine ("DESERIALIZE: {0}", this);
+			if (type == typeof(bool)) {
+				result = bool.Parse (value);
+				return true;
+			} else if (type == typeof(int)) {
+				result = int.Parse (value);
+				return true;
+			} else if (type == typeof(long)) {
+				result = long.Parse (value);
+				return true;
+			} else if (type == typeof(TimeSpan)) {
+				result = TimeSpan.Parse (value);
+				return true;
+			} else if (type == typeof(string)) {
+				result = value;
+				return true;
+			} else if (type.IsEnum) {
+				result = Enum.Parse (type, value);
+				return true;
+			} else if (type == typeof(Encoding)) {
+				result = Encoding.GetEncoding (value);
+				return true;
+			}
+
+			Console.WriteLine ("UNKNOWN TYPE: {0}", type);
+			result = null;
+			return false;
+		}
+
+		public override void Deserialize (XmlReader reader, object obj)
+		{
+			var instance = (T)obj;
+			Deserialize (reader, instance);
+		}
+
+		void Deserialize (XmlReader reader, T instance)
+		{
+			while (reader.MoveToNextAttribute ()) {
+				var attr = Attributes.First (t => t.Name.Equals (reader.LocalName));
+				object value;
+				if (Deserialize (attr.Type, reader.Value, out value))
+					attr.Setter (instance, value);
+			}
+
 			reader.ReadStartElement (Name, Generator.Namespace);
-			
+
 			for (reader.MoveToContent (); reader.NodeType != XmlNodeType.EndElement; reader.MoveToContent ()) {
 				if (reader.NodeType != XmlNodeType.Element || reader.IsEmptyElement) {
 					reader.Skip ();
 					continue;
 				}
 
-				var element = Elements.FirstOrDefault (t => t.Module.Name.Equals (reader.LocalName));
-				if (element == null) {
-					Console.WriteLine ("UNKNOWN ELEMENT: {0}", reader.Name);
-					return;
-				}
-
-				Console.WriteLine ("ELEMENT: {0}", reader.Name);
-				element.Module.Deserialize (reader);
-				break;
+				var element = Elements.First (t => t.Module.Name.Equals (reader.LocalName));
+				Deserialize (reader, instance, element);
 			}
 
 			reader.ReadEndElement ();
-			Console.WriteLine ("DESERIALIZE DONE: {0}", this);
 		}
+
+		protected abstract void Deserialize (XmlReader reader, T instance, Element<T> element);
 
 		protected abstract void Serialize (XmlWriter writer, T instance);
 

@@ -41,7 +41,7 @@ namespace WCF.Config {
 			var attr = new Attribute<T> (name, typeof (U), required, i => {
 				return (object)getter (i);
 			}, (i,v) => {
-				throw new NotImplementedException ();
+				setter (i, (U)v);
 			});
 			base.Add (attr);
 			return attr;

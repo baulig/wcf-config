@@ -48,14 +48,6 @@ namespace WCF.Config {
 			return schema;
 		}
 
-		public static string Serialize (params Binding[] bindings)
-		{
-			var config = new Configuration ();
-			config.Bindings.AddRange (bindings);
-
-			return Serialize (config);
-		}
-
 		public static string Serialize (Configuration config)
 		{
 			var settings = new XmlWriterSettings ();
@@ -71,19 +63,19 @@ namespace WCF.Config {
 			return output.ToString ();
 		}
 
-		public static void Deserialize (XmlSchema schema, string xml)
+		public static Configuration Deserialize (XmlSchema schema, string xml)
 		{
 			var settings = new XmlReaderSettings ();
 			settings.ValidationType = ValidationType.Schema;
 			settings.Schemas.Add (schema);
+			settings.IgnoreComments = true;
+			settings.IgnoreWhitespace = true;
 
 			var reader = XmlReader.Create (new StringReader (xml), settings);
 
-			reader.MoveToContent ();
-			if (reader.IsEmptyElement)
-				return;
-
-			rootModule.Deserialize (reader);
+			var config = new Configuration ();
+			rootModule.Deserialize (reader, config);
+			return config;
 		}
 	}
 }

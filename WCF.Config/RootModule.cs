@@ -24,6 +24,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Collections.Generic;
+using System.ServiceModel.Channels;
 using System.Xml;
 
 namespace WCF.Config {
@@ -35,7 +37,8 @@ namespace WCF.Config {
 
 		protected override void GetElements (ElementList<Configuration> list)
 		{
-			list.Add (new Element<Configuration> (new BindingsModule (), i => i.Bindings));
+			list.Add (new Element<Configuration> (
+				new BindingsModule (), typeof (List<Binding>), i => i.Bindings));
 			base.GetElements (list);
 		}
 	}
