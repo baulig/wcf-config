@@ -62,6 +62,12 @@ namespace WCF.Config {
 			base.GetAttributes (list);
 		}
 
+		protected override void GetElements (ElementList<BasicHttpBinding> list)
+		{
+			list.Add<BasicHttpSecurityModule,BasicHttpSecurity> (i => i.Security);
+			base.GetElements (list);
+		}
+
 		public override Value<BasicHttpBinding> GetValue (BasicHttpBinding instance)
 		{
 			return new ValueImpl (this, instance);
