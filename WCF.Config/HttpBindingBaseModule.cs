@@ -61,20 +61,6 @@ namespace WCF.Config {
 
 			base.GetAttributes (list);
 		}
-
-		public override Value<T> GetValue (T instance)
-		{
-			return new _Value (this, instance);
-		}
-		
-		class _Value : Value<T> {
-			
-			public _Value (HttpBindingBaseModule<T> module, T binding)
-				: base (module, binding)
-			{
-			}
-			
-		}
 	}
 }
 

@@ -32,14 +32,11 @@ using System.Xml.Schema;
 namespace WCF.Config {
 
 	public abstract class Value {
-		public virtual bool HasChildren {
-			get { return false; }
+		public abstract bool HasChildren {
+			get;
 		}
 
-		public virtual IList<Value> GetChildren ()
-		{
-			throw new InvalidOperationException ();
-		}
+		public abstract IList<Value> GetChildren ();
 
 		public abstract void Serialize (XmlWriter writer);
 
@@ -78,9 +75,11 @@ namespace WCF.Config {
 		}
 	}
 
-	public abstract class Value<TInstance> : Value
+	public class Value<TInstance> : Value
 		where TInstance : class, new()
 	{
+		IList<Value> children;
+
 		public ValueModule<TInstance> Module {
 			get;
 			private set;
@@ -91,7 +90,25 @@ namespace WCF.Config {
 			private set;
 		}
 
-		protected Value (ValueModule<TInstance> module, TInstance instance)
+		public override bool HasChildren {
+			get { return Module.HasChildren; }
+		}
+
+		public override IList<Value> GetChildren ()
+		{
+			if (children == null) {
+				var list = new List<Value> ();
+				GetChildren (list);
+				children = list.AsReadOnly ();
+			}
+			return children;
+		}
+
+		protected virtual void GetChildren (List<Value> list)
+		{
+		}
+		
+		public Value (ValueModule<TInstance> module, TInstance instance)
 		{
 			this.Module = module;
 			this.Instance = instance;
@@ -99,10 +116,8 @@ namespace WCF.Config {
 
 		protected virtual void DoSerialize (XmlWriter writer)
 		{
-			if (HasChildren) {
-				foreach (var child in GetChildren ())
-					child.Serialize (writer);
-			}
+			foreach (var child in GetChildren ())
+				child.Serialize (writer);
 		}
 
 		public override void Serialize (XmlWriter writer)

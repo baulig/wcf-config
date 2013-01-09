@@ -53,6 +53,7 @@
     <Compile Include="Utils.cs" />
     <Compile Include="HttpBindingBaseModule.cs" />
     <Compile Include="AttributeList.cs" />
+    <Compile Include="BasicHttpSecurityModule.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

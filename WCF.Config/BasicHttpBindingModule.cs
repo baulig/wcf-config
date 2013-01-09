@@ -33,8 +33,27 @@ namespace WCF.Config {
 
 	public class BasicHttpBindingModule : HttpBindingBaseModule<BasicHttpBinding> {
 
+		static readonly BasicHttpSecurityModule securityModule;
+		static IList<Module> children;
+
+		static BasicHttpBindingModule ()
+		{
+			securityModule = new BasicHttpSecurityModule ();
+			var list = new List<Module> ();
+			list.Add (securityModule);
+			children = list.AsReadOnly ();
+		}
+
 		public override string Name {
 			get { return "basicHttpBinding"; }
+		}
+
+		public override bool HasChildren {
+			get { return true; }
+		}
+
+		public override IList<Module> Children {
+			get { return children; }
 		}
 
 		protected override void GetAttributes (AttributeList<BasicHttpBinding> list)
@@ -43,6 +62,22 @@ namespace WCF.Config {
 			base.GetAttributes (list);
 		}
 
+		public override Value<BasicHttpBinding> GetValue (BasicHttpBinding instance)
+		{
+			return new ValueImpl (this, instance);
+		}
+
+		class ValueImpl : Value<BasicHttpBinding> {
+			public ValueImpl (BasicHttpBindingModule module, BasicHttpBinding instance)
+				: base (module, instance)
+			{ }
+
+			protected override void GetChildren (List<Value> list)
+			{
+				list.Add (securityModule.GetValue (Instance.Security));
+				base.GetChildren (list);
+			}
+		}
+
 	}
 }
-
