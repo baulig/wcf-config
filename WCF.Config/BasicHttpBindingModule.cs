@@ -39,6 +39,7 @@ namespace WCF.Config {
 
 		protected override void GetAttributes (AttributeList<BasicHttpBinding> list)
 		{
+			list.Add ("messageEncoding", i => i.MessageEncoding, (i,v) => i.MessageEncoding = v);
 			base.GetAttributes (list);
 		}
 

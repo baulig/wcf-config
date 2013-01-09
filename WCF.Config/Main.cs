@@ -62,6 +62,7 @@ namespace WCF.Config {
 			http.MaxBufferSize = 8192;
 			http.HostNameComparisonMode = HostNameComparisonMode.WeakWildcard;
 			http.AllowCookies = true;
+			http.Security.Mode = BasicHttpSecurityMode.Transport;
 
 			var netTcp = new NetTcpBinding ();
 			var custom = new CustomBinding ();
