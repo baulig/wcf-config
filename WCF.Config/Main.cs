@@ -67,7 +67,10 @@ namespace WCF.Config {
 			http.Security.Transport.ProxyCredentialType = HttpProxyCredentialType.Digest;
 
 			var netTcp = new NetTcpBinding ();
+
 			var custom = new CustomBinding ();
+			custom.Name = "myCustomBinding";
+			custom.Elements.Add (new TextMessageEncodingBindingElement ());
 
 			var xml = Generator.Serialize (http, netTcp, custom);
 			Console.WriteLine (xml);
@@ -97,8 +100,13 @@ namespace WCF.Config {
 
 			var httpElement = CreateConfigElement<BasicHttpBindingElement> (http);
 
+			var customElement = new CustomBindingElement ();
+			customElement.Name = custom.Name;
+			customElement.Add (new TextMessageEncodingElement ());
+
 			var bindings = BindingsSection.GetSection (config);
 			bindings.BasicHttpBinding.Bindings.Add (httpElement);
+			bindings.CustomBinding.Bindings.Add (customElement);
 
 			config.Save (ConfigurationSaveMode.Modified);
 
