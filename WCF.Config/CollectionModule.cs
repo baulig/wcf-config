@@ -24,49 +24,56 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Linq;
 using System.Xml;
 using System.Xml.Schema;
+using System.Collections;
 using System.Collections.Generic;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 
 namespace WCF.Config {
 
-	public abstract class ListModule<T> : Module
-		where T : class
+	public abstract class CollectionModule<T> : Module<ICollection<T>>
 	{
-		public override bool IsSupported (object instance)
-		{
-			return instance is IList<T>;
+		static IList<Element<ICollection<T>>> elements;
+		
+		protected class CollectionElementList : ElementList<ICollection<T>> {
+			public Element<ICollection<T>> Add<U,V> ()
+				where U : ValueModule<V>, new()
+				where V : class, T, new()
+			{
+				var element = new Element<ICollection<T>> (new U (), c => c.OfType<V> ());
+				base.Add (element);
+				return element;
+			}
 		}
 
-		protected override void CreateSchema (XmlSchemaComplexType type)
-		{
-			var all = new XmlSchemaAll ();
-			foreach (var child in Children) {
-				all.Items.Add (child.CreateSchema ());
+		public override IList<Element<ICollection<T>>> Elements {
+			get {
+				if (elements != null)
+					return elements;
+				
+				var list = new CollectionElementList ();
+				GetElements (list);
+				elements = list.AsReadOnly ();
+				return elements;
 			}
-			type.Particle = all;
-			
-			base.CreateSchema (type);
 		}
 		
-		public override bool HasChildren {
-			get { return true; }
-		}
-		
-		public override void Serialize (XmlWriter writer, object instance)
+		protected virtual void GetElements (CollectionElementList list)
 		{
-			writer.WriteStartElement ("test", Name, Generator.Namespace);
-			foreach (var item in (IList<T>)instance) {
-				foreach (var child in Children) {
-					if (!child.IsSupported (item))
-						continue;
-					child.Serialize (writer, item);
+		}
+
+		protected override void Serialize (XmlWriter writer, ICollection<T> instance)
+		{
+			foreach (var element in Elements) {
+				foreach (var item in (IEnumerable)element.Getter (instance)) {
+					element.Module.Serialize (writer, item);
 				}
 			}
-			writer.WriteEndElement ();
 		}
+		
 	}
 }
 

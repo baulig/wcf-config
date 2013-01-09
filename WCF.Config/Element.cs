@@ -27,14 +27,13 @@ using System;
 
 namespace WCF.Config {
 
-	public class Element<T>
-		where T : class, new()
-	{
+	public class Element<T> {
+
 		public Module Module {
 			get;
 			private set;
 		}
-
+		
 		public Func<T, object> Getter {
 			get;
 			private set;

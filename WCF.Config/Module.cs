@@ -38,27 +38,6 @@ namespace WCF.Config {
 			get;
 		}
 
-		public virtual bool HasChildren {
-			get { return false; }
-		}
-
-		public virtual IList<Module> Children {
-			get {
-				throw new InvalidOperationException ();
-			}
-		}
-
-		public abstract bool IsSupported (object instance);
-
-		protected virtual void CreateSchema (XmlSchemaElement element)
-		{
-			var type = new XmlSchemaComplexType ();
-
-			CreateSchema (type);
-
-			element.SchemaType = type;
-		}
-
 		protected virtual void CreateSchema (XmlSchemaComplexType type)
 		{
 		}
@@ -68,12 +47,72 @@ namespace WCF.Config {
 			var element = new XmlSchemaElement ();
 			element.Name = Name;
 
-			CreateSchema (element);
+			var type = new XmlSchemaComplexType ();
+			element.SchemaType = type;
+
+			CreateSchema (type);
 
 			return element;
 		}
 
-		public abstract void Serialize (XmlWriter writer, object instance);
+		public abstract void Serialize (XmlWriter writer, object obj);
+	}
+
+	public abstract class Module<T> : Module {
+		static IList<Attribute<T>> attrs;
+
+		public bool HasElements {
+			get { return Elements.Count > 0; }
+		}
+		
+		public abstract IList<Element<T>> Elements {
+			get;
+		}
+		
+		public bool HasAttributes {
+			get { return Attributes.Count > 0; }
+		}
+		
+		public IList<Attribute<T>> Attributes {
+			get {
+				if (attrs != null)
+					return attrs;
+				
+				var list = new AttributeList<T> ();
+				GetAttributes (list);
+				attrs = list.AsReadOnly ();
+				return attrs;
+			}
+		}
+		
+		protected virtual void GetAttributes (AttributeList<T> list)
+		{
+		}
+
+		protected override void CreateSchema (XmlSchemaComplexType type)
+		{
+			if (HasElements) {
+				var all = new XmlSchemaAll ();
+				foreach (var element in Elements) {
+					all.Items.Add (element.Module.CreateSchema ());
+				}
+				type.Particle = all;
+			}
+			
+			base.CreateSchema (type);
+		}
+
+		public override void Serialize (XmlWriter writer, object obj)
+		{
+			writer.WriteStartElement ("test", Name, Generator.Namespace);
+
+			Serialize (writer, (T) obj);
+
+			writer.WriteEndElement ();
+		}
+
+		protected abstract void Serialize (XmlWriter writer, T instance);
+
 	}
 }
 

@@ -47,8 +47,6 @@
     <Compile Include="BasicHttpBindingModule.cs" />
     <Compile Include="BindingModule.cs" />
     <Compile Include="Attribute.cs" />
-    <Compile Include="Value.cs" />
-    <Compile Include="ListModule.cs" />
     <Compile Include="ValueModule.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="HttpBindingBaseModule.cs" />
@@ -56,6 +54,7 @@
     <Compile Include="BasicHttpSecurityModule.cs" />
     <Compile Include="Element.cs" />
     <Compile Include="ElementList.cs" />
+    <Compile Include="CollectionModule.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

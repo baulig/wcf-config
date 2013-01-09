@@ -24,71 +24,71 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Text;
 using System.Xml;
 using System.Xml.Schema;
 using System.Collections.Generic;
 
 namespace WCF.Config {
 
-	public abstract class ValueModule<T> : Module
+	public abstract class ValueModule<T> : Module<T>
 		where T : class, new()
 	{
-		IList<Attribute<T>> attrs;
-		IList<Element<T>> elements;
+		static IList<Element<T>> elements;
 
-		public bool HasAttributes {
-			get { return Attributes.Count > 0; }
-		}
-			
-		public IList<Attribute<T>> Attributes {
-			get {
-				if (attrs != null)
-					return attrs;
-
-				var list = new AttributeList<T> ();
-				GetAttributes (list);
-				attrs = list.AsReadOnly ();
-				return attrs;
-			}
-		}
-
-		protected virtual void GetAttributes (AttributeList<T> list)
-		{
-		}
-
-		public bool HasElements {
-			get { return Elements.Count > 0; }
-		}
-
-		public IList<Element<T>> Elements {
+		public override IList<Element<T>> Elements {
 			get {
 				if (elements != null)
 					return elements;
-
+				
 				var list = new ElementList<T> ();
 				GetElements (list);
 				elements = list.AsReadOnly ();
 				return elements;
 			}
 		}
-
+		
 		protected virtual void GetElements (ElementList<T> list)
 		{
 		}
-
-		public override bool IsSupported (object instance)
+		
+		internal static XmlTypeCode GetTypeCode (Type type)
 		{
-			return instance is T;
+			if (type == typeof (string))
+				return XmlTypeCode.String;
+			else if (type == typeof (bool))
+				return XmlTypeCode.Boolean;
+			else if (type == typeof (int))
+				return XmlTypeCode.Int;
+			else if (type == typeof (long))
+				return XmlTypeCode.Long;
+			else if (type == typeof (TimeSpan))
+				return XmlTypeCode.Time;
+			else if (type == typeof (Uri))
+				return XmlTypeCode.AnyUri;
+			else if (type.IsEnum)
+				return XmlTypeCode.String;
+			else if (type == typeof (Encoding))
+				return XmlTypeCode.String;
+			else
+				throw new ArgumentException (string.Format (
+					"Unknown attribute type `{0}'", type));
+		}
+		
+		internal static string SerializeValue (object value)
+		{
+			if (value == null)
+				return null;
+			if (value is bool)
+				return (bool)value ? "true" : "false";
+			else if (value is Encoding)
+				return ((Encoding)value).WebName;
+			return value.ToString ();
 		}
 
-		public abstract Value<T> GetValue (T instance);
-
-		public override void Serialize (XmlWriter writer, object obj)
+		protected override void Serialize (XmlWriter writer, T instance)
 		{
-			var instance = (T)obj;
 			var defaultInstance = new T ();
-
-			writer.WriteStartElement ("test", Name, Generator.Namespace);
 
 			foreach (var attr in Attributes) {
 				var value = attr.Getter (instance);
@@ -99,7 +99,7 @@ namespace WCF.Config {
 					if (object.Equals (value, defaultValue))
 						continue;
 				}
-				writer.WriteAttributeString (attr.Name, Value.SerializeValue (value));
+				writer.WriteAttributeString (attr.Name, SerializeValue (value));
 			}
 
 			foreach (var element in Elements) {
@@ -108,8 +108,6 @@ namespace WCF.Config {
 					continue;
 				element.Module.Serialize (writer, value);
 			}
-
-			writer.WriteEndElement ();
 		}
 
 		XmlSchemaSimpleType CreateEnumerationType (XmlSchemaSimpleType baseType, Type type)
@@ -142,9 +140,9 @@ namespace WCF.Config {
 
 				var value = attr.Getter (defInstance);
 				if (!attr.IsRequired)
-					xsa.DefaultValue = Value.SerializeValue (value);
+					xsa.DefaultValue = SerializeValue (value);
 
-				var tc = Value.GetTypeCode (attr.Type);
+				var tc = GetTypeCode (attr.Type);
 				var builtin = XmlSchemaSimpleType.GetBuiltInSimpleType (tc);
 				
 				var restriction = attr.Content as XmlSchemaSimpleTypeRestriction;
@@ -160,17 +158,7 @@ namespace WCF.Config {
 				}
 			}
 
-			if (!HasElements)
-				return;
-
-			var all = new XmlSchemaAll ();
-			all.MinOccurs = 0;
-
-			foreach (var element in Elements) {
-				all.Items.Add (element.Module.CreateSchema ());
-			}
-
-			type.Particle = all;
+			base.CreateSchema (type);
 		}
 	}
 }

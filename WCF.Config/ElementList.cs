@@ -28,9 +28,8 @@ using System.Collections.Generic;
 
 namespace WCF.Config {
 
-	public class ElementList<T> : List<Element<T>>
-		where T : class, new()
-	{
+	public class ElementList<T> : List<Element<T>> {
+
 		public Element<T> Add<U,V> (Func<T, V> valueGetter)
 			where U : ValueModule<V>, new()
 			where V : class, new()

@@ -28,12 +28,7 @@ using System.Collections.Generic;
 
 namespace WCF.Config {
 
-	public class AttributeList<T> : List<Attribute<T>>
-		where T : class, new()
-	{
-		public AttributeList ()
-		{
-		}
+	public class AttributeList<T> : List<Attribute<T>> {
 
 		public Attribute<T> Add<U> (string name, Func<T, U> getter, Action<T, U> setter)
 		{

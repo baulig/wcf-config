@@ -31,14 +31,7 @@ namespace WCF.Config {
 	public class BasicHttpSecurityModule : ValueModule<BasicHttpSecurity> {
 
 		public override string Name {
-			get {
-				return "security";
-			}
-		}
-		
-		public override Value<BasicHttpSecurity> GetValue (BasicHttpSecurity instance)
-		{
-			return new Value<BasicHttpSecurity> (this, instance);
+			get { return "security"; }
 		}
 
 	}

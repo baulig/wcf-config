@@ -28,9 +28,8 @@ using System.Xml.Schema;
 
 namespace WCF.Config {
 
-	public class Attribute<T>
-		where T : class, new()
-	{
+	public class Attribute<T> {
+
 		public string Name {
 			get;
 			private set;

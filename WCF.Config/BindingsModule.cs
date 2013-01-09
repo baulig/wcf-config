@@ -32,23 +32,18 @@ using System.ServiceModel.Channels;
 
 namespace WCF.Config {
 
-	public class BindingsModule : ListModule<Binding> {
-		static IList<Module> children;
-
-		static BindingsModule ()
-		{
-			var list = new List<Module> ();
-			list.Add (new BasicHttpBindingModule ());
-			children = list.AsReadOnly ();
-		}
+	public class BindingsModule : CollectionModule<Binding> {
 
 		public override string Name {
 			get { return "bindings"; }
 		}
 
-		public override IList<Module> Children {
-			get { return children; }
+		protected override void GetElements (CollectionElementList list)
+		{
+			list.Add<BasicHttpBindingModule, BasicHttpBinding> ();
+			base.GetElements (list);
 		}
+
 	}
 }
 
