@@ -24,6 +24,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Collections.Generic;
+using System.Xml;
 using System.Xml.Schema;
 
 namespace Mono.System.ServiceModel.Configuration {
@@ -45,34 +47,26 @@ namespace Mono.System.ServiceModel.Configuration {
 			private set;
 		}
 
-		public XmlSchemaSimpleTypeContent Content {
+		protected XmlSchemaSimpleTypeRestriction Restriction {
 			get;
-			set;
-		}
-
-		public XmlSchemaSimpleType SchemaType {
-			get;
-			set;
+			private set;
 		}
 
 		public Attribute<T> SetMinMax (string min, string max)
 		{
-			var restriction = new XmlSchemaSimpleTypeRestriction ();
+			Restriction = new XmlSchemaSimpleTypeRestriction ();
 			var minFacet = new XmlSchemaMinInclusiveFacet ();
 			minFacet.Value = min;
 			var maxFacet = new XmlSchemaMaxInclusiveFacet ();
 			maxFacet.Value = max;
-			restriction.Facets.Add (minFacet);
-			restriction.Facets.Add (maxFacet);
-			Content = restriction;
+			Restriction.Facets.Add (minFacet);
+			Restriction.Facets.Add (maxFacet);
 			return this;
 		}
 
-		public Attribute<T> SetSchemaType (XmlSchemaSimpleType type)
-		{
-			SchemaType = type;
-			return this;
-		}
+		internal abstract XmlSchemaAttribute CreateSchema ();
+
+		internal abstract void RegisterSchemaTypes (SchemaTypeMap map);
 
 		public abstract void Deserialize (T instance, string text);
 
@@ -90,8 +84,9 @@ namespace Mono.System.ServiceModel.Configuration {
 		}
 	}
 
-	public class Attribute<T,U> : Attribute<T> {
-
+	public class Attribute<T,U> : Attribute<T>
+		where T : class, new()
+	{
 		public Attribute (string name, Func<T, U> getter, Action<T, U> setter)
 			: this (name, false, getter, setter)
 		{ }
@@ -123,8 +118,54 @@ namespace Mono.System.ServiceModel.Configuration {
 			where V : ValueSerializer<U>, new()
 		{
 			CustomSerializer = new V ();
-			SchemaType = CustomSerializer.SchemaType;
 			return this;
+		}
+
+		XmlSchemaSimpleType schemaType;
+		XmlQualifiedName schemaTypeName;
+
+		internal override void RegisterSchemaTypes (SchemaTypeMap map)
+		{
+			if (Type.IsEnum) {
+				schemaTypeName = Generator.GetEnumerationType (Type, map);
+				return;
+			}
+
+			if (CustomSerializer != null) {
+				schemaTypeName = CustomSerializer.GetSchemaType (map);
+				return;
+			}
+
+			var tc = Generator.GetTypeCode (Type);
+			var builtin = XmlSchemaSimpleType.GetBuiltInSimpleType (tc);
+
+			if (Restriction != null) {
+				var simple = new XmlSchemaSimpleType ();
+				Restriction.BaseTypeName = builtin.QualifiedName;
+				simple.Content = Restriction;
+				schemaType = simple;
+			} else {
+				schemaTypeName = builtin.QualifiedName;
+			}
+		}
+
+		internal override XmlSchemaAttribute CreateSchema ()
+		{
+			var xsa = new XmlSchemaAttribute ();
+			xsa.Name = Name;
+			xsa.Use = IsRequired ? XmlSchemaUse.Required : XmlSchemaUse.Optional;
+			
+			if (!IsRequired)
+				xsa.DefaultValue = Serialize (new T ());
+
+			if (schemaType != null)
+				xsa.SchemaType = schemaType;
+			else if (schemaTypeName != null)
+				xsa.SchemaTypeName = schemaTypeName;
+			else
+				throw new InvalidOperationException ();
+
+			return xsa;
 		}
 
 		public override string Serialize (T instance)

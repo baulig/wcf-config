@@ -73,18 +73,17 @@ namespace Mono.System.ServiceModel.Configuration {
 			return element;
 		}
 
-		protected override void CreateSchema (XmlSchemaComplexType type)
+		protected override void CreateSchemaType (XmlSchemaComplexType type, SchemaTypeMap map)
 		{
 			var sequence = new XmlSchemaSequence ();
 			foreach (var element in Elements) {
-				var item = element.Module.CreateSchema ();
+				var item = new XmlSchemaElement ();
+				item.Name = Name;
+				item.SchemaTypeName = map.LookupModule (element.Module);
 				item.MinOccurs = 0;
 				item.MaxOccursString = "unbounded";
-				sequence.Items.Add (item);
 			}
 			type.Particle = sequence;
-
-			base.CreateSchema (type);
 		}
 	}
 }

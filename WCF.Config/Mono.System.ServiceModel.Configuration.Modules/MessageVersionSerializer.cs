@@ -24,7 +24,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Xml;
 using System.Xml.Schema;
+using System.Collections.Generic;
 using System.ServiceModel.Channels;
 
 namespace Mono.System.ServiceModel.Configuration.Modules {
@@ -74,8 +76,9 @@ namespace Mono.System.ServiceModel.Configuration.Modules {
 				throw new InvalidOperationException ();
 		}
 
-		public override XmlSchemaSimpleType SchemaType {
-			get { return Generator.CreateEnumerationType (typeof(Version)); }
+		public override XmlQualifiedName GetSchemaType (SchemaTypeMap map)
+		{
+			return Generator.GetEnumerationType (typeof (Version), map);
 		}
 
 		public enum Version {

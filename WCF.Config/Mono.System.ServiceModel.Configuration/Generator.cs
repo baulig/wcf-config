@@ -47,16 +47,17 @@ namespace Mono.System.ServiceModel.Configuration {
 			var schema = new XmlSchema ();
 			schema.TargetNamespace = Namespace;
 
-			var modules = new List<Module> ();
-			rootModule.RegisterChildModules (modules);
+			var map = new SchemaTypeMap ();
+			rootModule.RegisterSchemaTypes (map);
 
-			foreach (var module in modules) {
-				var type = module.CreateSchemaType ();
+			foreach (var type in map.Schemas)
 				schema.Items.Add (type);
-				Console.WriteLine (module);
-			}
 
-			schema.Items.Add (rootModule.CreateSchema ());
+			var element = new XmlSchemaElement ();
+			element.Name = rootModule.Name;
+			element.SchemaTypeName = map.LookupModule (rootModule);
+			schema.Items.Add (element);
+				
 			return schema;
 		}
 
@@ -106,6 +107,27 @@ namespace Mono.System.ServiceModel.Configuration {
 			return (T)DeserializeValue (typeof (T), value);
 		}
 
+		internal static XmlTypeCode GetTypeCode (Type type)
+		{
+			if (type == typeof (string))
+				return XmlTypeCode.String;
+			else if (type == typeof (bool))
+				return XmlTypeCode.Boolean;
+			else if (type == typeof (int))
+				return XmlTypeCode.Int;
+			else if (type == typeof (long))
+				return XmlTypeCode.Long;
+			else if (type == typeof (TimeSpan))
+				return XmlTypeCode.Time;
+			else if (type == typeof (Uri))
+				return XmlTypeCode.AnyUri;
+			else if (type == typeof (Encoding))
+				return XmlTypeCode.String;
+			else
+				throw new ArgumentException (string.Format (
+					"Unknown attribute type `{0}'", type));
+		}
+		
 		internal static object DeserializeValue (Type type, string value)
 		{
 			if (type == typeof(bool))
@@ -126,9 +148,14 @@ namespace Mono.System.ServiceModel.Configuration {
 				throw new InvalidOperationException ();
 		}
 
-		internal static XmlSchemaSimpleType CreateEnumerationType (Type type)
+		internal static XmlQualifiedName GetEnumerationType (Type type, SchemaTypeMap map)
 		{
+			if (map.IsRegistered (type))
+				return map.LookupType (type);
+
 			var simple = new XmlSchemaSimpleType ();
+
+			simple.Name = "enum" + type.Name;
 			
 			var baseType = XmlSchemaSimpleType.GetBuiltInSimpleType (XmlTypeCode.String);
 			
@@ -142,8 +169,8 @@ namespace Mono.System.ServiceModel.Configuration {
 				facet.Value = member;
 				restriction.Facets.Add (facet);
 			}
-			
-			return simple;
+
+			return map.RegisterType (type, simple);
 		}
 		
 	}

@@ -1,5 +1,5 @@
 //
-// ValueSerializer.cs
+// SchemaTypeMap.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -25,22 +25,52 @@
 // THE SOFTWARE.
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Xml;
 using System.Xml.Schema;
 
 namespace Mono.System.ServiceModel.Configuration {
 
-	public abstract class ValueSerializer {
+	public class SchemaTypeMap {
 
-		public abstract XmlQualifiedName GetSchemaType (SchemaTypeMap map);
+		Dictionary<Type, XmlSchemaType> map = new Dictionary<Type, XmlSchemaType> ();
 
-	}
+		public XmlQualifiedName LookupModule (Module module)
+		{
+			return map [module.GetType ()].QualifiedName;
+		}
 
-	public abstract class ValueSerializer<T> : ValueSerializer {
+		public bool IsRegistered (Module module)
+		{
+			return map.ContainsKey (module.GetType ());
+		}
 
-		public abstract string Serialize (T instance);
+		public XmlQualifiedName RegisterModule (Module module, XmlSchemaType schema)
+		{
+			map.Add (module.GetType (), schema);
+			return schema.QualifiedName;
+		}
 
-		public abstract T Deserialize (string text);
+		public ICollection<XmlSchemaType> Schemas {
+			get { return map.Values; }
+		}
+
+		public bool IsRegistered (Type type)
+		{
+			return map.ContainsKey (type);
+		}
+
+		public XmlQualifiedName RegisterType (Type type, XmlSchemaType schema)
+		{
+			map.Add (type, schema);
+			return schema.QualifiedName;
+		}
+
+		public XmlQualifiedName LookupType (Type type)
+		{
+			return map [type].QualifiedName;
+		}
 
 	}
 }
+

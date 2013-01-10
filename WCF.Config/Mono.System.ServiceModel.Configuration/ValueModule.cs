@@ -88,73 +88,20 @@ namespace Mono.System.ServiceModel.Configuration {
 			return element;
 		}
 		
-		internal static XmlTypeCode GetTypeCode (Type type)
+		protected override void CreateSchemaType (XmlSchemaComplexType type, SchemaTypeMap map)
 		{
-			if (type == typeof (string))
-				return XmlTypeCode.String;
-			else if (type == typeof (bool))
-				return XmlTypeCode.Boolean;
-			else if (type == typeof (int))
-				return XmlTypeCode.Int;
-			else if (type == typeof (long))
-				return XmlTypeCode.Long;
-			else if (type == typeof (TimeSpan))
-				return XmlTypeCode.Time;
-			else if (type == typeof (Uri))
-				return XmlTypeCode.AnyUri;
-			else if (type.IsEnum)
-				return XmlTypeCode.String;
-			else if (type == typeof (Encoding))
-				return XmlTypeCode.String;
-			else
-				throw new ArgumentException (string.Format (
-					"Unknown attribute type `{0}'", type));
-		}
-		
-		protected override void CreateSchema (XmlSchemaComplexType type)
-		{
-			var defInstance = new T ();
-			foreach (var attr in Attributes) {
-				var xsa = new XmlSchemaAttribute ();
-				xsa.Name = attr.Name;
-				xsa.Use = attr.IsRequired ? XmlSchemaUse.Required : XmlSchemaUse.Optional;
-
-				type.Attributes.Add (xsa);
-
-				if (!attr.IsRequired)
-					xsa.DefaultValue = attr.Serialize (defInstance);
-
-				if (attr.SchemaType != null) {
-					xsa.SchemaType = attr.SchemaType;
-					continue;
-				}
-
-				var tc = GetTypeCode (attr.Type);
-				var builtin = XmlSchemaSimpleType.GetBuiltInSimpleType (tc);
-				
-				var restriction = attr.Content as XmlSchemaSimpleTypeRestriction;
-				if (restriction != null) {
-					var simple = new XmlSchemaSimpleType ();
-					restriction.BaseTypeName = builtin.QualifiedName;
-					simple.Content = restriction;
-					xsa.SchemaType = simple;
-				} else if (attr.Type.IsEnum) {
-					xsa.SchemaType = Generator.CreateEnumerationType (attr.Type);
-				} else {
-					xsa.SchemaTypeName = builtin.QualifiedName;
-				}
-			}
-
 			if (HasElements) {
 				var all = new XmlSchemaAll ();
 				all.MinOccurs = 0;
 				foreach (var element in Elements) {
-					all.Items.Add (element.Module.CreateSchema ());
+					var item = new XmlSchemaElement ();
+					item.Name = Name;
+					item.SchemaTypeName = map.LookupModule (element.Module);
+
+					all.Items.Add (item);
 				}
 				type.Particle = all;
 			}
-				
-			base.CreateSchema (type);
 		}
 	}
 }

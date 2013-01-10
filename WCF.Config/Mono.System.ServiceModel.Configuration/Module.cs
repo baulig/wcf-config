@@ -39,29 +39,7 @@ namespace Mono.System.ServiceModel.Configuration {
 			get;
 		}
 
-		protected virtual void CreateSchema (XmlSchemaComplexType type)
-		{
-		}
-
-		internal abstract void RegisterChildModules (List<Module> modules);
-
-		internal XmlSchemaType CreateSchemaType ()
-		{
-			var type = new XmlSchemaComplexType ();
-			type.Name = Name;
-
-			CreateSchema (type);
-			return type;
-		}
-
-		public XmlSchemaElement CreateSchema ()
-		{
-			var element = new XmlSchemaElement ();
-			element.Name = Name;
-			element.SchemaTypeName = new XmlQualifiedName (Name, Generator.Namespace);
-
-			return element;
-		}
+		internal abstract void RegisterSchemaTypes (SchemaTypeMap map);
 
 		public abstract void Serialize (XmlWriter writer, object obj);
 
@@ -130,14 +108,26 @@ namespace Mono.System.ServiceModel.Configuration {
 			get { return attributes.AsReadOnly (); }
 		}
 
-		internal override void RegisterChildModules (List<Module> modules)
+		protected abstract void CreateSchemaType (XmlSchemaComplexType type, SchemaTypeMap map);
+
+		internal override void RegisterSchemaTypes (SchemaTypeMap map)
 		{
-			if (modules.Contains (this))
+			if (map.IsRegistered (this))
 				return;
-			modules.Add (this);
-			foreach (var element in Elements) {
-				element.Module.RegisterChildModules (modules);
+
+			var type = new XmlSchemaComplexType ();
+			type.Name = Name;
+			map.RegisterModule (this, type);
+
+			foreach (var attr in Attributes) {
+				attr.RegisterSchemaTypes (map);
 			}
+			
+			foreach (var element in Elements) {
+				element.Module.RegisterSchemaTypes (map);
+			}
+
+			CreateSchemaType (type, map);
 		}
 		
 		public override void Serialize (XmlWriter writer, object obj)
