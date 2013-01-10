@@ -38,18 +38,18 @@ namespace Mono.System.ServiceModel.Configuration {
 	public abstract class CollectionModule<T> : Module<Collection<T>>
 	{
 		protected class CollectionElement<U,V> : Element<Collection<T>>
-			where U : class, T, new()
-			where V : Module<U>, new()
+			where U : Module<V>, new()
+			where V : class, T, new()
 		{
 			public CollectionElement ()
-				: base (Generator.GetModule<V,U> (), typeof (U))
+				: base (Generator.GetModule<U,V> (), typeof (V))
 			{
 			}
 			
 			public override void Serialize (XmlWriter writer, Collection<T> instance)
 			{
 				foreach (var item in instance) {
-					var value = item as U;
+					var value = item as V;
 					if (value == null)
 						continue;
 					Module.Serialize (writer, value);
@@ -58,15 +58,15 @@ namespace Mono.System.ServiceModel.Configuration {
 			
 			public override void Deserialize (XmlReader reader, Collection<T> instance)
 			{
-				var item = new U ();
+				var item = new V ();
 				instance.Add (item);
 				Module.Deserialize (reader, item);
 			}
 		}
 
 		protected CollectionElement<U,V> AddElement<U,V> ()
-			where U : class, T, new()
-			where V : Module<U>, new()
+			where U : Module<V>, new()
+			where V : class, T, new()
 		{
 			var element = new CollectionElement<U,V> ();
 			AddElement (element);

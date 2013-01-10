@@ -40,7 +40,7 @@ namespace Mono.System.ServiceModel.Configuration.Modules {
 		protected override void Populate ()
 		{
 			AddAttribute ("messageEncoding", i => i.MessageEncoding, (i,v) => i.MessageEncoding = v);
-			AddElement<BasicHttpSecurity,BasicHttpSecurityModule> (i => i.Security);
+			AddElement<BasicHttpSecurityModule,BasicHttpSecurity> (i => i.Security);
 			base.Populate ();
 		}
 	}

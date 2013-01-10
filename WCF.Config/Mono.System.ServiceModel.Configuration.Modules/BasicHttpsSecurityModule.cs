@@ -37,7 +37,7 @@ namespace Mono.System.ServiceModel.Configuration.Modules {
 		protected override void Populate ()
 		{
 			AddAttribute ("mode", i => i.Mode, (i,v) => i.Mode = v);
-			AddElement<HttpTransportSecurity, HttpTransportSecurityModule> (i => i.Transport);
+			AddElement<HttpTransportSecurityModule, HttpTransportSecurity> (i => i.Transport);
 			base.Populate ();
 		}
 		

@@ -40,9 +40,9 @@ namespace Mono.System.ServiceModel.Configuration.Modules {
 
 		protected override void Populate ()
 		{
-			AddElement<BasicHttpBinding, BasicHttpBindingModule> ();
-			AddElement<BasicHttpsBinding, BasicHttpsBindingModule> ();
-			AddElement<CustomBinding, CustomBindingModule> ();
+			AddElement<BasicHttpBindingModule, BasicHttpBinding> ();
+			AddElement<BasicHttpsBindingModule, BasicHttpsBinding> ();
+			AddElement<CustomBindingModule, CustomBinding> ();
 			base.Populate ();
 		}
 

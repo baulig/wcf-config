@@ -37,9 +37,9 @@ namespace Mono.System.ServiceModel.Configuration.Modules {
 
 		protected override void Populate ()
 		{
-			AddElement<TextMessageEncodingBindingElement,TextMessageEncodingModule> ();
-			AddElement<BinaryMessageEncodingBindingElement,BinaryMessageEncodingModule> ();
-			AddElement<MtomMessageEncodingBindingElement,MtomMessageEncodingModule> ();
+			AddElement<TextMessageEncodingModule,TextMessageEncodingBindingElement> ();
+			AddElement<BinaryMessageEncodingModule,BinaryMessageEncodingBindingElement> ();
+			AddElement<MtomMessageEncodingModule,MtomMessageEncodingBindingElement> ();
 			base.Populate ();
 		}
 		
