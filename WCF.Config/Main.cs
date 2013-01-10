@@ -69,7 +69,7 @@ namespace WCF.Config {
 			http.TransferMode = TransferMode.StreamedRequest;
 
 			var https = new BasicHttpsBinding ();
-			https.MaxBufferSize = 65536;
+			https.MaxBufferSize = 32768;
 
 			var netTcp = new NetTcpBinding ();
 

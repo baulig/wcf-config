@@ -41,5 +41,12 @@ namespace Mono.System.ServiceModel.Configuration.Modules {
 			base.Populate ();
 		}
 		
+		public override bool IsDefault (BasicHttpsSecurity instance)
+		{
+			if (instance.Mode != BasicHttpsSecurityMode.Transport)
+				return false;
+			var transport = Generator.GetModule<HttpTransportSecurityModule, HttpTransportSecurity> ();
+			return transport.IsDefault (instance.Transport);
+		}
 	}
 }

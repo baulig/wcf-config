@@ -187,6 +187,8 @@ namespace Mono.System.ServiceModel.Configuration {
 
 		void Deserialize (XmlReader reader, T instance)
 		{
+			bool empty = reader.IsEmptyElement;
+
 			while (reader.MoveToNextAttribute ()) {
 				var attr = Attributes.First (t => t.Name.Equals (reader.LocalName));
 				attr.Deserialize (instance, reader.Value);
@@ -195,6 +197,9 @@ namespace Mono.System.ServiceModel.Configuration {
 			reader.ReadStartElement (Name, Generator.Namespace);
 
 			if (reader.MoveToContent () == XmlNodeType.EndElement)
+				return;
+
+			if (empty)
 				return;
 
 			do {
