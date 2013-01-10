@@ -35,7 +35,7 @@ using System.ServiceModel.Channels;
 using System.ServiceModel.Configuration;
 using SysConfig = System.Configuration;
 
-namespace WCF.Config {
+namespace WCF.Config.Helper {
 
 	using Mono.System.ServiceModel.Configuration;
 	using Mono.System.ServiceModel.Configuration.Modules;
@@ -103,12 +103,12 @@ namespace WCF.Config {
 
 			Console.WriteLine ();
 
-			Utils.SaveConfig (root, "test.config");
+			ConfigUtils.SaveConfig (root, "test.config");
 			
 			var deserialized = Generator.Deserialize (schema, xml);
 			var test = deserialized.Bindings.OfType<CustomBinding> ().First ();
 			Console.WriteLine (test.Elements.Count);
-			Utils.SaveConfig (deserialized, "test2.config");
+			ConfigUtils.SaveConfig (deserialized, "test2.config");
 		}
 	}
 }

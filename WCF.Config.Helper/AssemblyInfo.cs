@@ -1,5 +1,5 @@
 //
-// Utils.cs
+// AssemblyInfo.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -23,56 +23,30 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-using System;
-using System.IO;
-using System.Xml;
-using System.Xml.Schema;
 using System.Reflection;
-using System.ServiceModel;
-using System.ServiceModel.Channels;
+using System.Runtime.CompilerServices;
 
-namespace Mono.System.ServiceModel.Configuration {
+// Information about this assembly is defined by the following attributes. 
+// Change them to the values specific to your project.
 
-	public static class Utils {
+[assembly: AssemblyTitle("WCF.Config.Helper")]
+[assembly: AssemblyDescription("")]
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCompany("Xamarin")]
+[assembly: AssemblyProduct("")]
+[assembly: AssemblyCopyright("Xamarin Inc. (http://www.xamarin.com)")]
+[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture("")]
 
-		public static void Dump (string filename)
-		{
-			if (!File.Exists (filename)) {
-				Console.WriteLine ("ERROR: File does not exist!");
-				return;
-			}
-			using (var reader = new StreamReader (filename)) {
-				Console.WriteLine (reader.ReadToEnd ());
-				Console.WriteLine ();
-				Console.WriteLine ();
-			}
-		}
-		
-		public static void PrettyPrintXML (string filename)
-		{
-			var doc = new XmlDocument ();
-			doc.Load (filename);
-			
-			using (var writer = new XmlTextWriter (new StreamWriter (filename))) {
-				writer.Formatting = Formatting.Indented;
-				doc.WriteTo (writer);
-			}
-		}
+// The assembly version has the format "{Major}.{Minor}.{Build}.{Revision}".
+// The form "{Major}.{Minor}.*" will automatically update the build and revision,
+// and "{Major}.{Minor}.{Build}.*" will update just the revision.
 
-		public static void ValidateSchema (string xmlFilename, string schemaFilename)
-		{
-			var schema = new XmlSchemaSet ();
-			schema.Add (Generator.Namespace, schemaFilename);
-			
-			var settings = new XmlReaderSettings ();
-			settings.ValidationType = ValidationType.Schema;
-			settings.Schemas = schema;
-			
-			var reader = XmlReader.Create (xmlFilename, settings);
-			while (reader.Read ())
-				;
-		}
+[assembly: AssemblyVersion("1.0.*")]
 
-	}
-}
+// The following attributes are used to specify the signing key for the assembly, 
+// if desired. See the Mono documentation for more information about signing.
+
+//[assembly: AssemblyDelaySign(false)]
+//[assembly: AssemblyKeyFile("")]
 
