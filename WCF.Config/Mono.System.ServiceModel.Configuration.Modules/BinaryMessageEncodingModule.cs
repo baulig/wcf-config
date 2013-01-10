@@ -29,7 +29,7 @@ using System.ServiceModel.Channels;
 
 namespace Mono.System.ServiceModel.Configuration.Modules {
 
-	public class BinaryMessageEncodingModule : ValueModule<BinaryMessageEncodingBindingElement>{
+	public class BinaryMessageEncodingModule : ValueModule<BinaryMessageEncodingBindingElement> {
 		
 		public override string Name {
 			get { return "binaryMessageEncoding"; }

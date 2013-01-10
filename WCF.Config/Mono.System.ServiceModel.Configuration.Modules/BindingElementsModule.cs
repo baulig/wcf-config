@@ -40,6 +40,7 @@ namespace Mono.System.ServiceModel.Configuration.Modules {
 			AddElement<TextMessageEncodingModule,TextMessageEncodingBindingElement> ();
 			AddElement<BinaryMessageEncodingModule,BinaryMessageEncodingBindingElement> ();
 			AddElement<MtomMessageEncodingModule,MtomMessageEncodingBindingElement> ();
+			AddElement<HttpTransportModule,HttpTransportBindingElement> ();
 			base.Populate ();
 		}
 		

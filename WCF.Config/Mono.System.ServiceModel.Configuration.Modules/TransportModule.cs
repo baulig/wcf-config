@@ -1,5 +1,5 @@
 //
-// MtomMessageEncodingModule.cs
+// TransportModule.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -28,31 +28,28 @@ using System.ServiceModel;
 using System.ServiceModel.Channels;
 
 namespace Mono.System.ServiceModel.Configuration.Modules {
-	
-	public class MtomMessageEncodingModule : ValueModule<MtomMessageEncodingBindingElement> {
-		
-		public override string Name {
-			get { return "mtomMessageEncoding"; }
-		}
-		
+
+	public abstract class TransportModule<T> : ValueModule<T>
+		where T : TransportBindingElement, new()
+	{
+
 		protected override void Populate ()
 		{
 			AddAttribute (
-				"messageVersion", i => i.MessageVersion, (i,v) => i.MessageVersion = v).
-				SetCustomSerializer<MessageVersionSerializer> ();
+				"manualAddressing", i => i.ManualAddressing,
+				(i,v) => i.ManualAddressing = v);
 			AddAttribute (
-				"maxBufferSize", i => i.MaxBufferSize, (i,v) => i.MaxBufferSize = v).
-				SetMinMax ("1", int.MaxValue.ToString ());
+				"maxBufferPoolSize", i => i.MaxBufferPoolSize,
+				(i,v) => i.MaxBufferPoolSize = v).
+				SetMinMax ("1", "9223372036854775807");
 			AddAttribute (
-				"maxReadPoolSize", i => i.MaxReadPoolSize, (i,v) => i.MaxReadPoolSize = v).
-				SetMinMax ("1", int.MaxValue.ToString ());
-			AddAttribute (
-				"maxWritePoolSize", i => i.MaxWritePoolSize, (i,v) => i.MaxWritePoolSize = v).
-				SetMinMax ("1", int.MaxValue.ToString ());
-			AddAttribute (
-				"writeEncoding", i => i.WriteEncoding, (i,v) => i.WriteEncoding = v);
-
+				"maxReceiveMessageSize", i => i.MaxReceivedMessageSize,
+				(i,v) => i.MaxReceivedMessageSize = v).
+				SetMinMax ("1", "9223372036854775807");
 			base.Populate ();
 		}
+
 	}
+
 }
+

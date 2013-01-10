@@ -1,5 +1,5 @@
 //
-// MtomMessageEncodingModule.cs
+// HttpTransportModule.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -29,30 +29,53 @@ using System.ServiceModel.Channels;
 
 namespace Mono.System.ServiceModel.Configuration.Modules {
 	
-	public class MtomMessageEncodingModule : ValueModule<MtomMessageEncodingBindingElement> {
-		
+	public class HttpTransportModule : TransportModule<HttpTransportBindingElement> {
+
 		public override string Name {
-			get { return "mtomMessageEncoding"; }
+			get { return "httpTransport"; }
 		}
-		
+
 		protected override void Populate ()
 		{
 			AddAttribute (
-				"messageVersion", i => i.MessageVersion, (i,v) => i.MessageVersion = v).
-				SetCustomSerializer<MessageVersionSerializer> ();
+				"allowCookies", i => i.AllowCookies, (i,v) => i.AllowCookies = v);
 			AddAttribute (
-				"maxBufferSize", i => i.MaxBufferSize, (i,v) => i.MaxBufferSize = v).
-				SetMinMax ("1", int.MaxValue.ToString ());
+				"authenticationSchema", i => i.AuthenticationScheme,
+				(i,v) => i.AuthenticationScheme = v);
 			AddAttribute (
-				"maxReadPoolSize", i => i.MaxReadPoolSize, (i,v) => i.MaxReadPoolSize = v).
-				SetMinMax ("1", int.MaxValue.ToString ());
+				"bypassProxyOnLocal", i => i.BypassProxyOnLocal,
+				(i,v) => i.BypassProxyOnLocal = v);
 			AddAttribute (
-				"maxWritePoolSize", i => i.MaxWritePoolSize, (i,v) => i.MaxWritePoolSize = v).
-				SetMinMax ("1", int.MaxValue.ToString ());
+				"hostNameComparisonMode", i => i.HostNameComparisonMode,
+				(i,v) => i.HostNameComparisonMode = v);
 			AddAttribute (
-				"writeEncoding", i => i.WriteEncoding, (i,v) => i.WriteEncoding = v);
+				"keepAliveEnabled", i => i.KeepAliveEnabled,
+				(i,v) => i.KeepAliveEnabled = v);
+			AddAttribute (
+				"maxBufferSize", i => i.MaxBufferSize,
+				(i,v) => i.MaxBufferSize = v).SetMinMax ("1", int.MaxValue.ToString ());
+			AddAttribute (
+				"decompressionEnabled", i => i.DecompressionEnabled,
+				(i,v) => i.DecompressionEnabled = v);
 
+			AddAttribute (
+				"proxyAddress", i => i.ProxyAddress, (i,v) => i.ProxyAddress = v);
+			AddAttribute (
+				"proxyAuthenticationScheme", i => i.ProxyAuthenticationScheme,
+				(i,v) => i.ProxyAuthenticationScheme = v);
+			AddAttribute (
+				"useDefaultWebProxy", i => i.UseDefaultWebProxy,
+				(i,v) => i.UseDefaultWebProxy = v);
+			AddAttribute (
+				"realm", i => i.Realm, (i,v) => i.Realm = v);
+			AddAttribute (
+				"transferMode", i => i.TransferMode, (i,v) => i.TransferMode = v);
+			AddAttribute (
+				"unsafeConnectionNtlmAuthentication", i => i.UnsafeConnectionNtlmAuthentication,
+				(i,v) => i.UnsafeConnectionNtlmAuthentication = v);
 			base.Populate ();
 		}
+
 	}
 }
+

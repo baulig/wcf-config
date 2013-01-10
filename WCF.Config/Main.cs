@@ -78,6 +78,7 @@ namespace WCF.Config {
 			var text = new TextMessageEncodingBindingElement ();
 			text.MessageVersion = MessageVersion.Soap12WSAddressingAugust2004;
 			custom.Elements.Add (text);
+			custom.Elements.Add (new HttpTransportBindingElement ());
 
 			var root = new Configuration ();
 			root.Bindings.Add (http);
