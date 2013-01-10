@@ -37,16 +37,9 @@ namespace Mono.System.ServiceModel.Configuration.Modules {
 		protected override void Populate ()
 		{
 			AddAttribute ("mode", i => i.Mode, (i,v) => i.Mode = v);
-			AddElement<HttpTransportSecurity, HttpTransportSecurityModule> (
-				i => i.Transport).IsModified (i => !IsDefault (i.Transport));
+			AddElement<HttpTransportSecurity, HttpTransportSecurityModule> (i => i.Transport);
 			base.Populate ();
 		}
 		
-		static bool IsDefault (HttpTransportSecurity t)
-		{
-			return t.ClientCredentialType == HttpClientCredentialType.None &&
-				t.ProxyCredentialType == HttpProxyCredentialType.None &&
-					string.IsNullOrEmpty (t.Realm);
-		}
 	}
 }

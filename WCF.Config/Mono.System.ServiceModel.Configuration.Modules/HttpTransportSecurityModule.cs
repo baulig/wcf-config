@@ -45,6 +45,13 @@ namespace Mono.System.ServiceModel.Configuration.Modules {
 			AddAttribute ("realm", i => i.Realm, (i,v) => i.Realm = v);
 			base.Populate ();
 		}
+
+		public override bool IsDefault (HttpTransportSecurity instance)
+		{
+			return instance.ClientCredentialType == HttpClientCredentialType.None &&
+				instance.ProxyCredentialType == HttpProxyCredentialType.None &&
+				string.IsNullOrEmpty (instance.Realm);
+		}
 		
 	}
 

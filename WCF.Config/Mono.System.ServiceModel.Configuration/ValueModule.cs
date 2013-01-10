@@ -40,7 +40,7 @@ namespace Mono.System.ServiceModel.Configuration {
 			where V : Module<U>, new()
 		{
 			public ValueElement (Func<T, U> getter)
-				: base (new V (), typeof (U))
+				: base (Generator.GetModule<V,U> (), typeof (U))
 			{
 				this.ValueGetter = getter;
 			}
@@ -50,24 +50,10 @@ namespace Mono.System.ServiceModel.Configuration {
 				private set;
 			}
 
-			public Func<T, bool> IsModifiedFunc {
-				get;
-				private set;
-			}
-
-			public ValueElement<U,V> IsModified (Func<T, bool> func)
-			{
-				IsModifiedFunc = func;
-				return this;
-			}
-
 			public override void Serialize (XmlWriter writer, T instance)
 			{
 				var value = ValueGetter (instance);
 				if (value == null)
-					return;
-
-				if (IsModifiedFunc != null && !IsModifiedFunc (instance))
 					return;
 
 				Module.Serialize (writer, value);

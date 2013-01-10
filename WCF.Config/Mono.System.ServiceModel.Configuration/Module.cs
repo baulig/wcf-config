@@ -35,6 +35,11 @@ namespace Mono.System.ServiceModel.Configuration {
 
 	public abstract class Module {
 
+		protected Module ()
+		{
+			Generator.RegisterModule (this);
+		}
+
 		public abstract string Name {
 			get;
 		}
@@ -54,7 +59,8 @@ namespace Mono.System.ServiceModel.Configuration {
 		List<Element<T>> elements;
 		List<Attribute<T>> attributes;
 		XmlSchemaComplexType schemaType;
-		bool populated;
+		readonly T defaultInstance;
+		readonly bool populated;
 		
 		public bool HasElements {
 			get { return elements.Count > 0; }
@@ -68,6 +74,7 @@ namespace Mono.System.ServiceModel.Configuration {
 		{
 			elements = new List<Element<T>> ();
 			attributes = new List<Attribute<T>> ();
+			defaultInstance = new T ();
 			Populate ();
 			populated = true;
 		}
@@ -147,11 +154,12 @@ namespace Mono.System.ServiceModel.Configuration {
 		
 		public override void Serialize (XmlWriter writer, object obj)
 		{
+			var instance = (T) obj;
+			if (IsDefault (instance))
+				return;
+			
 			writer.WriteStartElement (Name, Generator.Namespace);
 
-			var instance = (T) obj;
-			var defaultInstance = new T ();
-				
 			foreach (var attr in Attributes) {
 				var value = attr.Serialize (instance);
 				if (value == null)
@@ -202,6 +210,15 @@ namespace Mono.System.ServiceModel.Configuration {
 			} while (reader.MoveToContent () != XmlNodeType.EndElement);
 
 			reader.ReadEndElement ();
+		}
+
+		protected T DefaultInstance {
+			get { return defaultInstance; }
+		}
+
+		public virtual bool IsDefault (T instance)
+		{
+			return object.Equals (instance, defaultInstance);
 		}
 	}
 }

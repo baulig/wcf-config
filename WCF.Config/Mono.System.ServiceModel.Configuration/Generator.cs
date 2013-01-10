@@ -37,14 +37,44 @@ namespace Mono.System.ServiceModel.Configuration {
 
 	using Modules;
 
-	public class Generator {
-		static readonly RootModule rootModule = new RootModule ();
+	public static class Generator {
+		static readonly RootModule rootModule;
+		static readonly Dictionary<Type, Module> moduleMap;
 
 		public const string Namespace = "https://github.com/baulig/wcf-config/schema";
+
+		static Generator ()
+		{
+			moduleMap = new Dictionary<Type, Module> ();
+			rootModule = new RootModule ();
+		}
 
 		public static XmlSchema CreateSchema ()
 		{
 			return SchemaTypeMap.CreateSchema (rootModule);
+		}
+
+		internal static void RegisterModule (Module module)
+		{
+			moduleMap.Add (module.GetType (), module);
+		}
+
+		public static T GetModule<T> ()
+			where T : Module, new()
+		{
+			if (!moduleMap.ContainsKey (typeof(T))) {
+				// Module's ctor calls RegisterModule().
+				return new T ();
+			} else {
+				return (T)moduleMap [typeof(T)];
+			}
+		}
+
+		public static T GetModule<T,V> ()
+			where T : Module<V>, new()
+			where V : class, new()
+		{
+			return GetModule<T> ();
 		}
 
 		public static string Serialize (Configuration config)
