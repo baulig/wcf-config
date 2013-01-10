@@ -43,15 +43,22 @@ namespace Mono.System.ServiceModel.Configuration {
 		{
 		}
 
+		internal abstract void RegisterChildModules (List<Module> modules);
+
+		internal XmlSchemaType CreateSchemaType ()
+		{
+			var type = new XmlSchemaComplexType ();
+			type.Name = Name;
+
+			CreateSchema (type);
+			return type;
+		}
+
 		public XmlSchemaElement CreateSchema ()
 		{
 			var element = new XmlSchemaElement ();
 			element.Name = Name;
-
-			var type = new XmlSchemaComplexType ();
-			element.SchemaType = type;
-
-			CreateSchema (type);
+			element.SchemaTypeName = new XmlQualifiedName (Name, Generator.Namespace);
 
 			return element;
 		}
@@ -122,10 +129,20 @@ namespace Mono.System.ServiceModel.Configuration {
 		public IList<Attribute<T>> Attributes {
 			get { return attributes.AsReadOnly (); }
 		}
+
+		internal override void RegisterChildModules (List<Module> modules)
+		{
+			if (modules.Contains (this))
+				return;
+			modules.Add (this);
+			foreach (var element in Elements) {
+				element.Module.RegisterChildModules (modules);
+			}
+		}
 		
 		public override void Serialize (XmlWriter writer, object obj)
 		{
-			writer.WriteStartElement ("test", Name, Generator.Namespace);
+			writer.WriteStartElement (Name, Generator.Namespace);
 
 			var instance = (T) obj;
 			var defaultInstance = new T ();

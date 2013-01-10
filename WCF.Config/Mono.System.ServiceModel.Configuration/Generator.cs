@@ -46,6 +46,16 @@ namespace Mono.System.ServiceModel.Configuration {
 		{
 			var schema = new XmlSchema ();
 			schema.TargetNamespace = Namespace;
+
+			var modules = new List<Module> ();
+			rootModule.RegisterChildModules (modules);
+
+			foreach (var module in modules) {
+				var type = module.CreateSchemaType ();
+				schema.Items.Add (type);
+				Console.WriteLine (module);
+			}
+
 			schema.Items.Add (rootModule.CreateSchema ());
 			return schema;
 		}
