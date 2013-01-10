@@ -55,8 +55,6 @@ namespace WCF.Config {
 		public static void Main (string[] args)
 		{
 			var schema = Generator.CreateSchema ();
-			schema.ElementFormDefault = XmlSchemaForm.Qualified;
-			schema.AttributeFormDefault = XmlSchemaForm.Unqualified;
 
 			schema.Write (Console.Out);
 			Console.WriteLine ();

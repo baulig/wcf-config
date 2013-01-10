@@ -95,9 +95,7 @@ namespace Mono.System.ServiceModel.Configuration {
 				all.MinOccurs = 0;
 				foreach (var element in Elements) {
 					var item = new XmlSchemaElement ();
-					item.Name = Name;
-					item.SchemaTypeName = map.LookupModule (element.Module);
-
+					item.RefName = map.LookupModuleElement (element.Module);
 					all.Items.Add (item);
 				}
 				type.Particle = all;

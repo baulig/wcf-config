@@ -44,21 +44,9 @@ namespace Mono.System.ServiceModel.Configuration {
 
 		public static XmlSchema CreateSchema ()
 		{
-			var schema = new XmlSchema ();
-			schema.TargetNamespace = Namespace;
-
 			var map = new SchemaTypeMap ();
 			rootModule.RegisterSchemaTypes (map);
-
-			foreach (var type in map.Schemas)
-				schema.Items.Add (type);
-
-			var element = new XmlSchemaElement ();
-			element.Name = rootModule.Name;
-			element.SchemaTypeName = map.LookupModule (rootModule);
-			schema.Items.Add (element);
-				
-			return schema;
+			return map.Schema;
 		}
 
 		public static string Serialize (Configuration config)

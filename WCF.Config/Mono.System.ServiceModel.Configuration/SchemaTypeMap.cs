@@ -28,47 +28,72 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Xml;
 using System.Xml.Schema;
+using QName = System.Xml.XmlQualifiedName;
 
 namespace Mono.System.ServiceModel.Configuration {
 
 	public class SchemaTypeMap {
 
-		Dictionary<Type, XmlSchemaType> map = new Dictionary<Type, XmlSchemaType> ();
+		XmlSchema schema;
+		Dictionary<Type, XmlSchemaType> typeMap = new Dictionary<Type, XmlSchemaType> ();
+		Dictionary<Type, XmlSchemaElement> elementMap = new Dictionary<Type, XmlSchemaElement> ();
 
-		public XmlQualifiedName LookupModule (Module module)
+		public SchemaTypeMap ()
 		{
-			return map [module.GetType ()].QualifiedName;
+			schema = new XmlSchema ();
+			schema.ElementFormDefault = XmlSchemaForm.Unqualified;
+			schema.AttributeFormDefault = XmlSchemaForm.Unqualified;
+			schema.TargetNamespace = Generator.Namespace;
+		}
+
+		public XmlSchema Schema {
+			get { return schema; }
 		}
 
 		public bool IsRegistered (Module module)
 		{
-			return map.ContainsKey (module.GetType ());
+			return typeMap.ContainsKey (module.GetType ());
 		}
 
-		public XmlQualifiedName RegisterModule (Module module, XmlSchemaType schema)
+		public void RegisterModule (Module module, XmlSchemaType type)
 		{
-			map.Add (module.GetType (), schema);
-			return schema.QualifiedName;
+			typeMap.Add (module.GetType (), type);
+			schema.Items.Add (type);
+
+			var element = new XmlSchemaElement ();
+			element.Name = module.Name;
+			element.SchemaTypeName = new QName (type.Name, schema.TargetNamespace);
+			elementMap.Add (module.GetType (), element);
+			schema.Items.Add (element);
 		}
 
-		public ICollection<XmlSchemaType> Schemas {
-			get { return map.Values; }
+		public QName LookupModuleType (Module module)
+		{
+			var type = typeMap [module.GetType ()];
+			return new QName (type.Name, schema.TargetNamespace);
+		}
+		
+		public QName LookupModuleElement (Module module)
+		{
+			var element = elementMap [module.GetType ()];
+			return new QName (element.Name, schema.TargetNamespace);
 		}
 
 		public bool IsRegistered (Type type)
 		{
-			return map.ContainsKey (type);
+			return typeMap.ContainsKey (type);
 		}
 
-		public XmlQualifiedName RegisterType (Type type, XmlSchemaType schema)
+		public QName RegisterType (Type type, XmlSchemaType item)
 		{
-			map.Add (type, schema);
-			return schema.QualifiedName;
+			typeMap.Add (type, item);
+			schema.Items.Add (item);
+			return new QName (item.Name, schema.TargetNamespace);
 		}
 
-		public XmlQualifiedName LookupType (Type type)
+		public QName LookupType (Type type)
 		{
-			return map [type].QualifiedName;
+			return new QName (typeMap [type].Name, schema.TargetNamespace);
 		}
 
 	}

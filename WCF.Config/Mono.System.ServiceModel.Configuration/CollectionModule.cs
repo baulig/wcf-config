@@ -78,10 +78,10 @@ namespace Mono.System.ServiceModel.Configuration {
 			var sequence = new XmlSchemaSequence ();
 			foreach (var element in Elements) {
 				var item = new XmlSchemaElement ();
-				item.Name = Name;
-				item.SchemaTypeName = map.LookupModule (element.Module);
+				item.RefName = map.LookupModuleElement (element.Module);
 				item.MinOccurs = 0;
 				item.MaxOccursString = "unbounded";
+				sequence.Items.Add (item);
 			}
 			type.Particle = sequence;
 		}

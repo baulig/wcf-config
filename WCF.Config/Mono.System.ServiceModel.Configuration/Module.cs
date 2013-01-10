@@ -41,6 +41,8 @@ namespace Mono.System.ServiceModel.Configuration {
 
 		internal abstract void RegisterSchemaTypes (SchemaTypeMap map);
 
+		internal abstract void CreateSchemaType (SchemaTypeMap map);
+
 		public abstract void Serialize (XmlWriter writer, object obj);
 
 		public abstract void Deserialize (XmlReader reader, object obj);
@@ -117,6 +119,7 @@ namespace Mono.System.ServiceModel.Configuration {
 
 			var type = new XmlSchemaComplexType ();
 			type.Name = Name;
+
 			map.RegisterModule (this, type);
 
 			foreach (var attr in Attributes) {
@@ -127,7 +130,16 @@ namespace Mono.System.ServiceModel.Configuration {
 				element.Module.RegisterSchemaTypes (map);
 			}
 
+			foreach (var attr in Attributes) {
+				type.Attributes.Add (attr.CreateSchema ());
+			}
+
 			CreateSchemaType (type, map);
+		}
+
+		internal override void CreateSchemaType (SchemaTypeMap map)
+		{
+			;
 		}
 		
 		public override void Serialize (XmlWriter writer, object obj)
