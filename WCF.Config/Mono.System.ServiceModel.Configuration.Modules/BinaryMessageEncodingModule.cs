@@ -1,5 +1,5 @@
 //
-// BindingElementsModule.cs
+// BinaryMessageEncodingModule.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -29,20 +29,25 @@ using System.ServiceModel.Channels;
 
 namespace Mono.System.ServiceModel.Configuration.Modules {
 
-	public class BindingElementsModule : CollectionModule<BindingElement> {
-
+	public class BinaryMessageEncodingModule : ValueModule<BinaryMessageEncodingBindingElement>{
+		
 		public override string Name {
-			get { return "elements"; }
-		}
-
-		protected override void Populate ()
-		{
-			AddElement<TextMessageEncodingBindingElement,TextMessageEncodingModule> ();
-			AddElement<BinaryMessageEncodingBindingElement,BinaryMessageEncodingModule> ();
-			AddElement<MtomMessageEncodingBindingElement,MtomMessageEncodingModule> ();
-			base.Populate ();
+			get { return "binaryMessageEncoding"; }
 		}
 		
+		protected override void Populate ()
+		{
+			AddAttribute (
+				"maxReadPoolSize", i => i.MaxReadPoolSize, (i,v) => i.MaxReadPoolSize = v).
+				SetMinMax ("1", int.MaxValue.ToString ());
+			AddAttribute (
+				"maxWritePoolSize", i => i.MaxWritePoolSize, (i,v) => i.MaxWritePoolSize = v).
+				SetMinMax ("1", int.MaxValue.ToString ());
+			AddAttribute (
+				"maxSessionSize", i => i.MaxSessionSize, (i,v) => i.MaxSessionSize = v).
+				SetMinMax ("0", int.MaxValue.ToString ());
+
+			base.Populate ();
+		}
 	}
 }
-

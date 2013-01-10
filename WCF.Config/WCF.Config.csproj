@@ -61,6 +61,8 @@
     <Compile Include="Mono.System.ServiceModel.Configuration.Modules\RootModule.cs" />
     <Compile Include="Mono.System.ServiceModel.Configuration.Modules\TextMessageEncodingModule.cs" />
     <Compile Include="Main.cs" />
+    <Compile Include="Mono.System.ServiceModel.Configuration.Modules\BinaryMessageEncodingModule.cs" />
+    <Compile Include="Mono.System.ServiceModel.Configuration.Modules\MtomMessageEncodingModule.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
