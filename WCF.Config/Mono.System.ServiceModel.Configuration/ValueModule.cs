@@ -30,7 +30,7 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Collections.Generic;
 
-namespace WCF.Config {
+namespace Mono.System.ServiceModel.Configuration {
 
 	public abstract class ValueModule<T> : Module<T>
 		where T : class, new()

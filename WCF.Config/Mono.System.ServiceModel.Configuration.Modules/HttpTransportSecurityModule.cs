@@ -1,5 +1,5 @@
 //
-// CustomBindingModule.cs
+// HttpTransportSecurityModule.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,26 +24,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ServiceModel;
-using System.ServiceModel.Channels;
 
-namespace WCF.Config {
+namespace Mono.System.ServiceModel.Configuration.Modules {
 
-	public class CustomBindingModule : BindingModule<CustomBinding> {
-
+	public class HttpTransportSecurityModule : ValueModule<HttpTransportSecurity> {
+		
 		public override string Name {
-			get { return "customBinding"; }
+			get { return "transport"; }
 		}
 
 		protected override void Populate ()
 		{
-			AddElement<Collection<BindingElement>,BindingElementsModule> (i => i.Elements);
+			AddAttribute (
+				"clientCredentialType", i => i.ClientCredentialType,
+				(i,v) => i.ClientCredentialType = v);
+			AddAttribute (
+				"proxyCredentialType", i => i.ProxyCredentialType,
+				(i,v) => i.ProxyCredentialType = v);
+			AddAttribute ("realm", i => i.Realm, (i,v) => i.Realm = v);
 			base.Populate ();
 		}
-
+		
 	}
+
 }
 

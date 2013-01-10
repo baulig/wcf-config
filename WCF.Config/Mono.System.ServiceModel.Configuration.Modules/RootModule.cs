@@ -1,5 +1,5 @@
 //
-// ValueSerializer.cs
+// RootModule.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,20 +24,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Xml.Schema;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ServiceModel.Channels;
+using System.Xml;
 
-namespace WCF.Config {
+namespace Mono.System.ServiceModel.Configuration.Modules {
 
-	public abstract class ValueSerializer<T> {
-
-		public abstract string Serialize (T instance);
-
-		public abstract T Deserialize (string text);
-
-		public abstract XmlSchemaSimpleType SchemaType {
-			get;
+	public class RootModule : ValueModule<Configuration> {
+		public override string Name {
+			get { return "wcf-config"; }
 		}
 
+		protected override void Populate ()
+		{
+			AddElement<Collection<Binding>,BindingsModule> (i => i.Bindings);
+			base.Populate ();
+		}
 	}
 }
 

@@ -29,7 +29,7 @@ using System.Xml.Schema;
 using System.Collections.Generic;
 using System.ServiceModel;
 
-namespace WCF.Config {
+namespace Mono.System.ServiceModel.Configuration.Modules {
 	
 	public abstract class HttpBindingBaseModule<T> : BindingModule<T>
 		where T: HttpBindingBase, new()

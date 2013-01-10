@@ -1,10 +1,10 @@
 //
-// BindingModule.cs
+// Configuration.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
 //
-// Copyright (c) 2012 Xamarin Inc. (http://www.xamarin.com)
+// Copyright (c) 2013 Xamarin Inc. (http://www.xamarin.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -25,24 +25,18 @@
 // THE SOFTWARE.
 using System;
 using System.Collections.Generic;
-using System.Xml;
-using System.Xml.Schema;
+using System.Collections.ObjectModel;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 
-namespace WCF.Config {
+namespace Mono.System.ServiceModel.Configuration {
 
-	public class BindingsModule : CollectionModule<Binding> {
+	public class Configuration {
 
-		public override string Name {
-			get { return "bindings"; }
-		}
+		Collection<Binding> bindings = new Collection<Binding> ();
 
-		protected override void Populate ()
-		{
-			AddElement<BasicHttpBinding, BasicHttpBindingModule> ();
-			AddElement<CustomBinding, CustomBindingModule> ();
-			base.Populate ();
+		public Collection<Binding> Bindings {
+			get { return bindings; }
 		}
 
 	}

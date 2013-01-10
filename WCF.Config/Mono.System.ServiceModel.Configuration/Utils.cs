@@ -33,7 +33,7 @@ using System.ServiceModel.Channels;
 using System.ServiceModel.Configuration;
 using SysConfig = System.Configuration;
 
-namespace WCF.Config {
+namespace Mono.System.ServiceModel.Configuration {
 
 	public static class Utils {
 

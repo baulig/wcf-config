@@ -33,7 +33,7 @@ using System.Collections.ObjectModel;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 
-namespace WCF.Config {
+namespace Mono.System.ServiceModel.Configuration {
 
 	public abstract class CollectionModule<T> : Module<Collection<T>>
 	{

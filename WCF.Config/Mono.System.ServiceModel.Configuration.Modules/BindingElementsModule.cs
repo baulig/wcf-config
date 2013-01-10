@@ -1,5 +1,5 @@
 //
-// Element.cs
+// BindingElementsModule.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,33 +24,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Xml;
-using System.Linq;
-using System.Collections.Generic;
+using System.ServiceModel;
+using System.ServiceModel.Channels;
 
-namespace WCF.Config {
+namespace Mono.System.ServiceModel.Configuration.Modules {
 
-	public abstract class Element<T> {
+	public class BindingElementsModule : CollectionModule<BindingElement> {
 
-		public Module Module {
-			get;
-			private set;
+		public override string Name {
+			get { return "elements"; }
 		}
 
-		public Type Type {
-			get;
-			private set;
-		}
-
-		public abstract void Serialize (XmlWriter writer, T instance);
-		
-		public abstract void Deserialize (XmlReader reader, T instance);
-
-		public Element (Module module, Type type)
+		protected override void Populate ()
 		{
-			this.Module = module;
-			this.Type = type;
+			AddElement<TextMessageEncodingBindingElement,TextMessageEncodingModule> ();
+			base.Populate ();
 		}
-
+		
 	}
 }
+

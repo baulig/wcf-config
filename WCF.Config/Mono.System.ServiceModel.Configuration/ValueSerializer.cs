@@ -1,10 +1,10 @@
 //
-// BasicHttpBindingModule.cs
+// ValueSerializer.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
 //
-// Copyright (c) 2012 Xamarin Inc. (http://www.xamarin.com)
+// Copyright (c) 2013 Xamarin Inc. (http://www.xamarin.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,24 +24,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Xml;
 using System.Xml.Schema;
-using System.Collections.Generic;
-using System.ServiceModel;
 
-namespace WCF.Config {
+namespace Mono.System.ServiceModel.Configuration {
 
-	public class BasicHttpBindingModule : HttpBindingBaseModule<BasicHttpBinding> {
+	public abstract class ValueSerializer<T> {
 
-		public override string Name {
-			get { return "basicHttpBinding"; }
+		public abstract string Serialize (T instance);
+
+		public abstract T Deserialize (string text);
+
+		public abstract XmlSchemaSimpleType SchemaType {
+			get;
 		}
 
-		protected override void Populate ()
-		{
-			AddAttribute ("messageEncoding", i => i.MessageEncoding, (i,v) => i.MessageEncoding = v);
-			AddElement<BasicHttpSecurity,BasicHttpSecurityModule> (i => i.Security);
-			base.Populate ();
-		}
 	}
 }
+

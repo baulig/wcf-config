@@ -31,7 +31,7 @@ using System.Xml;
 using System.Xml.Schema;
 using System.ServiceModel;
 
-namespace WCF.Config {
+namespace Mono.System.ServiceModel.Configuration {
 
 	public abstract class Module {
 

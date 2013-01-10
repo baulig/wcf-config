@@ -33,7 +33,9 @@ using System.Xml.Schema;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 
-namespace WCF.Config {
+namespace Mono.System.ServiceModel.Configuration {
+
+	using Modules;
 
 	public class Generator {
 		static readonly RootModule rootModule = new RootModule ();

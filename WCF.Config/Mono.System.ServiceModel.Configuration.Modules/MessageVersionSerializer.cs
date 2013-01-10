@@ -27,7 +27,7 @@ using System;
 using System.Xml.Schema;
 using System.ServiceModel.Channels;
 
-namespace WCF.Config {
+namespace Mono.System.ServiceModel.Configuration.Modules {
 
 	public class MessageVersionSerializer : ValueSerializer<MessageVersion> {
 

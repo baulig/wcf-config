@@ -37,6 +37,9 @@ using SysConfig = System.Configuration;
 
 namespace WCF.Config {
 
+	using Mono.System.ServiceModel.Configuration;
+	using Mono.System.ServiceModel.Configuration.Modules;
+
 	class MainClass {
 
 		static T CreateConfigElement<T> (Binding binding)

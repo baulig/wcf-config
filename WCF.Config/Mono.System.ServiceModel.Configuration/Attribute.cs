@@ -26,7 +26,7 @@
 using System;
 using System.Xml.Schema;
 
-namespace WCF.Config {
+namespace Mono.System.ServiceModel.Configuration {
 
 	public abstract class Attribute<T> {
 

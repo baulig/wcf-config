@@ -1,10 +1,10 @@
 //
-// HttpTransportSecurityModule.cs
+// BindingModule.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
 //
-// Copyright (c) 2013 Xamarin Inc. (http://www.xamarin.com)
+// Copyright (c) 2012 Xamarin Inc. (http://www.xamarin.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,29 +24,25 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Xml;
+using System.Xml.Schema;
+using System.Collections.Generic;
 using System.ServiceModel;
+using System.ServiceModel.Channels;
 
-namespace WCF.Config {
+namespace Mono.System.ServiceModel.Configuration.Modules {
 
-	public class HttpTransportSecurityModule : ValueModule<HttpTransportSecurity> {
-		
-		public override string Name {
-			get { return "transport"; }
-		}
-
+	public abstract class BindingModule<T> : ValueModule<T>
+		where T : Binding, new()
+	{
 		protected override void Populate ()
 		{
-			AddAttribute (
-				"clientCredentialType", i => i.ClientCredentialType,
-				(i,v) => i.ClientCredentialType = v);
-			AddAttribute (
-				"proxyCredentialType", i => i.ProxyCredentialType,
-				(i,v) => i.ProxyCredentialType = v);
-			AddAttribute ("realm", i => i.Realm, (i,v) => i.Realm = v);
+			AddAttribute ("name", true, v => v.Name, (i,v) => i.Name = v);
+			AddAttribute ("openTimeout", v => v.OpenTimeout, (i,v) => i.OpenTimeout = v);
+			AddAttribute ("closeTimeout", v => v.CloseTimeout, (i,v) => i.CloseTimeout = v);
+			AddAttribute ("receiveTimeout", v => v.ReceiveTimeout, (i,v) => i.ReceiveTimeout = v);
+			AddAttribute ("sendTimeout", v => v.SendTimeout, (i,v) => i.SendTimeout = v);
 			base.Populate ();
 		}
-		
 	}
-
 }
-
