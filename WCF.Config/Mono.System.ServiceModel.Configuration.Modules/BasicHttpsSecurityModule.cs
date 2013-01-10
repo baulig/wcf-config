@@ -1,5 +1,5 @@
 //
-// BasicHttpSecurityModule.cs
+// BasicHttpsSecurityModule.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -27,13 +27,13 @@ using System;
 using System.ServiceModel;
 
 namespace Mono.System.ServiceModel.Configuration.Modules {
-
-	public class BasicHttpSecurityModule : ValueModule<BasicHttpSecurity> {
-
+	
+	public class BasicHttpsSecurityModule : ValueModule<BasicHttpsSecurity> {
+		
 		public override string Name {
-			get { return "httpSecurity"; }
+			get { return "httpsSecurity"; }
 		}
-
+		
 		protected override void Populate ()
 		{
 			AddAttribute ("mode", i => i.Mode, (i,v) => i.Mode = v);
@@ -41,12 +41,12 @@ namespace Mono.System.ServiceModel.Configuration.Modules {
 				i => i.Transport).IsModified (i => !IsDefault (i.Transport));
 			base.Populate ();
 		}
-
+		
 		static bool IsDefault (HttpTransportSecurity t)
 		{
 			return t.ClientCredentialType == HttpClientCredentialType.None &&
 				t.ProxyCredentialType == HttpProxyCredentialType.None &&
-				string.IsNullOrEmpty (t.Realm);
+					string.IsNullOrEmpty (t.Realm);
 		}
 	}
 }

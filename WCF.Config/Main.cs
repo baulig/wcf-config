@@ -67,7 +67,9 @@ namespace WCF.Config {
 			http.AllowCookies = true;
 			http.Security.Mode = BasicHttpSecurityMode.Transport;
 			http.TransferMode = TransferMode.StreamedRequest;
-			// http.Security.Transport.ProxyCredentialType = HttpProxyCredentialType.Digest;
+
+			var https = new BasicHttpsBinding ();
+			https.MaxBufferSize = 65536;
 
 			var netTcp = new NetTcpBinding ();
 
@@ -79,7 +81,7 @@ namespace WCF.Config {
 
 			var root = new Configuration ();
 			root.Bindings.Add (http);
-			root.Bindings.Add (http);
+			root.Bindings.Add (https);
 			root.Bindings.Add (netTcp);
 			root.Bindings.Add (custom);
 

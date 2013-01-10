@@ -1,5 +1,5 @@
 //
-// BasicHttpSecurityModule.cs
+// BasicHttpsBindingModule.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,29 +24,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Xml;
+using System.Xml.Schema;
+using System.Collections.Generic;
 using System.ServiceModel;
 
 namespace Mono.System.ServiceModel.Configuration.Modules {
-
-	public class BasicHttpSecurityModule : ValueModule<BasicHttpSecurity> {
-
+	
+	public class BasicHttpsBindingModule : HttpBindingBaseModule<BasicHttpsBinding> {
+		
 		public override string Name {
-			get { return "httpSecurity"; }
+			get { return "basicHttpsBinding"; }
 		}
-
+		
 		protected override void Populate ()
 		{
-			AddAttribute ("mode", i => i.Mode, (i,v) => i.Mode = v);
-			AddElement<HttpTransportSecurity, HttpTransportSecurityModule> (
-				i => i.Transport).IsModified (i => !IsDefault (i.Transport));
+			AddAttribute ("messageEncoding", i => i.MessageEncoding, (i,v) => i.MessageEncoding = v);
+			AddElement<BasicHttpsSecurity,BasicHttpsSecurityModule> (i => i.Security);
 			base.Populate ();
-		}
-
-		static bool IsDefault (HttpTransportSecurity t)
-		{
-			return t.ClientCredentialType == HttpClientCredentialType.None &&
-				t.ProxyCredentialType == HttpProxyCredentialType.None &&
-				string.IsNullOrEmpty (t.Realm);
 		}
 	}
 }
