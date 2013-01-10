@@ -44,9 +44,7 @@ namespace Mono.System.ServiceModel.Configuration {
 
 		public static XmlSchema CreateSchema ()
 		{
-			var map = new SchemaTypeMap ();
-			rootModule.RegisterSchemaTypes (map);
-			return map.Schema;
+			return SchemaTypeMap.CreateSchema (rootModule);
 		}
 
 		public static string Serialize (Configuration config)
@@ -139,7 +137,7 @@ namespace Mono.System.ServiceModel.Configuration {
 		internal static XmlQualifiedName GetEnumerationType (Type type, SchemaTypeMap map)
 		{
 			if (map.IsRegistered (type))
-				return map.LookupType (type);
+				return map.LookupTypeName (type);
 
 			var simple = new XmlSchemaSimpleType ();
 

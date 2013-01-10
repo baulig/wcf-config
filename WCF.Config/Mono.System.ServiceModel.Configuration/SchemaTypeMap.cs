@@ -35,15 +35,31 @@ namespace Mono.System.ServiceModel.Configuration {
 	public class SchemaTypeMap {
 
 		XmlSchema schema;
-		Dictionary<Type, XmlSchemaType> typeMap = new Dictionary<Type, XmlSchemaType> ();
+		Dictionary<Type, XmlSchemaComplexType> moduleMap = new Dictionary<Type, XmlSchemaComplexType> ();
+		Dictionary<Type, XmlSchemaSimpleType> typeMap = new Dictionary<Type, XmlSchemaSimpleType> ();
 		Dictionary<Type, XmlSchemaElement> elementMap = new Dictionary<Type, XmlSchemaElement> ();
 
-		public SchemaTypeMap ()
+		SchemaTypeMap (Module root)
 		{
 			schema = new XmlSchema ();
-			schema.ElementFormDefault = XmlSchemaForm.Unqualified;
+			schema.ElementFormDefault = XmlSchemaForm.Qualified;
 			schema.AttributeFormDefault = XmlSchemaForm.Unqualified;
 			schema.TargetNamespace = Generator.Namespace;
+
+			root.RegisterSchemaTypes (this);
+
+			var element = new XmlSchemaElement ();
+			element.Name = root.Name;
+			element.SchemaTypeName = LookupModuleTypeName (root);
+			elementMap.Add (root.GetType (), element);
+			schema.Items.Add (element);
+
+			root.CreateSchemaType (this);
+		}
+
+		public static XmlSchema CreateSchema (Module root)
+		{
+			return new SchemaTypeMap (root).Schema;
 		}
 
 		public XmlSchema Schema {
@@ -52,31 +68,31 @@ namespace Mono.System.ServiceModel.Configuration {
 
 		public bool IsRegistered (Module module)
 		{
-			return typeMap.ContainsKey (module.GetType ());
+			return moduleMap.ContainsKey (module.GetType ());
 		}
 
-		public void RegisterModule (Module module, XmlSchemaType type)
+		public void RegisterModule (Module module, XmlSchemaComplexType type)
 		{
-			typeMap.Add (module.GetType (), type);
+			moduleMap.Add (module.GetType (), type);
 			schema.Items.Add (type);
-
-			var element = new XmlSchemaElement ();
-			element.Name = module.Name;
-			element.SchemaTypeName = new QName (type.Name, schema.TargetNamespace);
-			elementMap.Add (module.GetType (), element);
-			schema.Items.Add (element);
 		}
 
-		public QName LookupModuleType (Module module)
+		public QName LookupModuleTypeName (Module module)
 		{
-			var type = typeMap [module.GetType ()];
+			var type = moduleMap [module.GetType ()];
 			return new QName (type.Name, schema.TargetNamespace);
 		}
 		
-		public QName LookupModuleElement (Module module)
+		public XmlSchemaElement CreateModuleElement (Module module)
 		{
-			var element = elementMap [module.GetType ()];
-			return new QName (element.Name, schema.TargetNamespace);
+			var element = new XmlSchemaElement ();
+			if (elementMap.ContainsKey (module.GetType ()))
+				element.RefName = new QName (module.Name, schema.TargetNamespace);
+			else {
+				element.Name = module.Name;
+				element.SchemaTypeName = LookupModuleTypeName (module);
+			}
+			return element;
 		}
 
 		public bool IsRegistered (Type type)
@@ -84,14 +100,14 @@ namespace Mono.System.ServiceModel.Configuration {
 			return typeMap.ContainsKey (type);
 		}
 
-		public QName RegisterType (Type type, XmlSchemaType item)
+		public QName RegisterType (Type type, XmlSchemaSimpleType item)
 		{
 			typeMap.Add (type, item);
 			schema.Items.Add (item);
 			return new QName (item.Name, schema.TargetNamespace);
 		}
 
-		public QName LookupType (Type type)
+		public QName LookupTypeName (Type type)
 		{
 			return new QName (typeMap [type].Name, schema.TargetNamespace);
 		}

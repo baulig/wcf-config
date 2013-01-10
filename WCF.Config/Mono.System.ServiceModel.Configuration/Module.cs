@@ -53,6 +53,7 @@ namespace Mono.System.ServiceModel.Configuration {
 	{
 		List<Element<T>> elements;
 		List<Attribute<T>> attributes;
+		XmlSchemaComplexType schemaType;
 		bool populated;
 		
 		public bool HasElements {
@@ -117,10 +118,10 @@ namespace Mono.System.ServiceModel.Configuration {
 			if (map.IsRegistered (this))
 				return;
 
-			var type = new XmlSchemaComplexType ();
-			type.Name = Name;
+			schemaType = new XmlSchemaComplexType ();
+			schemaType.Name = Name;
 
-			map.RegisterModule (this, type);
+			map.RegisterModule (this, schemaType);
 
 			foreach (var attr in Attributes) {
 				attr.RegisterSchemaTypes (map);
@@ -131,15 +132,17 @@ namespace Mono.System.ServiceModel.Configuration {
 			}
 
 			foreach (var attr in Attributes) {
-				type.Attributes.Add (attr.CreateSchema ());
+				schemaType.Attributes.Add (attr.CreateSchema ());
 			}
-
-			CreateSchemaType (type, map);
 		}
 
 		internal override void CreateSchemaType (SchemaTypeMap map)
 		{
-			;
+			foreach (var element in Elements) {
+				element.Module.CreateSchemaType (map);
+			}
+
+			CreateSchemaType (schemaType, map);
 		}
 		
 		public override void Serialize (XmlWriter writer, object obj)
