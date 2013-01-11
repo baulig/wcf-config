@@ -39,7 +39,9 @@ namespace Mono.System.ServiceModel.Configuration.Modules {
 		{
 			AddElement<TextMessageEncodingModule,TextMessageEncodingBindingElement> ();
 			AddElement<BinaryMessageEncodingModule,BinaryMessageEncodingBindingElement> ();
+#if !MOBILE_FIXME
 			AddElement<MtomMessageEncodingModule,MtomMessageEncodingBindingElement> ();
+#endif
 			AddElement<HttpTransportModule,HttpTransportBindingElement> ();
 			base.Populate ();
 		}

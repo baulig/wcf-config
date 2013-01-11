@@ -31,7 +31,11 @@ using System.ServiceModel;
 
 namespace Mono.System.ServiceModel.Configuration.Modules {
 
+#if MOBILE_FIXME
+	public class BasicHttpBindingModule : HttpBindingBaseModule {
+#else
 	public class BasicHttpBindingModule : HttpBindingBaseModule<BasicHttpBinding> {
+#endif
 
 		public override string Name {
 			get { return "basicHttpBinding"; }
@@ -40,7 +44,9 @@ namespace Mono.System.ServiceModel.Configuration.Modules {
 		protected override void Populate ()
 		{
 			AddAttribute ("messageEncoding", i => i.MessageEncoding, (i,v) => i.MessageEncoding = v);
+#if !MOBILE_FIXME
 			AddElement<BasicHttpSecurityModule,BasicHttpSecurity> (i => i.Security);
+#endif
 			base.Populate ();
 		}
 	}

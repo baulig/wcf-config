@@ -54,9 +54,11 @@ namespace Mono.System.ServiceModel.Configuration.Modules {
 			AddAttribute (
 				"maxBufferSize", i => i.MaxBufferSize,
 				(i,v) => i.MaxBufferSize = v).SetMinMax ("1", int.MaxValue.ToString ());
+#if !MOBILE_FIXME
 			AddAttribute (
 				"decompressionEnabled", i => i.DecompressionEnabled,
 				(i,v) => i.DecompressionEnabled = v);
+#endif
 
 			AddAttribute (
 				"proxyAddress", i => i.ProxyAddress, (i,v) => i.ProxyAddress = v);

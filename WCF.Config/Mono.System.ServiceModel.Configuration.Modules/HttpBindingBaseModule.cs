@@ -31,8 +31,12 @@ using System.ServiceModel;
 
 namespace Mono.System.ServiceModel.Configuration.Modules {
 	
+#if MOBILE_FIXME
+	public abstract class HttpBindingBaseModule : BindingModule<BasicHttpBinding>
+#else
 	public abstract class HttpBindingBaseModule<T> : BindingModule<T>
 		where T: HttpBindingBase, new()
+#endif
 	{
 		protected override void Populate ()
 		{
