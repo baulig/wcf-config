@@ -85,15 +85,24 @@ namespace Mono.System.ServiceModel.Configuration {
 		{
 		}
 
-		public Configuration (TextReader reader)
+		public void Deserialize (string xmlFilename, string schemaFilename)
 		{
-			var settings = new XmlReaderSettings ();
-			settings.ValidationType = ValidationType.Schema;
-			settings.Schemas.Add (Generator.Schema);
-			settings.IgnoreComments = true;
-			settings.IgnoreWhitespace = true;
+			var schema = new XmlSchemaSet ();
+			schema.Add (Generator.Namespace, Utils.GetFilename (schemaFilename));
+			schema.Compile ();
+				
+			var settings = new XmlReaderSettings {
+				ValidationType = ValidationType.Schema,
+				ValidationFlags = XmlSchemaValidationFlags.ProcessInlineSchema |
+				XmlSchemaValidationFlags.ProcessSchemaLocation |
+				XmlSchemaValidationFlags.ReportValidationWarnings |
+				XmlSchemaValidationFlags.ProcessIdentityConstraints,
+				IgnoreComments = true, IgnoreWhitespace = true
+			};
+				
+			settings.Schemas.Add (schema);
 
-			using (var xml = XmlReader.Create (reader, settings)) {
+			using (var xml = XmlReader.Create (Utils.GetFilename (xmlFilename), settings)) {
 				Generator.RootModule.Deserialize (xml, this);
 			}
 		}

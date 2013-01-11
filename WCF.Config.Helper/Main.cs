@@ -53,7 +53,7 @@ namespace WCF.Config.Helper {
 				Test.Run (xmlFilename, xsdFilename);
 			}
 
-			Test.Deserialize (xmlFilename);
+			Test.Deserialize (xmlFilename, xsdFilename);
 		}
 	}
 }

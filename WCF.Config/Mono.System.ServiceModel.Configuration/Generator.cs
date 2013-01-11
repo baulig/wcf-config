@@ -77,12 +77,6 @@ namespace Mono.System.ServiceModel.Configuration {
 			}
 		}
 
-		public static Configuration Read (string xmlFilename)
-		{
-			using (var reader = new StreamReader (xmlFilename))
-				return new Configuration (reader);
-		}
-
 		internal static Module RootModule {
 			get { return rootModule; }
 		}
@@ -115,13 +109,6 @@ namespace Mono.System.ServiceModel.Configuration {
 			return GetModule<T> ();
 		}
 #endif
-
-		public static Configuration Deserialize (string xml)
-		{
-			using (var reader = new StringReader (xml)) {
-				return new Configuration (reader);
-			}
-		}
 
 		internal static string SerializeValue (object value)
 		{

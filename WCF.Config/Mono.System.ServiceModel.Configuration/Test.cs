@@ -88,9 +88,10 @@ namespace Mono.System.ServiceModel.Configuration {
 			Utils.ValidateSchema (xmlFilename, xsdFilename);
 		}
 
-		public static void Deserialize (string xmlFilename)
+		public static void Deserialize (string xmlFilename, string xsdFilename)
 		{
-			var config = Generator.Read (xmlFilename);
+			var config = new Configuration ();
+			config.Deserialize (xmlFilename, xsdFilename);
 			Console.WriteLine ("READ CONFIG FROM XML");
 
 			foreach (var binding in config.Bindings) {
