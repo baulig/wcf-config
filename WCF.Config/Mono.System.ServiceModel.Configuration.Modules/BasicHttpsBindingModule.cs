@@ -32,7 +32,7 @@ using System.ServiceModel;
 
 namespace Mono.System.ServiceModel.Configuration.Modules {
 	
-	public class BasicHttpsBindingModule : HttpBindingBaseModule<BasicHttpsBinding> {
+	public class BasicHttpsBindingModule : ValueModule<BasicHttpsBinding> {
 		
 		public override string Name {
 			get { return "basicHttpsBinding"; }
@@ -40,6 +40,8 @@ namespace Mono.System.ServiceModel.Configuration.Modules {
 		
 		protected override void Populate ()
 		{
+			Implement<BindingValue> ();
+			Implement<HttpBindingBaseValue> ();
 			AddAttribute ("messageEncoding", i => i.MessageEncoding, (i,v) => i.MessageEncoding = v);
 			AddElement<BasicHttpsSecurityModule,BasicHttpsSecurity> (i => i.Security);
 			base.Populate ();

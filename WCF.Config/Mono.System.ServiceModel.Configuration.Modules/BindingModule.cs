@@ -32,20 +32,15 @@ using System.ServiceModel.Channels;
 
 namespace Mono.System.ServiceModel.Configuration.Modules {
 
-	public abstract class BindingModule<T> : ValueModule<T>
-		where T : Binding, new()
+	public class BindingValue : Value<Binding>
 	{
-		protected override void Populate ()
+		public BindingValue ()
 		{
 			AddAttribute ("name", true, v => v.Name, (i,v) => i.Name = v);
-			// AddAttribute ("test", v => 1.0, (i,v) => { });
-#if FIXME
 			AddAttribute ("openTimeout", false, v => v.OpenTimeout, (i,v) => i.OpenTimeout = v);
 			AddAttribute ("closeTimeout", v => v.CloseTimeout, (i,v) => i.CloseTimeout = v);
 			AddAttribute ("receiveTimeout", v => v.ReceiveTimeout, (i,v) => i.ReceiveTimeout = v);
 			AddAttribute ("sendTimeout", v => v.SendTimeout, (i,v) => i.SendTimeout = v);
-#endif
-			base.Populate ();
 		}
 	}
 }

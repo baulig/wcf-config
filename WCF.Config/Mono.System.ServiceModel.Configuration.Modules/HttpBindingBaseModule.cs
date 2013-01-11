@@ -32,22 +32,13 @@ using System.ServiceModel;
 namespace Mono.System.ServiceModel.Configuration.Modules {
 	
 #if MOBILE_FIXME
-	public abstract class HttpBindingBaseModule : BindingModule<BasicHttpBinding>
+	public class HttpBindingBaseValue : Value<BasicHttpBinding>
 #else
-	public abstract class HttpBindingBaseModule<T> : BindingModule<T>
-		where T: HttpBindingBase, new()
+	public class HttpBindingBaseValue : Value<HttpBindingBase>
 #endif
 	{
-		protected override void Populate ()
+		public HttpBindingBaseValue ()
 		{
-#if FIXME
-			AddAttribute ("name", true, v => v.Name, (i,v) => i.Name = v);
-			AddAttribute ("openTimeout", false, v => v.OpenTimeout, (i,v) => i.OpenTimeout = v);
-			AddAttribute ("closeTimeout", v => v.CloseTimeout, (i,v) => i.CloseTimeout = v);
-			AddAttribute ("receiveTimeout", v => v.ReceiveTimeout, (i,v) => i.ReceiveTimeout = v);
-			AddAttribute ("sendTimeout", v => v.SendTimeout, (i,v) => i.SendTimeout = v);
-#endif
-
 			AddAttribute ("allowCookies", i => i.AllowCookies, (i,v) => i.AllowCookies = v);
 			AddAttribute (
 				"bypassProxyOnLocal", i => i.BypassProxyOnLocal,
@@ -70,8 +61,6 @@ namespace Mono.System.ServiceModel.Configuration.Modules {
 			AddAttribute ("proxyAddress", i => i.ProxyAddress, (i,v) => i.ProxyAddress = v);
 			AddAttribute ("textEncoding", i => i.TextEncoding, (i,v) => i.TextEncoding = v);
 			AddAttribute ("transferMode", i => i.TransferMode, (i,v) => i.TransferMode = v);
-			base.Populate ();
 		}
 	}
 }
-
