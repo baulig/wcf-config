@@ -77,7 +77,7 @@ namespace Mono.System.ServiceModel.Configuration {
 		{
 			var sequence = new XmlSchemaSequence ();
 			foreach (var element in Elements) {
-				var item = map.CreateModuleElement (element.Module);
+				var item = element.Module.CreateSchemaElement (map);
 				item.MinOccurs = 0;
 				item.MaxOccursString = "unbounded";
 				sequence.Items.Add (item);

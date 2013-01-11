@@ -54,7 +54,7 @@ namespace WCF.Config.Helper {
 
 		public static void Main (string[] args)
 		{
-			Run ("test4.xml", "test4.xsd");
+			Run ("test.xml", "test.xsd");
 		}
 
 		static void Run (string xmlFilename, string xsdFilename)
@@ -96,7 +96,7 @@ namespace WCF.Config.Helper {
 			endpoint.Contract = "myContract";
 			endpoint.Binding = "myBinding";
 			root.Endpoints.Add (endpoint);
-			root.Endpoints.Add (endpoint);
+			// root.Endpoints.Add (endpoint);
 
 			Generator.Write (xmlFilename, xsdFilename, root);
 

@@ -38,7 +38,7 @@ namespace Mono.System.ServiceModel.Configuration.Modules {
 
 		protected override void Populate ()
 		{
-			// AddElement<BindingsModule,Collection<Binding>> (i => i.Bindings);
+			AddElement<BindingsModule,Collection<Binding>> (i => i.Bindings);
 			AddElement<EndpointsModule,Collection<Endpoint>> (i => i.Endpoints);
 			base.Populate ();
 		}

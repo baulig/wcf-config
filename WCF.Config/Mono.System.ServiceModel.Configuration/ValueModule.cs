@@ -80,7 +80,7 @@ namespace Mono.System.ServiceModel.Configuration {
 				var all = new XmlSchemaAll ();
 				all.MinOccurs = 0;
 				foreach (var element in Elements) {
-					var item = map.CreateModuleElement (element.Module);
+					var item = element.Module.CreateSchemaElement (map);
 					all.Items.Add (item);
 				}
 				type.Particle = all;

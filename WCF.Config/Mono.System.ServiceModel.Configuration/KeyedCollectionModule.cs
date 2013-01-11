@@ -76,7 +76,7 @@ namespace Mono.System.ServiceModel.Configuration {
 			base.Populate ();
 		}
 
-		internal override void CreateSchemaElement (XmlSchemaElement schema, SchemaTypeMap map)
+		protected override void CreateSchemaElement (XmlSchemaElement schema, SchemaTypeMap map)
 		{
 			var key = new XmlSchemaKey ();
 			key.Name = "idKey_" + Name;
@@ -98,7 +98,7 @@ namespace Mono.System.ServiceModel.Configuration {
 		{
 			var sequence = new XmlSchemaSequence ();
 
-			var item = map.CreateModuleElement (element.Module);
+			var item = element.Module.CreateSchemaElement (map);
 			item.MinOccurs = 0;
 			item.MaxOccursString = "unbounded";
 			sequence.Items.Add (item);

@@ -37,7 +37,6 @@ namespace Mono.System.ServiceModel.Configuration {
 		XmlSchema schema;
 		Dictionary<Type, XmlSchemaComplexType> moduleMap = new Dictionary<Type, XmlSchemaComplexType> ();
 		Dictionary<Type, XmlSchemaSimpleType> typeMap = new Dictionary<Type, XmlSchemaSimpleType> ();
-		Dictionary<Type, XmlSchemaElement> elementMap = new Dictionary<Type, XmlSchemaElement> ();
 
 		SchemaTypeMap (Module root)
 		{
@@ -53,7 +52,6 @@ namespace Mono.System.ServiceModel.Configuration {
 			var element = new XmlSchemaElement ();
 			element.Name = root.Name;
 			element.SchemaTypeName = LookupModuleTypeName (root);
-			elementMap.Add (root.GetType (), element);
 			schema.Items.Add (element);
 
 			root.CreateSchemaType (this);
@@ -87,20 +85,6 @@ namespace Mono.System.ServiceModel.Configuration {
 			return new QName (type.Name, schema.TargetNamespace);
 		}
 		
-		public XmlSchemaElement CreateModuleElement (Module module)
-		{
-			var element = new XmlSchemaElement ();
-			if (elementMap.ContainsKey (module.GetType ())) {
-				element.RefName = new QName (module.Name, schema.TargetNamespace);
-			} else {
-				element.Name = module.Name;
-				element.SchemaTypeName = LookupModuleTypeName (module);
-				elementMap.Add (module.GetType (), element);
-				module.CreateSchemaElement (element, this);
-			}
-			return element;
-		}
-
 		public bool IsRegistered (Type type)
 		{
 			return typeMap.ContainsKey (type);

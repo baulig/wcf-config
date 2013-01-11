@@ -48,9 +48,7 @@ namespace Mono.System.ServiceModel.Configuration {
 
 		internal abstract void CreateSchemaType (SchemaTypeMap map);
 
-		internal virtual void CreateSchemaElement (XmlSchemaElement schema, SchemaTypeMap map)
-		{
-		}
+		internal abstract XmlSchemaElement CreateSchemaElement (SchemaTypeMap map);
 
 		public abstract void Serialize (XmlWriter writer, object obj);
 
@@ -155,7 +153,20 @@ namespace Mono.System.ServiceModel.Configuration {
 
 			CreateSchemaType (schemaType, map);
 		}
-		
+
+		internal override XmlSchemaElement CreateSchemaElement (SchemaTypeMap map)
+		{
+			var element = new XmlSchemaElement ();
+			element.Name = Name;
+			element.SchemaTypeName = map.LookupModuleTypeName (this);
+			CreateSchemaElement (element, map);
+			return element;
+		}
+
+		protected virtual void CreateSchemaElement (XmlSchemaElement schema, SchemaTypeMap map)
+		{
+		}
+
 		public override void Serialize (XmlWriter writer, object obj)
 		{
 			var instance = (T) obj;

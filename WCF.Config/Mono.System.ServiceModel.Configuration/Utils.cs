@@ -80,25 +80,9 @@ namespace Mono.System.ServiceModel.Configuration {
 			while (reader.Read ())
 				;
 
-			return;
-
-#if FIXME
-			var doc = new XPathDocument (reader);
-			var nav = doc.CreateNavigator ();
-
-			var ok = nav.CheckValidity (schema, OnValidationEvent);
-			Console.WriteLine (ok);
-#else
-			var xml = new XmlDocument ();
-			xml.Load (reader);
-
-			xml.Validate (OnValidationEvent);
-#endif
-		}
-
-		static void OnValidationEvent (object sender, ValidationEventArgs e)
-		{
-			Console.WriteLine ("ON VALIDATION: {0} {1} {2}", e.Message, e.Severity, e.Exception);
+			Console.WriteLine ("Document {0} successfully validated against schema {1}.",
+			                   xmlFilename, schemaFilename);
+			Console.WriteLine ();
 		}
 	}
 }
