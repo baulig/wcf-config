@@ -49,10 +49,11 @@ namespace WCF.Config.Helper {
 		{
 			if (File.Exists (xmlFilename) && File.Exists (xsdFilename)) {
 				Utils.ValidateSchema (xmlFilename, xsdFilename);
-				return;
+			} else {
+				Test.Run (xmlFilename, xsdFilename);
 			}
 
-			Test.Run (xmlFilename, xsdFilename);
+			Test.Deserialize (xmlFilename);
 		}
 	}
 }

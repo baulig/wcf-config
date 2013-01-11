@@ -77,6 +77,12 @@ namespace Mono.System.ServiceModel.Configuration {
 			}
 		}
 
+		public static Configuration Read (string xmlFilename)
+		{
+			using (var reader = new StreamReader (xmlFilename))
+				return new Configuration (reader);
+		}
+
 		internal static Module RootModule {
 			get { return rootModule; }
 		}

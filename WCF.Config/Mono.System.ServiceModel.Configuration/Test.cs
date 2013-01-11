@@ -88,6 +88,40 @@ namespace Mono.System.ServiceModel.Configuration {
 			Utils.ValidateSchema (xmlFilename, xsdFilename);
 		}
 
+		public static void Deserialize (string xmlFilename)
+		{
+			var config = Generator.Read (xmlFilename);
+			Console.WriteLine ("READ CONFIG FROM XML");
+
+			foreach (var binding in config.Bindings) {
+				Console.WriteLine ("BINDING: {0}", binding);
+				var http = binding as BasicHttpBinding;
+				if (http != null)
+					Dump (http);
+				var custom = binding as CustomBinding;
+				if (custom != null)
+					Dump (custom);
+			}
+			foreach (var endpoint in config.Endpoints) {
+				Console.WriteLine ("ENDPOINT: {0}", endpoint);
+			}
+		}
+
+		public static void Dump (BasicHttpBinding binding)
+		{
+			Console.WriteLine ("HTTP: {0} {1} {2} {3}",
+			                   binding.Name, binding.OpenTimeout, binding.Security.Mode,
+			                   binding.TransferMode);
+		}
+
+		public static void Dump (CustomBinding binding)
+		{
+			Console.WriteLine ("CUSTOM: {0}", binding.Name);
+
+			foreach (var element in binding.Elements)
+				Console.WriteLine ("ELEMENT: {0}", element);
+		}
+
 	}
 }
 

@@ -41,6 +41,12 @@ namespace Mono.System.ServiceModel.Configuration {
 			get; set;
 		}
 
+		public override string ToString ()
+		{
+			return string.Format (
+				"[Endpoint: Name={0}, Contract={1}, Binding={2}]", Name, Contract, Binding);
+		}
+
 	}
 }
 
