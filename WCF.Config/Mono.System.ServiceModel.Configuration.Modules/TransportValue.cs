@@ -29,11 +29,9 @@ using System.ServiceModel.Channels;
 
 namespace Mono.System.ServiceModel.Configuration.Modules {
 
-	public abstract class TransportModule<T> : ValueModule<T>
-		where T : TransportBindingElement, new()
+	public abstract class TransportValue<T> : Value<TransportBindingElement>
 	{
-
-		protected override void Populate ()
+		public TransportValue ()
 		{
 			AddAttribute (
 				"manualAddressing", i => i.ManualAddressing,
@@ -46,7 +44,6 @@ namespace Mono.System.ServiceModel.Configuration.Modules {
 				"maxReceiveMessageSize", i => i.MaxReceivedMessageSize,
 				(i,v) => i.MaxReceivedMessageSize = v).
 				SetMinMax ("1", "9223372036854775807");
-			base.Populate ();
 		}
 
 	}

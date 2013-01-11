@@ -96,9 +96,6 @@
     <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration.Modules\BindingElementsModule.cs">
       <Link>Mono.System.ServiceModel.Configuration.Modules\BindingElementsModule.cs</Link>
     </Compile>
-    <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration.Modules\BindingModule.cs">
-      <Link>Mono.System.ServiceModel.Configuration.Modules\BindingModule.cs</Link>
-    </Compile>
     <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration.Modules\BindingsModule.cs">
       <Link>Mono.System.ServiceModel.Configuration.Modules\BindingsModule.cs</Link>
     </Compile>
@@ -110,9 +107,6 @@
     </Compile>
     <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration.Modules\EndpointsModule.cs">
       <Link>Mono.System.ServiceModel.Configuration.Modules\EndpointsModule.cs</Link>
-    </Compile>
-    <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration.Modules\HttpBindingBaseModule.cs">
-      <Link>Mono.System.ServiceModel.Configuration.Modules\HttpBindingBaseModule.cs</Link>
     </Compile>
     <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration.Modules\HttpTransportModule.cs">
       <Link>Mono.System.ServiceModel.Configuration.Modules\HttpTransportModule.cs</Link>
@@ -132,12 +126,18 @@
     <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration.Modules\TextMessageEncodingModule.cs">
       <Link>Mono.System.ServiceModel.Configuration.Modules\TextMessageEncodingModule.cs</Link>
     </Compile>
-    <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration.Modules\TransportModule.cs">
-      <Link>Mono.System.ServiceModel.Configuration.Modules\TransportModule.cs</Link>
-    </Compile>
     <Compile Include="Mono.System.ServiceModel.Configuration.Modules\TestModule.cs" />
     <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration\Value.cs">
       <Link>Mono.System.ServiceModel.Configuration\Value.cs</Link>
+    </Compile>
+    <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration.Modules\BindingValue.cs">
+      <Link>Mono.System.ServiceModel.Configuration.Modules\BindingValue.cs</Link>
+    </Compile>
+    <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration.Modules\HttpBindingBaseValue.cs">
+      <Link>Mono.System.ServiceModel.Configuration.Modules\HttpBindingBaseValue.cs</Link>
+    </Compile>
+    <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration.Modules\TransportValue.cs">
+      <Link>Mono.System.ServiceModel.Configuration.Modules\TransportValue.cs</Link>
     </Compile>
   </ItemGroup>
 </Project>

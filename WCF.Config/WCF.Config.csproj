@@ -51,10 +51,8 @@
     <Compile Include="Mono.System.ServiceModel.Configuration.Modules\BasicHttpBindingModule.cs" />
     <Compile Include="Mono.System.ServiceModel.Configuration.Modules\BasicHttpSecurityModule.cs" />
     <Compile Include="Mono.System.ServiceModel.Configuration.Modules\BindingElementsModule.cs" />
-    <Compile Include="Mono.System.ServiceModel.Configuration.Modules\BindingModule.cs" />
     <Compile Include="Mono.System.ServiceModel.Configuration.Modules\BindingsModule.cs" />
     <Compile Include="Mono.System.ServiceModel.Configuration.Modules\CustomBindingModule.cs" />
-    <Compile Include="Mono.System.ServiceModel.Configuration.Modules\HttpBindingBaseModule.cs" />
     <Compile Include="Mono.System.ServiceModel.Configuration.Modules\HttpTransportSecurityModule.cs" />
     <Compile Include="Mono.System.ServiceModel.Configuration.Modules\MessageVersionSerializer.cs" />
     <Compile Include="Mono.System.ServiceModel.Configuration.Modules\RootModule.cs" />
@@ -64,13 +62,15 @@
     <Compile Include="Mono.System.ServiceModel.Configuration\SchemaTypeMap.cs" />
     <Compile Include="Mono.System.ServiceModel.Configuration.Modules\BasicHttpsBindingModule.cs" />
     <Compile Include="Mono.System.ServiceModel.Configuration.Modules\BasicHttpsSecurityModule.cs" />
-    <Compile Include="Mono.System.ServiceModel.Configuration.Modules\TransportModule.cs" />
     <Compile Include="Mono.System.ServiceModel.Configuration.Modules\HttpTransportModule.cs" />
     <Compile Include="Mono.System.ServiceModel.Configuration.Modules\EndpointsModule.cs" />
     <Compile Include="Mono.System.ServiceModel.Configuration.Modules\EndpointModule.cs" />
     <Compile Include="Mono.System.ServiceModel.Configuration\Endpoint.cs" />
     <Compile Include="Mono.System.ServiceModel.Configuration\KeyedCollectionModule.cs" />
     <Compile Include="Mono.System.ServiceModel.Configuration\Value.cs" />
+    <Compile Include="Mono.System.ServiceModel.Configuration.Modules\BindingValue.cs" />
+    <Compile Include="Mono.System.ServiceModel.Configuration.Modules\HttpBindingBaseValue.cs" />
+    <Compile Include="Mono.System.ServiceModel.Configuration.Modules\TransportValue.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
