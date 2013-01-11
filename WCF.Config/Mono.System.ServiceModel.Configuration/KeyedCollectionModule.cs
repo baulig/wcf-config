@@ -82,7 +82,7 @@ namespace Mono.System.ServiceModel.Configuration {
 			key.Name = "idKey_" + Name;
 			
 			var selector = new XmlSchemaXPath ();
-			selector.XPath = Generator.Prefix + ":" + element.Module.Name;
+			selector.XPath = SchemaTypeMap.Prefix + ":" + element.Module.Name;
 			key.Selector = selector;
 			
 			var field = new XmlSchemaXPath ();

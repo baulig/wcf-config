@@ -42,7 +42,7 @@ namespace Mono.System.ServiceModel.Configuration {
 		static readonly RootModule rootModule;
 		static readonly Dictionary<Type, Module> moduleMap;
 
-		public const string Prefix = "mwc";
+		public const string Prefix = null;
 		public const string Namespace = "https://github.com/baulig/wcf-config/schema";
 
 		static Generator ()

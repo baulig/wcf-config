@@ -46,7 +46,7 @@ namespace Mono.System.ServiceModel.Configuration {
 			schema.AttributeFormDefault = XmlSchemaForm.Unqualified;
 			schema.TargetNamespace = Generator.Namespace;
 
-			schema.Namespaces.Add (Generator.Prefix, Generator.Namespace);
+			schema.Namespaces.Add (Prefix, Generator.Namespace);
 
 			root.RegisterSchemaTypes (this);
 
@@ -67,6 +67,8 @@ namespace Mono.System.ServiceModel.Configuration {
 		public XmlSchema Schema {
 			get { return schema; }
 		}
+
+		public const string Prefix = "mwc";
 
 		public bool IsRegistered (Module module)
 		{
