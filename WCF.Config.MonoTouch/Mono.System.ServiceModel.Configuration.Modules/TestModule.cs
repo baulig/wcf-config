@@ -1,10 +1,10 @@
 //
-// BindingModule.cs
+// TestModule.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
 //
-// Copyright (c) 2012 Xamarin Inc. (http://www.xamarin.com)
+// Copyright (c) 2013 Xamarin Inc. (http://www.xamarin.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -29,29 +29,67 @@ using System.Xml;
 using System.Xml.Schema;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
+using System.ServiceModel.Description;
 
 namespace Mono.System.ServiceModel.Configuration.Modules {
 
-	public class BindingsModule : KeyedCollectionModule<Binding> {
-
-		public override string Name {
-			get { return "bindings"; }
+	public class MyTest : Test {
+		public string Hello {
+			get; set;
 		}
 
+		public double PI {
+			get; set;
+		}
+
+		public override void Run ()
+		{
+			Console.WriteLine ("Hello World");
+		}
+	}
+
+	public class TestCollectionModule : KeyedCollectionModule<Test> {
+		
+		public override string Name {
+			get { return "tests"; }
+		}
+		
 		protected override string KeyName {
 			get { return "@name"; }
 		}
-
+		
 		protected override void Populate ()
 		{
-			AddElement<BasicHttpBindingModule, BasicHttpBinding> ();
-#if !MOBILE_FIXME
-			AddElement<BasicHttpsBindingModule, BasicHttpsBinding> ();
-			AddElement<CustomBindingModule, CustomBinding> ();
-#endif
+			AddElement<MyTestModule, MyTest> ();
 			base.Populate ();
 		}
+		
+	}
 
+	public abstract class TestModule<T> : ValueModule<T>
+		where T : Test, new()
+	{
+		protected override void Populate ()
+		{
+			AddAttribute ("name", true, i => i.Name, (i,v) => i.Name = v);
+			AddAttribute ("test", i => i.Time, (i,v) => i.Time = v);
+			base.Populate ();
+		}
+	}
+
+	public class MyTestModule : TestModule<MyTest> {
+		
+		public override string Name {
+			get { return "test"; }
+		}
+		
+		protected override void Populate ()
+		{
+			AddAttribute ("hello", true, i => i.Hello, (i,v) => i.Hello = v);
+			// AddAttribute ("time", i => i.Time, (i,v) => i.Time = v);
+			// AddAttribute ("pi", i => i.PI, (i,v) => i.PI = v);
+			base.Populate ();
+		}
+		
 	}
 }
-

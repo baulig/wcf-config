@@ -37,8 +37,8 @@ Global
 		{42B00D16-A053-4479-B9B8-5C6B9E3A89E4}.Debug|iPhone.Build.0 = Debug|iPhone
 		{42B00D16-A053-4479-B9B8-5C6B9E3A89E4}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
 		{42B00D16-A053-4479-B9B8-5C6B9E3A89E4}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
-		{42B00D16-A053-4479-B9B8-5C6B9E3A89E4}.Debug|x86.ActiveCfg = Debug|iPhoneSimulator
-		{42B00D16-A053-4479-B9B8-5C6B9E3A89E4}.Debug|x86.Build.0 = Debug|iPhoneSimulator
+		{42B00D16-A053-4479-B9B8-5C6B9E3A89E4}.Debug|x86.ActiveCfg = Debug|iPhone
+		{42B00D16-A053-4479-B9B8-5C6B9E3A89E4}.Debug|x86.Build.0 = Debug|iPhone
 		{42B00D16-A053-4479-B9B8-5C6B9E3A89E4}.Release|iPhone.ActiveCfg = Release|iPhone
 		{42B00D16-A053-4479-B9B8-5C6B9E3A89E4}.Release|iPhone.Build.0 = Release|iPhone
 		{42B00D16-A053-4479-B9B8-5C6B9E3A89E4}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
@@ -51,6 +51,6 @@ Global
 		{87D6C4EC-09FF-4972-9526-4D16CC5F88E3}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = WCF.Config.Helper\WCF.Config.Helper.csproj
+		StartupItem = WCF.Config.MonoTouch.Test\WCF.Config.MonoTouch.Test.csproj
 	EndGlobalSection
 EndGlobal

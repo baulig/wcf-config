@@ -36,10 +36,23 @@ using System.ServiceModel.Description;
 
 namespace Mono.System.ServiceModel.Configuration {
 
+	public abstract class Test  {
+		public string Name {
+			get; set;
+		}
+
+		public TimeSpan Time {
+			get; set;
+		}
+
+		public abstract void Run ();
+	}
+
 	public class Configuration {
 
 		Collection<Binding> bindings = new Collection<Binding> ();
 		Collection<Endpoint> endpoints = new Collection<Endpoint> ();
+		Collection<Test> test = new Collection<Test> ();
 
 		public Collection<Binding> Bindings {
 			get { return bindings; }
@@ -47,6 +60,10 @@ namespace Mono.System.ServiceModel.Configuration {
 
 		public Collection<Endpoint> Endpoints {
 			get { return endpoints; }
+		}
+
+		public Collection<Test> Test {
+			get { return test; }
 		}
 
 		public void AddEndpoint (ServiceEndpoint sep)

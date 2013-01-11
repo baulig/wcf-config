@@ -38,10 +38,13 @@ namespace Mono.System.ServiceModel.Configuration.Modules {
 		protected override void Populate ()
 		{
 			AddAttribute ("name", true, v => v.Name, (i,v) => i.Name = v);
-			AddAttribute ("openTimeout", v => v.OpenTimeout, (i,v) => i.OpenTimeout = v);
+			// AddAttribute ("test", v => 1.0, (i,v) => { });
+#if FIXME
+			AddAttribute ("openTimeout", false, v => v.OpenTimeout, (i,v) => i.OpenTimeout = v);
 			AddAttribute ("closeTimeout", v => v.CloseTimeout, (i,v) => i.CloseTimeout = v);
 			AddAttribute ("receiveTimeout", v => v.ReceiveTimeout, (i,v) => i.ReceiveTimeout = v);
 			AddAttribute ("sendTimeout", v => v.SendTimeout, (i,v) => i.SendTimeout = v);
+#endif
 			base.Populate ();
 		}
 	}

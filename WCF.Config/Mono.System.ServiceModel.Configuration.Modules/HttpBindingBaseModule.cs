@@ -40,6 +40,14 @@ namespace Mono.System.ServiceModel.Configuration.Modules {
 	{
 		protected override void Populate ()
 		{
+#if FIXME
+			AddAttribute ("name", true, v => v.Name, (i,v) => i.Name = v);
+			AddAttribute ("openTimeout", false, v => v.OpenTimeout, (i,v) => i.OpenTimeout = v);
+			AddAttribute ("closeTimeout", v => v.CloseTimeout, (i,v) => i.CloseTimeout = v);
+			AddAttribute ("receiveTimeout", v => v.ReceiveTimeout, (i,v) => i.ReceiveTimeout = v);
+			AddAttribute ("sendTimeout", v => v.SendTimeout, (i,v) => i.SendTimeout = v);
+#endif
+
 			AddAttribute ("allowCookies", i => i.AllowCookies, (i,v) => i.AllowCookies = v);
 			AddAttribute (
 				"bypassProxyOnLocal", i => i.BypassProxyOnLocal,

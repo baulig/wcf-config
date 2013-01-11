@@ -42,7 +42,7 @@ namespace Mono.System.ServiceModel.Configuration {
 			where V : class, T, new()
 		{
 			public CollectionElement ()
-				: base (Generator.GetModule<U,V> (), typeof (V))
+				: base (Generator.GetModule<U> (), typeof (V))
 			{
 			}
 			

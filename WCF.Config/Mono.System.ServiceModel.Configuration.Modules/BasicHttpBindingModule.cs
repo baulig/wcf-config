@@ -43,6 +43,13 @@ namespace Mono.System.ServiceModel.Configuration.Modules {
 
 		protected override void Populate ()
 		{
+#if FIXME
+			AddAttribute ("name", true, v => v.Name, (i,v) => i.Name = v);
+			AddAttribute ("openTimeout", v => v.OpenTimeout, (i,v) => i.OpenTimeout = v);
+			AddAttribute ("closeTimeout", v => v.CloseTimeout, (i,v) => i.CloseTimeout = v);
+			AddAttribute ("receiveTimeout", v => v.ReceiveTimeout, (i,v) => i.ReceiveTimeout = v);
+			AddAttribute ("sendTimeout", v => v.SendTimeout, (i,v) => i.SendTimeout = v);
+#endif
 			AddAttribute ("messageEncoding", i => i.MessageEncoding, (i,v) => i.MessageEncoding = v);
 #if !MOBILE_FIXME
 			AddElement<BasicHttpSecurityModule,BasicHttpSecurity> (i => i.Security);

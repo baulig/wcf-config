@@ -73,6 +73,8 @@ namespace WCF.Config.MonoTouch.Test {
 			endpoint.Binding = "myBinding";
 			root.Endpoints.Add (endpoint);
 			// root.Endpoints.Add (endpoint);
+
+			root.Test.Add (new MyTest { Name = "Hello", Hello = "World", PI = Math.PI });
 			
 			Generator.Write (xmlFilename, xsdFilename, root);
 			

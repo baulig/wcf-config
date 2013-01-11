@@ -40,7 +40,7 @@ namespace Mono.System.ServiceModel.Configuration {
 			where V : class, new()
 		{
 			public ValueElement (Func<T, V> getter)
-				: base (Generator.GetModule<U,V> (), typeof (V))
+				: base (Generator.GetModule<U> (), typeof (V))
 			{
 				this.ValueGetter = getter;
 			}
@@ -65,12 +65,12 @@ namespace Mono.System.ServiceModel.Configuration {
 			}
 		}
 		
-		protected virtual ValueElement<U,V> AddElement<U,V> (Func<T, V> getter)
+		protected ValueElement<U,V> AddElement<U,V> (Func<T, V> getter)
 			where U : Module<V>, new()
 			where V : class, new()
 		{
 			var element = new ValueElement<U,V> (getter);
-			AddElement (element);
+			// AddElement (element);
 			return element;
 		}
 		

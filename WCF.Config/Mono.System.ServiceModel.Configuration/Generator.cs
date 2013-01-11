@@ -87,12 +87,14 @@ namespace Mono.System.ServiceModel.Configuration {
 
 		internal static void RegisterModule (Module module)
 		{
+			Console.WriteLine ("REGISTER MODULE: {0}", module);
 			moduleMap.Add (module.GetType (), module);
 		}
 
 		public static T GetModule<T> ()
 			where T : Module, new()
 		{
+			Console.WriteLine ("GET MODULE: {0}", typeof (T));
 			if (!moduleMap.ContainsKey (typeof(T))) {
 				// Module's ctor calls RegisterModule().
 				return new T ();
@@ -101,12 +103,14 @@ namespace Mono.System.ServiceModel.Configuration {
 			}
 		}
 
+#if !MOBILE
 		public static T GetModule<T,V> ()
 			where T : Module<V>, new()
 			where V : class, new()
 		{
 			return GetModule<T> ();
 		}
+#endif
 
 		public static Configuration Deserialize (string xml)
 		{
@@ -141,6 +145,8 @@ namespace Mono.System.ServiceModel.Configuration {
 				return XmlTypeCode.Int;
 			else if (type == typeof (long))
 				return XmlTypeCode.Long;
+			else if (type == typeof (double))
+				return XmlTypeCode.Double;
 			else if (type == typeof (TimeSpan))
 				return XmlTypeCode.Time;
 			else if (type == typeof (Uri))
@@ -160,6 +166,8 @@ namespace Mono.System.ServiceModel.Configuration {
 				return int.Parse (value);
 			else if (type == typeof(long))
 				return long.Parse (value);
+			else if (type == typeof(double))
+				return double.Parse (value);
 			else if (type == typeof(TimeSpan))
 				return TimeSpan.Parse (value);
 			else if (type == typeof(string))
