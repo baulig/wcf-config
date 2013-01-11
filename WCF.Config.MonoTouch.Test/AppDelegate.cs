@@ -31,6 +31,8 @@ using System.Linq;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 
+using C = Mono.System.ServiceModel.Configuration;
+
 namespace WCF.Config.MonoTouch.Test {
 	// The UIApplicationDelegate for the application. This class is responsible for launching the 
 	// User Interface of the application, as well as listening (and optionally responding) to 
@@ -64,7 +66,7 @@ namespace WCF.Config.MonoTouch.Test {
 
 		static void Run ()
 		{
-			Test.Run ("test.xml", "test.xsd");
+			C.Test.Run ("test.xml", "test.xsd");
 		}
 	}
 }

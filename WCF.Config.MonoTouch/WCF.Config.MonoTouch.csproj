@@ -135,5 +135,8 @@
     <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration.Modules\TransportValue.cs">
       <Link>Mono.System.ServiceModel.Configuration.Modules\TransportValue.cs</Link>
     </Compile>
+    <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration\Test.cs">
+      <Link>Mono.System.ServiceModel.Configuration\Test.cs</Link>
+    </Compile>
   </ItemGroup>
 </Project>

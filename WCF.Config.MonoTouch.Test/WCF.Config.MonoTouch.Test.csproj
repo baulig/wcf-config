@@ -97,7 +97,6 @@
     <Compile Include="WCF_Config_MonoTouch_TestViewController.designer.cs">
       <DependentUpon>WCF_Config_MonoTouch_TestViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="Test.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="WCF_Config_MonoTouch_TestViewController_iPhone.xib" />

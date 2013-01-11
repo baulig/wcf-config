@@ -70,6 +70,7 @@
     <Compile Include="Mono.System.ServiceModel.Configuration.Modules\BindingValue.cs" />
     <Compile Include="Mono.System.ServiceModel.Configuration.Modules\HttpBindingBaseValue.cs" />
     <Compile Include="Mono.System.ServiceModel.Configuration.Modules\TransportValue.cs" />
+    <Compile Include="Mono.System.ServiceModel.Configuration\Test.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

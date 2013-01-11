@@ -25,29 +25,25 @@
 // THE SOFTWARE.
 using System;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Schema;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
-using System.ServiceModel.Configuration;
+using System.ServiceModel.Description;
 
-namespace WCF.Config.MonoTouch.Test {
+namespace Mono.System.ServiceModel.Configuration {
 
-	using Mono.System.ServiceModel.Configuration;
-	using Mono.System.ServiceModel.Configuration.Modules;
-	
 	public static class Test {
+
+		public static void Run ()
+		{
+			Run ("test.xml", "test.xsd");
+		}
 
 		public static void Run (string xmlFilename, string xsdFilename)
 		{
-			if (File.Exists (xmlFilename) && File.Exists (xsdFilename)) {
-				Utils.ValidateSchema (xmlFilename, xsdFilename);
-				return;
-			}
-			
 			var http = new BasicHttpBinding ();
 			http.OpenTimeout = TimeSpan.FromHours (3);
 			http.MaxBufferSize = 8192;
@@ -56,6 +52,13 @@ namespace WCF.Config.MonoTouch.Test {
 			http.Security.Mode = BasicHttpSecurityMode.Transport;
 			http.TransferMode = TransferMode.StreamedRequest;
 
+#if !MOBILE_FIXME
+			var https = new BasicHttpsBinding ();
+			https.MaxBufferSize = 32768;
+			
+			var netTcp = new NetTcpBinding ();
+#endif
+			
 			var custom = new CustomBinding ();
 			custom.Name = "myCustomBinding";
 			var text = new TextMessageEncodingBindingElement ();
@@ -65,15 +68,18 @@ namespace WCF.Config.MonoTouch.Test {
 			
 			var root = new Configuration ();
 			root.Bindings.Add (http);
+#if !MOBILE_FIXME
+			root.Bindings.Add (https);
+			root.Bindings.Add (netTcp);
+#endif
 			root.Bindings.Add (custom);
 			
-			var endpoint = new Endpoint ();
-			endpoint.Name = "myEndpoint";
-			endpoint.Contract = "myContract";
-			endpoint.Binding = "myBinding";
-			root.Endpoints.Add (endpoint);
-			// root.Endpoints.Add (endpoint);
-
+			var contract = new ContractDescription ("MyContract");
+			var endpointUri = "custom://localhost:8888/MyService";
+			var endpoint = new ServiceEndpoint (contract, custom, new EndpointAddress (endpointUri));
+			
+			root.AddEndpoint (endpoint);
+			
 			Generator.Write (xmlFilename, xsdFilename, root);
 			
 			Utils.Dump (xsdFilename);

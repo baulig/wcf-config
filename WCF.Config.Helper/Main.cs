@@ -25,14 +25,13 @@
 // THE SOFTWARE.
 using System;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Schema;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
-using System.ServiceModel.Configuration;
+using System.ServiceModel.Description;
 
 namespace WCF.Config.Helper {
 
@@ -53,45 +52,7 @@ namespace WCF.Config.Helper {
 				return;
 			}
 
-			var http = new BasicHttpBinding ();
-			http.OpenTimeout = TimeSpan.FromHours (3);
-			http.MaxBufferSize = 8192;
-			http.HostNameComparisonMode = HostNameComparisonMode.WeakWildcard;
-			http.AllowCookies = true;
-			http.Security.Mode = BasicHttpSecurityMode.Transport;
-			http.TransferMode = TransferMode.StreamedRequest;
-
-			var https = new BasicHttpsBinding ();
-			https.MaxBufferSize = 32768;
-
-			var netTcp = new NetTcpBinding ();
-
-			var custom = new CustomBinding ();
-			custom.Name = "myCustomBinding";
-			var text = new TextMessageEncodingBindingElement ();
-			text.MessageVersion = MessageVersion.Soap12WSAddressingAugust2004;
-			custom.Elements.Add (text);
-			custom.Elements.Add (new HttpTransportBindingElement ());
-
-			var root = new Configuration ();
-			root.Bindings.Add (http);
-			root.Bindings.Add (https);
-			root.Bindings.Add (netTcp);
-			root.Bindings.Add (custom);
-
-			var endpoint = new Endpoint ();
-			endpoint.Name = "myEndpoint";
-			endpoint.Contract = "myContract";
-			endpoint.Binding = "myCustomBinding";
-			root.Endpoints.Add (endpoint);
-			// root.Endpoints.Add (endpoint);
-
-			Generator.Write (xmlFilename, xsdFilename, root);
-
-			Utils.Dump (xsdFilename);
-			Utils.Dump (xmlFilename);
-
-			Utils.ValidateSchema (xmlFilename, xsdFilename);
+			Test.Run (xmlFilename, xsdFilename);
 		}
 	}
 }
