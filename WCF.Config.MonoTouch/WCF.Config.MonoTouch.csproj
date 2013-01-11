@@ -60,9 +60,6 @@
     <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration\Generator.cs">
       <Link>Mono.System.ServiceModel.Configuration\Generator.cs</Link>
     </Compile>
-    <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration\KeyedCollectionModule.cs">
-      <Link>Mono.System.ServiceModel.Configuration\KeyedCollectionModule.cs</Link>
-    </Compile>
     <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration\Module.cs">
       <Link>Mono.System.ServiceModel.Configuration\Module.cs</Link>
     </Compile>

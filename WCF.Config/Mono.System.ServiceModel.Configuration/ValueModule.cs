@@ -32,6 +32,13 @@ using System.Collections.Generic;
 
 namespace Mono.System.ServiceModel.Configuration {
 
+	/*
+	 * IMPORTANT:
+	 * 
+	 * You must not create any generic subclasses of this or it will
+	 * not run on the device!
+	 * 
+	 */
 	public abstract class ValueModule<T> : Module<T>
 		where T : class, new()
 	{

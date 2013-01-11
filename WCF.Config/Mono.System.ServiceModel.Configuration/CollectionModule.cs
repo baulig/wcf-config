@@ -35,6 +35,13 @@ using System.ServiceModel.Channels;
 
 namespace Mono.System.ServiceModel.Configuration {
 
+	/*
+	 * IMPORTANT:
+	 * 
+	 * You must not create any generic subclasses of this or it will
+	 * not run on the device!
+	 * 
+	 */
 	public abstract class CollectionModule<T> : Module<Collection<T>>
 	{
 		protected class CollectionElement<U,V> : Element<Collection<T>>
@@ -71,6 +78,30 @@ namespace Mono.System.ServiceModel.Configuration {
 			var element = new CollectionElement<U,V> ();
 			AddElement (element);
 			return element;
+		}
+
+		protected abstract string KeyName {
+			get;
+		}
+		
+		protected override void CreateSchemaElement (XmlSchemaElement schema, SchemaTypeMap map)
+		{
+			if (KeyName != null) {
+				var key = new XmlSchemaKey ();
+				key.Name = "idKey_" + Name;
+			
+				var selector = new XmlSchemaXPath ();
+				selector.XPath = "*";
+				key.Selector = selector;
+			
+				var field = new XmlSchemaXPath ();
+				field.XPath = KeyName;
+				key.Fields.Add (field);
+			
+				schema.Constraints.Add (key);
+			}
+			
+			base.CreateSchemaElement (schema, map);
 		}
 
 		protected override void CreateSchemaType (XmlSchemaComplexType type, SchemaTypeMap map)
