@@ -30,7 +30,21 @@ using System.Collections.Generic;
 
 namespace Mono.System.ServiceModel.Configuration {
 
-	public abstract class Element<T> {
+	public interface IElement<in T> {
+		Module Module {
+			get;
+		}
+		
+		Type Type {
+			get;
+		}
+		
+		void Serialize (XmlWriter writer, T instance);
+		
+		void Deserialize (XmlReader reader, T instance);
+	}
+
+	public abstract class Element<T> : IElement<T> {
 
 		public Module Module {
 			get;

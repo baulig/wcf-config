@@ -30,7 +30,29 @@ using System.Xml.Schema;
 
 namespace Mono.System.ServiceModel.Configuration {
 
-	public abstract class Attribute<T> {
+	public interface IAttribute<in T> {
+		string Name {
+			get;
+		}
+		
+		Type Type {
+			get;
+		}
+		
+		bool IsRequired {
+			get;
+		}
+
+		XmlSchemaAttribute CreateSchema (T defaultInstance);
+		
+		void RegisterSchemaTypes (SchemaTypeMap map);
+
+		void Deserialize (T instance, string text);
+		
+		string Serialize (T instance);
+	}
+
+	public abstract class Attribute<T> : IAttribute<T> {
 
 		public string Name {
 			get;
@@ -64,9 +86,9 @@ namespace Mono.System.ServiceModel.Configuration {
 			return this;
 		}
 
-		internal abstract XmlSchemaAttribute CreateSchema ();
+		public abstract XmlSchemaAttribute CreateSchema (T defaultInstance);
 
-		internal abstract void RegisterSchemaTypes (SchemaTypeMap map);
+		public abstract void RegisterSchemaTypes (SchemaTypeMap map);
 
 		public abstract void Deserialize (T instance, string text);
 
@@ -85,7 +107,6 @@ namespace Mono.System.ServiceModel.Configuration {
 	}
 
 	public class Attribute<T,U> : Attribute<T>
-		where T : class, new()
 	{
 		public Attribute (string name, Func<T, U> getter, Action<T, U> setter)
 			: this (name, false, getter, setter)
@@ -124,7 +145,7 @@ namespace Mono.System.ServiceModel.Configuration {
 		XmlSchemaSimpleType schemaType;
 		XmlQualifiedName schemaTypeName;
 
-		internal override void RegisterSchemaTypes (SchemaTypeMap map)
+		public override void RegisterSchemaTypes (SchemaTypeMap map)
 		{
 			if (Type.IsEnum) {
 				schemaTypeName = Generator.GetEnumerationType (Type, map);
@@ -149,14 +170,14 @@ namespace Mono.System.ServiceModel.Configuration {
 			}
 		}
 
-		internal override XmlSchemaAttribute CreateSchema ()
+		public override XmlSchemaAttribute CreateSchema (T defaultInstance)
 		{
 			var xsa = new XmlSchemaAttribute ();
 			xsa.Name = Name;
 			xsa.Use = IsRequired ? XmlSchemaUse.Required : XmlSchemaUse.Optional;
 			
 			if (!IsRequired)
-				xsa.DefaultValue = Serialize (new T ());
+				xsa.DefaultValue = Serialize (defaultInstance);
 
 			if (schemaType != null)
 				xsa.SchemaType = schemaType;

@@ -59,7 +59,7 @@ namespace Mono.System.ServiceModel.Configuration {
 		where T : class, new()
 	{
 		List<Element<T>> elements;
-		List<Attribute<T>> attributes;
+		List<IAttribute<T>> attributes;
 		XmlSchemaComplexType schemaType;
 		readonly T defaultInstance;
 		readonly bool populated;
@@ -75,7 +75,7 @@ namespace Mono.System.ServiceModel.Configuration {
 		protected Module ()
 		{
 			elements = new List<Element<T>> ();
-			attributes = new List<Attribute<T>> ();
+			attributes = new List<IAttribute<T>> ();
 			defaultInstance = new T ();
 			Populate ();
 			populated = true;
@@ -92,7 +92,7 @@ namespace Mono.System.ServiceModel.Configuration {
 			elements.Add (element);
 		}
 
-		protected void AddAttribute (Attribute<T> attribute)
+		protected void AddAttribute (IAttribute<T> attribute)
 		{
 			if (populated)
 				throw new InvalidOperationException ();
@@ -116,7 +116,7 @@ namespace Mono.System.ServiceModel.Configuration {
 			get { return attributes.Count > 0; }
 		}
 		
-		public IList<Attribute<T>> Attributes {
+		public IList<IAttribute<T>> Attributes {
 			get { return attributes.AsReadOnly (); }
 		}
 
@@ -141,7 +141,7 @@ namespace Mono.System.ServiceModel.Configuration {
 			}
 
 			foreach (var attr in Attributes) {
-				schemaType.Attributes.Add (attr.CreateSchema ());
+				schemaType.Attributes.Add (attr.CreateSchema (defaultInstance));
 			}
 		}
 
