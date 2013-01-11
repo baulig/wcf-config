@@ -51,6 +51,6 @@ Global
 		{87D6C4EC-09FF-4972-9526-4D16CC5F88E3}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = WCF.Config.Helper\WCF.Config.Helper.csproj
+		StartupItem = WCF.Config.MonoTouch.Test\WCF.Config.MonoTouch.Test.csproj
 	EndGlobalSection
 EndGlobal

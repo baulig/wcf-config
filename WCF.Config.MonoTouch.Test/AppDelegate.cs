@@ -67,6 +67,7 @@ namespace WCF.Config.MonoTouch.Test {
 		static void Run ()
 		{
 			C.Test.Run ("test.xml", "test.xsd");
+			C.Test.Deserialize ("test.xml", "test.xsd");
 		}
 	}
 }
