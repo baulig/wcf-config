@@ -28,6 +28,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ServiceModel.Channels;
 using System.Xml;
+using System.Xml.Schema;
+using QName = System.Xml.XmlQualifiedName;
 
 namespace Mono.System.ServiceModel.Configuration.Modules {
 
@@ -42,6 +44,52 @@ namespace Mono.System.ServiceModel.Configuration.Modules {
 			AddElement<EndpointsModule,Collection<Endpoint>> (i => i.Endpoints);
 			base.Populate ();
 		}
+
+		protected override void CreateSchemaElement (XmlSchemaElement schema, SchemaTypeMap map)
+		{
+			var bindingsKey = new XmlSchemaKey ();
+			bindingsKey.Name = "bindingsKey";
+				
+			var bindingsKeySelector = new XmlSchemaXPath ();
+			bindingsKeySelector.XPath = SchemaTypeMap.Prefix + ":bindings/*";
+			bindingsKey.Selector = bindingsKeySelector;
+				
+			var bindingsKeyField = new XmlSchemaXPath ();
+			bindingsKeyField.XPath = "@name";
+			bindingsKey.Fields.Add (bindingsKeyField);
+				
+			schema.Constraints.Add (bindingsKey);
+
+			var endpointsKey = new XmlSchemaKey ();
+			endpointsKey.Name = "endpointsKey";
+
+			var endpointsKeySelector = new XmlSchemaXPath ();
+			endpointsKeySelector.XPath = SchemaTypeMap.Prefix + ":endpoints/*";
+			endpointsKey.Selector = endpointsKeySelector;
+
+			var endpointsKeyField = new XmlSchemaXPath ();
+			endpointsKeyField.XPath = "@name";
+			endpointsKey.Fields.Add (endpointsKeyField);
+
+			schema.Constraints.Add (endpointsKey);
+
+			var bindingsKeyRef = new XmlSchemaKeyref ();
+			bindingsKeyRef.Name = "bindingsKeyRef";
+			bindingsKeyRef.Refer = new QName ("bindingsKey", Generator.Namespace);
+
+			var bindingsKeyRefSelector = new XmlSchemaXPath ();
+			bindingsKeyRefSelector.XPath = SchemaTypeMap.Prefix + ":endpoints/*";
+			bindingsKeyRef.Selector = bindingsKeyRefSelector;
+
+			var bindingsKeyRefField = new XmlSchemaXPath ();
+			bindingsKeyRefField.XPath = "@binding";
+			bindingsKeyRef.Fields.Add (bindingsKeyRefField);
+
+			schema.Constraints.Add (bindingsKeyRef);
+
+			base.CreateSchemaElement (schema, map);
+		}
+		
 	}
 }
 

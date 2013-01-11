@@ -49,12 +49,10 @@ namespace Mono.System.ServiceModel.Configuration {
 
 			root.RegisterSchemaTypes (this);
 
-			var element = new XmlSchemaElement ();
-			element.Name = root.Name;
-			element.SchemaTypeName = LookupModuleTypeName (root);
-			schema.Items.Add (element);
-
 			root.CreateSchemaType (this);
+
+			var rootElement = root.CreateSchemaElement (this);
+			schema.Items.Add (rootElement);
 		}
 
 		public static XmlSchema CreateSchema (Module root)

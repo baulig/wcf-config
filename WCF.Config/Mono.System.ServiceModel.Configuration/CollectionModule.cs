@@ -80,30 +80,6 @@ namespace Mono.System.ServiceModel.Configuration {
 			return element;
 		}
 
-		protected abstract string KeyName {
-			get;
-		}
-		
-		protected override void CreateSchemaElement (XmlSchemaElement schema, SchemaTypeMap map)
-		{
-			if (KeyName != null) {
-				var key = new XmlSchemaKey ();
-				key.Name = "idKey_" + Name;
-			
-				var selector = new XmlSchemaXPath ();
-				selector.XPath = "*";
-				key.Selector = selector;
-			
-				var field = new XmlSchemaXPath ();
-				field.XPath = KeyName;
-				key.Fields.Add (field);
-			
-				schema.Constraints.Add (key);
-			}
-			
-			base.CreateSchemaElement (schema, map);
-		}
-
 		protected override void CreateSchemaType (XmlSchemaComplexType type, SchemaTypeMap map)
 		{
 			var sequence = new XmlSchemaSequence ();

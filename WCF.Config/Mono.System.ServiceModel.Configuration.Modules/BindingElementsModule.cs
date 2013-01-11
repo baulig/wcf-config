@@ -35,10 +35,6 @@ namespace Mono.System.ServiceModel.Configuration.Modules {
 			get { return "elements"; }
 		}
 
-		protected override string KeyName {
-			get { return null; }
-		}
-
 		protected override void Populate ()
 		{
 			AddElement<TextMessageEncodingModule,TextMessageEncodingBindingElement> ();

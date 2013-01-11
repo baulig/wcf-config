@@ -82,7 +82,7 @@ namespace WCF.Config.Helper {
 			var endpoint = new Endpoint ();
 			endpoint.Name = "myEndpoint";
 			endpoint.Contract = "myContract";
-			endpoint.Binding = "myBinding";
+			endpoint.Binding = "myCustomBinding";
 			root.Endpoints.Add (endpoint);
 			// root.Endpoints.Add (endpoint);
 

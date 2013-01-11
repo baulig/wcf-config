@@ -38,10 +38,6 @@ namespace Mono.System.ServiceModel.Configuration.Modules {
 			get { return "endpoints"; }
 		}
 
-		protected override string KeyName {
-			get { return "@name"; }
-		}
-
 		protected override void Populate ()
 		{
 			AddElement<EndpointModule, Endpoint> ();

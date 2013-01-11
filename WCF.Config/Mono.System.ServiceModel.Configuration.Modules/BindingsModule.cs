@@ -38,10 +38,6 @@ namespace Mono.System.ServiceModel.Configuration.Modules {
 			get { return "bindings"; }
 		}
 
-		protected override string KeyName {
-			get { return "@name"; }
-		}
-
 		protected override void Populate ()
 		{
 			AddElement<BasicHttpBindingModule, BasicHttpBinding> ();
