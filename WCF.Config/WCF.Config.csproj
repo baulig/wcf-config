@@ -7,7 +7,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{2720F0E6-84F7-4D89-83AD-568D6423522A}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>WCF.Config</RootNamespace>
+    <RootNamespace>Mono.System.ServiceModel.Configuration</RootNamespace>
     <AssemblyName>WCF.Config</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
@@ -66,10 +66,24 @@
     <Compile Include="Mono.System.ServiceModel.Configuration.Modules\BasicHttpsSecurityModule.cs" />
     <Compile Include="Mono.System.ServiceModel.Configuration.Modules\TransportModule.cs" />
     <Compile Include="Mono.System.ServiceModel.Configuration.Modules\HttpTransportModule.cs" />
+    <Compile Include="Mono.System.ServiceModel.Configuration.Modules\EndpointsModule.cs" />
+    <Compile Include="Mono.System.ServiceModel.Configuration.Modules\EndpointModule.cs" />
+    <Compile Include="Mono.System.ServiceModel.Configuration\Endpoint.cs" />
+    <Compile Include="Mono.System.ServiceModel.Configuration\KeyedCollectionModule.cs" />
+    <Compile Include="Mono.System.ServiceModel.Configuration\KeyedValueModule.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Mono.System.ServiceModel.Configuration\" />
     <Folder Include="Mono.System.ServiceModel.Configuration.Modules\" />
   </ItemGroup>
+  <ProjectExtensions>
+    <MonoDevelop>
+      <Properties>
+        <Policies>
+          <DotNetNamingPolicy DirectoryNamespaceAssociation="Flat" ResourceNamePolicy="FileFormatDefault" />
+        </Policies>
+      </Properties>
+    </MonoDevelop>
+  </ProjectExtensions>
 </Project>

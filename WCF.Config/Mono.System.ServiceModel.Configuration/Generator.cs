@@ -38,20 +38,40 @@ namespace Mono.System.ServiceModel.Configuration {
 	using Modules;
 
 	public static class Generator {
+		static readonly XmlSchema schema;
 		static readonly RootModule rootModule;
 		static readonly Dictionary<Type, Module> moduleMap;
 
+		public const string Prefix = "mwc";
 		public const string Namespace = "https://github.com/baulig/wcf-config/schema";
 
 		static Generator ()
 		{
 			moduleMap = new Dictionary<Type, Module> ();
 			rootModule = new RootModule ();
+			schema = SchemaTypeMap.CreateSchema (rootModule);
 		}
 
-		public static XmlSchema CreateSchema ()
+		public static void Write (string xmlFilename, string xsdFilename, Configuration config)
 		{
-			return SchemaTypeMap.CreateSchema (rootModule);
+			var settings = new XmlWriterSettings ();
+			settings.ConformanceLevel = ConformanceLevel.Document;
+			settings.Encoding = Encoding.UTF8;
+			settings.Indent = true;
+
+			using (var writer = XmlWriter.Create (xsdFilename, settings))
+				Schema.Write (writer);
+
+			using (var writer = XmlWriter.Create (xmlFilename, settings))
+				config.Serialize (writer);
+		}
+
+		internal static Module RootModule {
+			get { return rootModule; }
+		}
+
+		public static XmlSchema Schema {
+			get { return schema; }
 		}
 
 		internal static void RegisterModule (Module module)
@@ -77,34 +97,11 @@ namespace Mono.System.ServiceModel.Configuration {
 			return GetModule<T> ();
 		}
 
-		public static string Serialize (Configuration config)
+		public static Configuration Deserialize (string xml)
 		{
-			var settings = new XmlWriterSettings ();
-			settings.ConformanceLevel = ConformanceLevel.Document;
-			settings.Encoding = Encoding.UTF8;
-			settings.Indent = true;
-
-			var output = new StringBuilder ();
-			using (var writer = XmlTextWriter.Create (output, settings)) {
-				rootModule.Serialize (writer, config);
+			using (var reader = new StringReader (xml)) {
+				return new Configuration (reader);
 			}
-
-			return output.ToString ();
-		}
-
-		public static Configuration Deserialize (XmlSchema schema, string xml)
-		{
-			var settings = new XmlReaderSettings ();
-			settings.ValidationType = ValidationType.Schema;
-			settings.Schemas.Add (schema);
-			settings.IgnoreComments = true;
-			settings.IgnoreWhitespace = true;
-
-			var reader = XmlReader.Create (new StringReader (xml), settings);
-
-			var config = new Configuration ();
-			rootModule.Deserialize (reader, config);
-			return config;
 		}
 
 		internal static string SerializeValue (object value)

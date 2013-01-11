@@ -46,6 +46,8 @@ namespace Mono.System.ServiceModel.Configuration {
 			schema.AttributeFormDefault = XmlSchemaForm.Unqualified;
 			schema.TargetNamespace = Generator.Namespace;
 
+			schema.Namespaces.Add (Generator.Prefix, Generator.Namespace);
+
 			root.RegisterSchemaTypes (this);
 
 			var element = new XmlSchemaElement ();
@@ -86,11 +88,13 @@ namespace Mono.System.ServiceModel.Configuration {
 		public XmlSchemaElement CreateModuleElement (Module module)
 		{
 			var element = new XmlSchemaElement ();
-			if (elementMap.ContainsKey (module.GetType ()))
+			if (elementMap.ContainsKey (module.GetType ())) {
 				element.RefName = new QName (module.Name, schema.TargetNamespace);
-			else {
+			} else {
 				element.Name = module.Name;
 				element.SchemaTypeName = LookupModuleTypeName (module);
+				elementMap.Add (module.GetType (), element);
+				module.CreateSchemaElement (element, this);
 			}
 			return element;
 		}

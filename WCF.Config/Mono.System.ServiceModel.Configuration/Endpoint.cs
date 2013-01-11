@@ -1,5 +1,5 @@
 //
-// RootModule.cs
+// Endpoint.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,24 +24,27 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ServiceModel.Channels;
-using System.Xml;
 
-namespace Mono.System.ServiceModel.Configuration.Modules {
+namespace Mono.System.ServiceModel.Configuration {
 
-	public class RootModule : ValueModule<Configuration> {
-		public override string Name {
-			get { return "wcf-config"; }
+	public class Endpoint : IKey {
+
+		public string ID {
+			get; set;
 		}
 
-		protected override void Populate ()
-		{
-			// AddElement<BindingsModule,Collection<Binding>> (i => i.Bindings);
-			AddElement<EndpointsModule,Collection<Endpoint>> (i => i.Endpoints);
-			base.Populate ();
+		public string Name {
+			get; set;
 		}
+
+		public string Contract {
+			get; set;
+		}
+
+		public string Binding {
+			get; set;
+		}
+
 	}
 }
 

@@ -48,6 +48,10 @@ namespace Mono.System.ServiceModel.Configuration {
 
 		internal abstract void CreateSchemaType (SchemaTypeMap map);
 
+		internal virtual void CreateSchemaElement (XmlSchemaElement schema, SchemaTypeMap map)
+		{
+		}
+
 		public abstract void Serialize (XmlWriter writer, object obj);
 
 		public abstract void Deserialize (XmlReader reader, object obj);
@@ -157,8 +161,8 @@ namespace Mono.System.ServiceModel.Configuration {
 			var instance = (T) obj;
 			if (IsDefault (instance))
 				return;
-			
-			writer.WriteStartElement (Name, Generator.Namespace);
+
+			writer.WriteStartElement (Generator.Prefix, Name, Generator.Namespace);
 
 			foreach (var attr in Attributes) {
 				var value = attr.Serialize (instance);

@@ -1,5 +1,5 @@
 //
-// RootModule.cs
+// KeyedValueModule.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,24 +24,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ServiceModel.Channels;
-using System.Xml;
 
-namespace Mono.System.ServiceModel.Configuration.Modules {
+namespace Mono.System.ServiceModel.Configuration {
 
-	public class RootModule : ValueModule<Configuration> {
-		public override string Name {
-			get { return "wcf-config"; }
-		}
-
+	public abstract class KeyedValueModule<T> : ValueModule<T>
+		where T : class, IKey, new()
+	{
 		protected override void Populate ()
 		{
-			// AddElement<BindingsModule,Collection<Binding>> (i => i.Bindings);
-			AddElement<EndpointsModule,Collection<Endpoint>> (i => i.Endpoints);
+			AddAttribute ("ID", true, i => i.ID, (i,v) => i.ID = v);
 			base.Populate ();
 		}
 	}
 }
-

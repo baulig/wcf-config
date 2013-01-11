@@ -27,6 +27,7 @@ using System;
 using System.IO;
 using System.Xml;
 using System.Xml.Schema;
+using System.Xml.XPath;
 using System.Reflection;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
@@ -63,16 +64,42 @@ namespace Mono.System.ServiceModel.Configuration {
 		{
 			var schema = new XmlSchemaSet ();
 			schema.Add (Generator.Namespace, schemaFilename);
+			schema.Compile ();
+
+			var settings = new XmlReaderSettings {
+				ValidationType = ValidationType.Schema,
+				ValidationFlags = XmlSchemaValidationFlags.ProcessInlineSchema |
+				XmlSchemaValidationFlags.ProcessSchemaLocation |
+				XmlSchemaValidationFlags.ReportValidationWarnings |
+				XmlSchemaValidationFlags.ProcessIdentityConstraints,
+			};
 			
-			var settings = new XmlReaderSettings ();
-			settings.ValidationType = ValidationType.Schema;
-			settings.Schemas = schema;
-			
+			settings.Schemas.Add (schema);
+
 			var reader = XmlReader.Create (xmlFilename, settings);
 			while (reader.Read ())
 				;
+
+			return;
+
+#if FIXME
+			var doc = new XPathDocument (reader);
+			var nav = doc.CreateNavigator ();
+
+			var ok = nav.CheckValidity (schema, OnValidationEvent);
+			Console.WriteLine (ok);
+#else
+			var xml = new XmlDocument ();
+			xml.Load (reader);
+
+			xml.Validate (OnValidationEvent);
+#endif
 		}
 
+		static void OnValidationEvent (object sender, ValidationEventArgs e)
+		{
+			Console.WriteLine ("ON VALIDATION: {0} {1} {2}", e.Message, e.Severity, e.Exception);
+		}
 	}
 }
 

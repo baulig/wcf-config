@@ -54,11 +54,15 @@ namespace WCF.Config.Helper {
 
 		public static void Main (string[] args)
 		{
-			var schema = Generator.CreateSchema ();
+			Run ("test4.xml", "test4.xsd");
+		}
 
-			schema.Write (Console.Out);
-			Console.WriteLine ();
-			Console.WriteLine ();
+		static void Run (string xmlFilename, string xsdFilename)
+		{
+			if (File.Exists (xmlFilename) && File.Exists (xsdFilename)) {
+				Utils.ValidateSchema (xmlFilename, xsdFilename);
+				return;
+			}
 
 			var http = new BasicHttpBinding ();
 			http.OpenTimeout = TimeSpan.FromHours (3);
@@ -86,29 +90,20 @@ namespace WCF.Config.Helper {
 			root.Bindings.Add (netTcp);
 			root.Bindings.Add (custom);
 
-			var xml = Generator.Serialize (root);
-			Console.WriteLine (xml);
-			Console.WriteLine ();
+			var endpoint = new Endpoint ();
+			endpoint.ID = "myID";
+			endpoint.Name = "myEndpoint";
+			endpoint.Contract = "myContract";
+			endpoint.Binding = "myBinding";
+			root.Endpoints.Add (endpoint);
+			root.Endpoints.Add (endpoint);
 
-			var sc = new XmlSchemaSet ();
-			sc.Add (schema);
+			Generator.Write (xmlFilename, xsdFilename, root);
 
-			var settings = new XmlReaderSettings ();
-			settings.ValidationType = ValidationType.Schema;
-			settings.Schemas = sc;
+			Utils.Dump (xsdFilename);
+			Utils.Dump (xmlFilename);
 
-			var reader = XmlReader.Create (new StringReader (xml), settings);
-			while (reader.Read ())
-				;
-
-			Console.WriteLine ();
-
-			ConfigUtils.SaveConfig (root, "test.config");
-			
-			var deserialized = Generator.Deserialize (schema, xml);
-			var test = deserialized.Bindings.OfType<CustomBinding> ().First ();
-			Console.WriteLine (test.Elements.Count);
-			ConfigUtils.SaveConfig (deserialized, "test2.config");
+			Utils.ValidateSchema (xmlFilename, xsdFilename);
 		}
 	}
 }
