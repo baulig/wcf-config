@@ -32,10 +32,16 @@ using System.ServiceModel.Description;
 
 namespace Mono.System.ServiceModel.Configuration.Modules {
 
-	public class EndpointsModule : KeyedCollectionModule<EndpointModule,Endpoint> {
+	public class EndpointsModule : KeyedCollectionModule<Endpoint> {
 
 		public override string Name {
 			get { return "endpoints"; }
+		}
+
+		protected override void Populate ()
+		{
+			AddElement<EndpointModule, Endpoint> ();
+			base.Populate ();
 		}
 
 	}

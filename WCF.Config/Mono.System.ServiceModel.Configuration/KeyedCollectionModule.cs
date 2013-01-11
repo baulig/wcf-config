@@ -41,39 +41,14 @@ namespace Mono.System.ServiceModel.Configuration {
 		}
 	}
 
-	public abstract class KeyedCollectionModule<T,U> : Module<Collection<U>>
-		where T : KeyedValueModule<U>, new()
-		where U : class, IKey, new()
+	public abstract class KeyedCollectionModule<T> : CollectionModule<T>
+		where T : IKey
 	{
-		CollectionElement element;
-
-		class CollectionElement : Element<Collection<U>>
+		new protected CollectionElement<U,V> AddElement<U,V> ()
+			where U : KeyedValueModule<V>, new()
+			where V : class, T, new()
 		{
-			public CollectionElement ()
-				: base (Generator.GetModule<T,U> (), typeof (U))
-			{
-			}
-			
-			public override void Serialize (XmlWriter writer, Collection<U> instance)
-			{
-				foreach (var item in instance) {
-					Module.Serialize (writer, item);
-				}
-			}
-			
-			public override void Deserialize (XmlReader reader, Collection<U> instance)
-			{
-				var item = new U ();
-				instance.Add (item);
-				Module.Deserialize (reader, item);
-			}
-		}
-
-		protected override void Populate ()
-		{
-			element = new CollectionElement ();
-			AddElement (element);
-			base.Populate ();
+			return base.AddElement<U,V> ();
 		}
 
 		protected override void CreateSchemaElement (XmlSchemaElement schema, SchemaTypeMap map)
@@ -82,7 +57,7 @@ namespace Mono.System.ServiceModel.Configuration {
 			key.Name = "idKey_" + Name;
 			
 			var selector = new XmlSchemaXPath ();
-			selector.XPath = SchemaTypeMap.Prefix + ":" + element.Module.Name;
+			selector.XPath = "*";
 			key.Selector = selector;
 			
 			var field = new XmlSchemaXPath ();
@@ -93,19 +68,6 @@ namespace Mono.System.ServiceModel.Configuration {
 
 			base.CreateSchemaElement (schema, map);
 		}
-		
-		protected override void CreateSchemaType (XmlSchemaComplexType type, SchemaTypeMap map)
-		{
-			var sequence = new XmlSchemaSequence ();
-
-			var item = element.Module.CreateSchemaElement (map);
-			item.MinOccurs = 0;
-			item.MaxOccursString = "unbounded";
-			sequence.Items.Add (item);
-
-			type.Particle = sequence;
-		}
-
 	}
 }
 
