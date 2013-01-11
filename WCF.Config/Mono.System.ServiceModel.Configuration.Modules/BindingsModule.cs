@@ -47,8 +47,8 @@ namespace Mono.System.ServiceModel.Configuration.Modules {
 			AddElement<BasicHttpBindingModule, BasicHttpBinding> ();
 #if !MOBILE_FIXME
 			AddElement<BasicHttpsBindingModule, BasicHttpsBinding> ();
-			AddElement<CustomBindingModule, CustomBinding> ();
 #endif
+			AddElement<CustomBindingModule, CustomBinding> ();
 			base.Populate ();
 		}
 
