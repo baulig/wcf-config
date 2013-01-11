@@ -35,20 +35,10 @@ using System.ServiceModel.Channels;
 
 namespace Mono.System.ServiceModel.Configuration {
 
-	public interface IKey {
-		string ID {
-			get; set;
-		}
-	}
+	public abstract class KeyedCollectionModule<T> : CollectionModule<T> {
 
-	public abstract class KeyedCollectionModule<T> : CollectionModule<T>
-		where T : IKey
-	{
-		new protected CollectionElement<U,V> AddElement<U,V> ()
-			where U : KeyedValueModule<V>, new()
-			where V : class, T, new()
-		{
-			return base.AddElement<U,V> ();
+		protected abstract string KeyName {
+			get;
 		}
 
 		protected override void CreateSchemaElement (XmlSchemaElement schema, SchemaTypeMap map)
@@ -61,7 +51,7 @@ namespace Mono.System.ServiceModel.Configuration {
 			key.Selector = selector;
 			
 			var field = new XmlSchemaXPath ();
-			field.XPath = "@ID";
+			field.XPath = KeyName;
 			key.Fields.Add (field);
 			
 			schema.Constraints.Add (key);

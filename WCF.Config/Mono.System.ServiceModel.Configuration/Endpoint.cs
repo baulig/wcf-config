@@ -27,11 +27,7 @@ using System;
 
 namespace Mono.System.ServiceModel.Configuration {
 
-	public class Endpoint : IKey {
-
-		public string ID {
-			get; set;
-		}
+	public class Endpoint {
 
 		public string Name {
 			get; set;
