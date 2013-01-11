@@ -58,7 +58,7 @@ namespace Mono.System.ServiceModel.Configuration {
 	public abstract class Module<T> : Module
 		where T : class, new()
 	{
-		List<Element<T>> elements;
+		List<IElement<T>> elements;
 		List<IAttribute<T>> attributes;
 		XmlSchemaComplexType schemaType;
 		readonly T defaultInstance;
@@ -68,13 +68,13 @@ namespace Mono.System.ServiceModel.Configuration {
 			get { return elements.Count > 0; }
 		}
 		
-		public IList<Element<T>> Elements {
+		public IList<IElement<T>> Elements {
 			get { return elements.AsReadOnly (); }
 		}
 
 		protected Module ()
 		{
-			elements = new List<Element<T>> ();
+			elements = new List<IElement<T>> ();
 			attributes = new List<IAttribute<T>> ();
 			defaultInstance = new T ();
 			Populate ();
@@ -85,7 +85,7 @@ namespace Mono.System.ServiceModel.Configuration {
 		{
 		}
 
-		protected void AddElement (Element<T> element)
+		protected void AddElement (IElement<T> element)
 		{
 			if (populated)
 				throw new InvalidOperationException ();

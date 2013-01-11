@@ -67,7 +67,7 @@ namespace Mono.System.ServiceModel.Configuration.Modules {
 	}
 
 	public class TestValue : Value<Test> {
-		protected override void Populate ()
+		public TestValue ()
 		{
 			AddAttribute ("name", true, i => i.Name, (i,v) => i.Name = v);
 			AddAttribute ("test", i => i.Time, (i,v) => i.Time = v);
@@ -75,7 +75,7 @@ namespace Mono.System.ServiceModel.Configuration.Modules {
 	}
 
 	public class MyTestValue : Value<MyTest> {
-		protected override void Populate ()
+		public MyTestValue ()
 		{
 			AddAttribute ("hello", true, i => i.Hello, (i,v) => i.Hello = v);
 		}
@@ -101,8 +101,8 @@ namespace Mono.System.ServiceModel.Configuration.Modules {
 		protected override void Populate ()
 		{
 			Implement<TestValue> ();
-			Implement<MyTestValue> ();
-			// AddAttribute ("hello", true, i => i.Hello, (i,v) => i.Hello = v);
+			// Implement<MyTestValue> ();
+			AddAttribute ("hello", true, i => i.Hello, (i,v) => i.Hello = v);
 			// AddAttribute ("time", i => i.Time, (i,v) => i.Time = v);
 			// AddAttribute ("pi", i => i.PI, (i,v) => i.PI = v);
 			base.Populate ();

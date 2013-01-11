@@ -70,6 +70,7 @@
     <Compile Include="Mono.System.ServiceModel.Configuration.Modules\EndpointModule.cs" />
     <Compile Include="Mono.System.ServiceModel.Configuration\Endpoint.cs" />
     <Compile Include="Mono.System.ServiceModel.Configuration\KeyedCollectionModule.cs" />
+    <Compile Include="Mono.System.ServiceModel.Configuration\Value.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
