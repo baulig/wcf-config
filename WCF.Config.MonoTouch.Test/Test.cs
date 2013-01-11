@@ -1,10 +1,10 @@
 //
-// Main.cs
+// Test.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
 //
-// Copyright (c) 2012 Xamarin Inc. (http://www.xamarin.com)
+// Copyright (c) 2013 Xamarin Inc. (http://www.xamarin.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -34,25 +34,20 @@ using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Configuration;
 
-namespace WCF.Config.Helper {
+namespace WCF.Config.MonoTouch.Test {
 
 	using Mono.System.ServiceModel.Configuration;
 	using Mono.System.ServiceModel.Configuration.Modules;
+	
+	public static class Test {
 
-	class MainClass {
-
-		public static void Main (string[] args)
-		{
-			Run ("test.xml", "test.xsd");
-		}
-
-		static void Run (string xmlFilename, string xsdFilename)
+		public static void Run (string xmlFilename, string xsdFilename)
 		{
 			if (File.Exists (xmlFilename) && File.Exists (xsdFilename)) {
 				Utils.ValidateSchema (xmlFilename, xsdFilename);
 				return;
 			}
-
+			
 			var http = new BasicHttpBinding ();
 			http.OpenTimeout = TimeSpan.FromHours (3);
 			http.MaxBufferSize = 8192;
@@ -61,37 +56,32 @@ namespace WCF.Config.Helper {
 			http.Security.Mode = BasicHttpSecurityMode.Transport;
 			http.TransferMode = TransferMode.StreamedRequest;
 
-			var https = new BasicHttpsBinding ();
-			https.MaxBufferSize = 32768;
-
-			var netTcp = new NetTcpBinding ();
-
 			var custom = new CustomBinding ();
 			custom.Name = "myCustomBinding";
 			var text = new TextMessageEncodingBindingElement ();
 			text.MessageVersion = MessageVersion.Soap12WSAddressingAugust2004;
 			custom.Elements.Add (text);
 			custom.Elements.Add (new HttpTransportBindingElement ());
-
+			
 			var root = new Configuration ();
 			root.Bindings.Add (http);
-			root.Bindings.Add (https);
-			root.Bindings.Add (netTcp);
 			root.Bindings.Add (custom);
-
+			
 			var endpoint = new Endpoint ();
 			endpoint.Name = "myEndpoint";
 			endpoint.Contract = "myContract";
 			endpoint.Binding = "myBinding";
 			root.Endpoints.Add (endpoint);
 			// root.Endpoints.Add (endpoint);
-
+			
 			Generator.Write (xmlFilename, xsdFilename, root);
-
+			
 			Utils.Dump (xsdFilename);
 			Utils.Dump (xmlFilename);
-
+			
 			Utils.ValidateSchema (xmlFilename, xsdFilename);
 		}
+
 	}
 }
+
