@@ -58,19 +58,19 @@ namespace Mono.System.ServiceModel.Configuration.Modules {
 
 		public override string Serialize (MessageVersion instance)
 		{
-			if (instance == MessageVersion.None)
+			if (instance.Equals (MessageVersion.None))
 				return Version.None.ToString ();
-			else if (instance == MessageVersion.Soap11)
+			else if (instance.Equals (MessageVersion.Soap11))
 				return Version.Soap11.ToString ();
-			else if (instance == MessageVersion.Soap11WSAddressing10)
+			else if (instance.Equals (MessageVersion.Soap11WSAddressing10))
 				return Version.Soap11WSAddressing10.ToString ();
-			else if (instance == MessageVersion.Soap11WSAddressingAugust2004)
+			else if (instance.Equals (MessageVersion.Soap11WSAddressingAugust2004))
 				return Version.Soap11WSAddressingAugust2004.ToString ();
-			else if (instance == MessageVersion.Soap12)
+			else if (instance.Equals (MessageVersion.Soap12))
 				return Version.Soap12.ToString ();
-			else if (instance == MessageVersion.Soap12WSAddressing10)
+			else if (instance.Equals (MessageVersion.Soap12WSAddressing10))
 				return Version.Soap12WSAddressing10.ToString ();
-			else if (instance == MessageVersion.Soap12WSAddressingAugust2004)
+			else if (instance.Equals (MessageVersion.Soap12WSAddressingAugust2004))
 				return Version.Soap12WSAddressingAugust2004.ToString ();
 			else
 				throw new InvalidOperationException ();
