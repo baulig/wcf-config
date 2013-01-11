@@ -87,14 +87,12 @@ namespace Mono.System.ServiceModel.Configuration {
 
 		internal static void RegisterModule (Module module)
 		{
-			Console.WriteLine ("REGISTER MODULE: {0}", module);
 			moduleMap.Add (module.GetType (), module);
 		}
 
 		public static T GetModule<T> ()
 			where T : Module, new()
 		{
-			Console.WriteLine ("GET MODULE: {0}", typeof (T));
 			if (!moduleMap.ContainsKey (typeof(T))) {
 				// Module's ctor calls RegisterModule().
 				return new T ();

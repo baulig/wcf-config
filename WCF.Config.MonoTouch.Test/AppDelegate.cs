@@ -64,9 +64,6 @@ namespace WCF.Config.MonoTouch.Test {
 
 		static void Run ()
 		{
-			TestGenerics.Run ();
-			Console.WriteLine ("GENERICS OK!");
-
 			Test.Run ("test.xml", "test.xsd");
 		}
 	}
