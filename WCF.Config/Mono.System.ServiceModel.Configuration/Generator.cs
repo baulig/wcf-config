@@ -60,7 +60,7 @@ namespace Mono.System.ServiceModel.Configuration {
 			settings.Indent = true;
 			settings.CloseOutput = false;
 
-			using (var stream = new StreamWriter (xsdFilename)) {
+			using (var stream = new StreamWriter (Utils.GetFilename (xsdFilename))) {
 				using (var writer = XmlWriter.Create (stream, settings)) {
 					Schema.Write (writer);
 					writer.WriteEndDocument ();
@@ -68,7 +68,7 @@ namespace Mono.System.ServiceModel.Configuration {
 				stream.WriteLine ();
 			}
 
-			using (var stream = new StreamWriter (xmlFilename)) {
+			using (var stream = new StreamWriter (Utils.GetFilename (xmlFilename))) {
 				using (var writer = XmlWriter.Create (stream, settings)) {
 					config.Serialize (writer);
 					writer.WriteEndDocument ();

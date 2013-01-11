@@ -38,6 +38,7 @@ namespace Mono.System.ServiceModel.Configuration {
 
 		public static void Dump (string filename)
 		{
+			filename = Utils.GetFilename (filename);
 			if (!File.Exists (filename)) {
 				Console.WriteLine ("ERROR: File does not exist!");
 				return;
@@ -60,10 +61,20 @@ namespace Mono.System.ServiceModel.Configuration {
 			}
 		}
 
+		public static string GetFilename (string filename)
+		{
+#if MOBILE
+			var documents = Environment.GetFolderPath (Environment.SpecialFolder.MyDocuments);
+			return Path.Combine (documents, filename);
+#else
+			return filename;
+#endif
+		}
+
 		public static void ValidateSchema (string xmlFilename, string schemaFilename)
 		{
 			var schema = new XmlSchemaSet ();
-			schema.Add (Generator.Namespace, schemaFilename);
+			schema.Add (Generator.Namespace, GetFilename (schemaFilename));
 			schema.Compile ();
 
 			var settings = new XmlReaderSettings {
@@ -76,7 +87,7 @@ namespace Mono.System.ServiceModel.Configuration {
 			
 			settings.Schemas.Add (schema);
 
-			var reader = XmlReader.Create (xmlFilename, settings);
+			var reader = XmlReader.Create (GetFilename (xmlFilename), settings);
 			while (reader.Read ())
 				;
 
