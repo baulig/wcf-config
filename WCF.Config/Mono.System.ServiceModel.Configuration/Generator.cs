@@ -58,12 +58,23 @@ namespace Mono.System.ServiceModel.Configuration {
 			settings.ConformanceLevel = ConformanceLevel.Document;
 			settings.Encoding = Encoding.UTF8;
 			settings.Indent = true;
+			settings.CloseOutput = false;
 
-			using (var writer = XmlWriter.Create (xsdFilename, settings))
-				Schema.Write (writer);
+			using (var stream = new StreamWriter (xsdFilename)) {
+				using (var writer = XmlWriter.Create (stream, settings)) {
+					Schema.Write (writer);
+					writer.WriteEndDocument ();
+				}
+				stream.WriteLine ();
+			}
 
-			using (var writer = XmlWriter.Create (xmlFilename, settings))
-				config.Serialize (writer);
+			using (var stream = new StreamWriter (xmlFilename)) {
+				using (var writer = XmlWriter.Create (stream, settings)) {
+					config.Serialize (writer);
+					writer.WriteEndDocument ();
+				}
+				stream.WriteLine ();
+			}
 		}
 
 		internal static Module RootModule {
