@@ -43,6 +43,7 @@ namespace WCF.Config.Helper {
 		public static void Main (string[] args)
 		{
 			Run ("test.xml", "test.xsd");
+			TestService ();
 		}
 
 		static void Run (string xmlFilename, string xsdFilename)
@@ -54,6 +55,13 @@ namespace WCF.Config.Helper {
 			}
 
 			Test.Deserialize (xmlFilename, xsdFilename);
+		}
+
+		static void TestService ()
+		{
+			ConfigurationHost.Install ();
+			var client = new MyService.MyServiceClient ();
+			client.Hello ();
 		}
 	}
 }

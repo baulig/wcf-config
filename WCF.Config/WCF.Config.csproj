@@ -71,6 +71,7 @@
     <Compile Include="Mono.ServiceModel.Configuration.Modules\BindingValue.cs" />
     <Compile Include="Mono.ServiceModel.Configuration.Modules\HttpBindingBaseValue.cs" />
     <Compile Include="Mono.ServiceModel.Configuration.Modules\TransportValue.cs" />
+    <Compile Include="Mono.ServiceModel.Configuration\ConfigurationHost.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
