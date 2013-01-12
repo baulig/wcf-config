@@ -11,7 +11,7 @@
 namespace WCF.Config.Helper.MyService {
     
     
-    [System.ServiceModel.ServiceContractAttribute(Namespace="WCF.Config.Helper.MyService")]
+    [System.ServiceModel.ServiceContractAttribute(Namespace="http://provcon-faust/TestWCF/")]
     public interface IMyService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://provcon-faust/TestWCF/IMyService/Hello", ReplyAction="http://provcon-faust/TestWCF/IMyService/HelloResponse")]

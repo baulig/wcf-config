@@ -77,7 +77,8 @@ namespace WCF.Config.MonoTouch.Test {
 			C.ConfigurationHost.Install ();
 			WebRequest.DefaultWebProxy = new WebProxy ("http://192.168.16.104:3128");
 			var client = new MyService.MyServiceClient ("*", "http://provcon-faust/TestWCF/Service/MyService.svc");
-			client.Hello ();
+			var hello = client.Hello ();
+			Console.WriteLine ("Got response from service: {0}", hello);
 		}
 	}
 }
