@@ -52,10 +52,12 @@ namespace Mono.ServiceModel.Configuration {
 			http.Security.Mode = BasicHttpSecurityMode.Transport;
 			http.TransferMode = TransferMode.StreamedRequest;
 
-#if !MOBILE_FIXME
+#if !MOBILE || MOBILE_BAULIG
 			var https = new BasicHttpsBinding ();
 			https.MaxBufferSize = 32768;
-			
+#endif
+
+#if !MOBILE_FIXME
 			var netTcp = new NetTcpBinding ();
 #endif
 			
@@ -68,8 +70,10 @@ namespace Mono.ServiceModel.Configuration {
 			
 			var root = new Configuration ();
 			root.Bindings.Add (http);
-#if !MOBILE_FIXME
+#if !MOBILE || MOBILE_BAULIG
 			root.Bindings.Add (https);
+#endif
+#if !MOBILE_FIXME
 			root.Bindings.Add (netTcp);
 #endif
 			root.Bindings.Add (custom);
@@ -99,6 +103,11 @@ namespace Mono.ServiceModel.Configuration {
 				var http = binding as BasicHttpBinding;
 				if (http != null)
 					Dump (http);
+#if !MOBILE || MOBILE_BAULIG
+				var https = binding as BasicHttpsBinding;
+				if (https != null)
+					Dump (https);
+#endif
 				var custom = binding as CustomBinding;
 				if (custom != null)
 					Dump (custom);
@@ -115,6 +124,15 @@ namespace Mono.ServiceModel.Configuration {
 			                   binding.TransferMode);
 		}
 
+#if !MOBILE || MOBILE_BAULIG
+		public static void Dump (BasicHttpsBinding binding)
+		{
+			Console.WriteLine ("HTTPS: {0} {1} {2} {3}",
+			                   binding.Name, binding.OpenTimeout, binding.Security.Mode,
+			                   binding.TransferMode);
+		}
+#endif
+		
 		public static void Dump (CustomBinding binding)
 		{
 			Console.WriteLine ("CUSTOM: {0}", binding.Name);
