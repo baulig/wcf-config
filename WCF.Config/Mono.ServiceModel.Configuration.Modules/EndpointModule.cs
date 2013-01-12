@@ -1,10 +1,10 @@
 //
-// Main.cs
+// EndpointModule.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
 //
-// Copyright (c) 2012 Xamarin Inc. (http://www.xamarin.com)
+// Copyright (c) 2013 Xamarin Inc. (http://www.xamarin.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,36 +24,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.IO;
-using System.Text;
-using System.Reflection;
+using System.Collections.Generic;
 using System.Xml;
 using System.Xml.Schema;
 using System.ServiceModel;
-using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 
-namespace WCF.Config.Helper {
+namespace Mono.ServiceModel.Configuration.Modules {
 
-	using Mono.ServiceModel.Configuration;
-	using Mono.ServiceModel.Configuration.Modules;
+	public class EndpointModule : ValueModule<Endpoint> {
 
-	class MainClass {
-
-		public static void Main (string[] args)
-		{
-			Run ("test.xml", "test.xsd");
+		public override string Name {
+			get { return "endpoint"; }
 		}
 
-		static void Run (string xmlFilename, string xsdFilename)
+		protected override void Populate ()
 		{
-			if (File.Exists (xmlFilename) && File.Exists (xsdFilename)) {
-				Utils.ValidateSchema (xmlFilename, xsdFilename);
-			} else {
-				Test.Run (xmlFilename, xsdFilename);
-			}
-
-			Test.Deserialize (xmlFilename, xsdFilename);
+			AddAttribute ("name", true, i => i.Name, (i,v) => i.Name = v);
+			AddAttribute ("contract", true, i => i.Contract, (i,v) => i.Contract = v);
+			AddAttribute ("binding", true, i => i.Binding, (i,v) => i.Binding = v);
+			base.Populate ();
 		}
+
 	}
 }
+

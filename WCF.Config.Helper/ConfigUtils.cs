@@ -36,7 +36,7 @@ using SysConfig = System.Configuration;
 
 namespace WCF.Config.Helper {
 
-	using Mono.System.ServiceModel.Configuration;
+	using Mono.ServiceModel.Configuration;
 
 	public static class ConfigUtils {
 

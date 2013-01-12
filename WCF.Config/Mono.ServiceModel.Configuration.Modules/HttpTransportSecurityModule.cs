@@ -1,10 +1,10 @@
 //
-// Main.cs
+// HttpTransportSecurityModule.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
 //
-// Copyright (c) 2012 Xamarin Inc. (http://www.xamarin.com)
+// Copyright (c) 2013 Xamarin Inc. (http://www.xamarin.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,37 +23,39 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+#if !MOBILE || MOBILE_BAULIG
 using System;
-using System.IO;
-using System.Text;
-using System.Reflection;
-using System.Xml;
-using System.Xml.Schema;
 using System.ServiceModel;
-using System.ServiceModel.Channels;
-using System.ServiceModel.Description;
 
-namespace WCF.Config.Helper {
+namespace Mono.ServiceModel.Configuration.Modules {
 
-	using Mono.ServiceModel.Configuration;
-	using Mono.ServiceModel.Configuration.Modules;
-
-	class MainClass {
-
-		public static void Main (string[] args)
-		{
-			Run ("test.xml", "test.xsd");
+	public class HttpTransportSecurityModule : ValueModule<HttpTransportSecurity> {
+		
+		public override string Name {
+			get { return "transport"; }
 		}
 
-		static void Run (string xmlFilename, string xsdFilename)
+		protected override void Populate ()
 		{
-			if (File.Exists (xmlFilename) && File.Exists (xsdFilename)) {
-				Utils.ValidateSchema (xmlFilename, xsdFilename);
-			} else {
-				Test.Run (xmlFilename, xsdFilename);
-			}
-
-			Test.Deserialize (xmlFilename, xsdFilename);
+			AddAttribute (
+				"clientCredentialType", i => i.ClientCredentialType,
+				(i,v) => i.ClientCredentialType = v);
+			AddAttribute (
+				"proxyCredentialType", i => i.ProxyCredentialType,
+				(i,v) => i.ProxyCredentialType = v);
+			AddAttribute ("realm", i => i.Realm, (i,v) => i.Realm = v);
+			base.Populate ();
 		}
+
+		public override bool IsDefault (HttpTransportSecurity instance)
+		{
+			return instance.ClientCredentialType == HttpClientCredentialType.None &&
+				instance.ProxyCredentialType == HttpProxyCredentialType.None &&
+				string.IsNullOrEmpty (instance.Realm);
+		}
+		
 	}
+
 }
+#endif
+

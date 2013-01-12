@@ -1,10 +1,10 @@
 //
-// Main.cs
+// BasicHttpsSecurityModule.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
 //
-// Copyright (c) 2012 Xamarin Inc. (http://www.xamarin.com)
+// Copyright (c) 2013 Xamarin Inc. (http://www.xamarin.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,37 +23,32 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+#if !MOBILE || MOBILE_BAULIG
 using System;
-using System.IO;
-using System.Text;
-using System.Reflection;
-using System.Xml;
-using System.Xml.Schema;
 using System.ServiceModel;
-using System.ServiceModel.Channels;
-using System.ServiceModel.Description;
 
-namespace WCF.Config.Helper {
-
-	using Mono.ServiceModel.Configuration;
-	using Mono.ServiceModel.Configuration.Modules;
-
-	class MainClass {
-
-		public static void Main (string[] args)
-		{
-			Run ("test.xml", "test.xsd");
+namespace Mono.ServiceModel.Configuration.Modules {
+	
+	public class BasicHttpsSecurityModule : ValueModule<BasicHttpsSecurity> {
+		
+		public override string Name {
+			get { return "httpsSecurity"; }
 		}
-
-		static void Run (string xmlFilename, string xsdFilename)
+		
+		protected override void Populate ()
 		{
-			if (File.Exists (xmlFilename) && File.Exists (xsdFilename)) {
-				Utils.ValidateSchema (xmlFilename, xsdFilename);
-			} else {
-				Test.Run (xmlFilename, xsdFilename);
-			}
-
-			Test.Deserialize (xmlFilename, xsdFilename);
+			AddAttribute ("mode", i => i.Mode, (i,v) => i.Mode = v);
+			AddElement<HttpTransportSecurityModule, HttpTransportSecurity> (i => i.Transport);
+			base.Populate ();
+		}
+		
+		public override bool IsDefault (BasicHttpsSecurity instance)
+		{
+			if (instance.Mode != BasicHttpsSecurityMode.Transport)
+				return false;
+			var transport = Generator.GetModule<HttpTransportSecurityModule, HttpTransportSecurity> ();
+			return transport.IsDefault (instance.Transport);
 		}
 	}
 }
+#endif

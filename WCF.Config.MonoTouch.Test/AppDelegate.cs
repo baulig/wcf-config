@@ -31,7 +31,7 @@ using System.Linq;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 
-using C = Mono.System.ServiceModel.Configuration;
+using C = Mono.ServiceModel.Configuration;
 
 namespace WCF.Config.MonoTouch.Test {
 	// The UIApplicationDelegate for the application. This class is responsible for launching the 

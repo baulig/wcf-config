@@ -42,101 +42,101 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration\Attribute.cs">
-      <Link>Mono.System.ServiceModel.Configuration\Attribute.cs</Link>
+    <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration\Attribute.cs">
+      <Link>Mono.ServiceModel.Configuration\Attribute.cs</Link>
     </Compile>
-    <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration\CollectionModule.cs">
-      <Link>Mono.System.ServiceModel.Configuration\CollectionModule.cs</Link>
+    <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration\CollectionModule.cs">
+      <Link>Mono.ServiceModel.Configuration\CollectionModule.cs</Link>
     </Compile>
-    <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration\Configuration.cs">
-      <Link>Mono.System.ServiceModel.Configuration\Configuration.cs</Link>
+    <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration\Configuration.cs">
+      <Link>Mono.ServiceModel.Configuration\Configuration.cs</Link>
     </Compile>
-    <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration\Element.cs">
-      <Link>Mono.System.ServiceModel.Configuration\Element.cs</Link>
+    <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration\Element.cs">
+      <Link>Mono.ServiceModel.Configuration\Element.cs</Link>
     </Compile>
-    <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration\Endpoint.cs">
-      <Link>Mono.System.ServiceModel.Configuration\Endpoint.cs</Link>
+    <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration\Endpoint.cs">
+      <Link>Mono.ServiceModel.Configuration\Endpoint.cs</Link>
     </Compile>
-    <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration\Generator.cs">
-      <Link>Mono.System.ServiceModel.Configuration\Generator.cs</Link>
+    <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration\Generator.cs">
+      <Link>Mono.ServiceModel.Configuration\Generator.cs</Link>
     </Compile>
-    <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration\Module.cs">
-      <Link>Mono.System.ServiceModel.Configuration\Module.cs</Link>
+    <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration\Module.cs">
+      <Link>Mono.ServiceModel.Configuration\Module.cs</Link>
     </Compile>
-    <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration\SchemaTypeMap.cs">
-      <Link>Mono.System.ServiceModel.Configuration\SchemaTypeMap.cs</Link>
+    <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration\SchemaTypeMap.cs">
+      <Link>Mono.ServiceModel.Configuration\SchemaTypeMap.cs</Link>
     </Compile>
-    <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration\Utils.cs">
-      <Link>Mono.System.ServiceModel.Configuration\Utils.cs</Link>
+    <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration\Utils.cs">
+      <Link>Mono.ServiceModel.Configuration\Utils.cs</Link>
     </Compile>
-    <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration\ValueModule.cs">
-      <Link>Mono.System.ServiceModel.Configuration\ValueModule.cs</Link>
+    <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration\ValueModule.cs">
+      <Link>Mono.ServiceModel.Configuration\ValueModule.cs</Link>
     </Compile>
-    <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration\ValueSerializer.cs">
-      <Link>Mono.System.ServiceModel.Configuration\ValueSerializer.cs</Link>
+    <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration\ValueSerializer.cs">
+      <Link>Mono.ServiceModel.Configuration\ValueSerializer.cs</Link>
     </Compile>
-    <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration.Modules\BasicHttpBindingModule.cs">
-      <Link>Mono.System.ServiceModel.Configuration.Modules\BasicHttpBindingModule.cs</Link>
+    <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration.Modules\BasicHttpBindingModule.cs">
+      <Link>Mono.ServiceModel.Configuration.Modules\BasicHttpBindingModule.cs</Link>
     </Compile>
-    <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration.Modules\BasicHttpSecurityModule.cs">
-      <Link>Mono.System.ServiceModel.Configuration.Modules\BasicHttpSecurityModule.cs</Link>
+    <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration.Modules\BasicHttpSecurityModule.cs">
+      <Link>Mono.ServiceModel.Configuration.Modules\BasicHttpSecurityModule.cs</Link>
     </Compile>
-    <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration.Modules\BasicHttpsBindingModule.cs">
-      <Link>Mono.System.ServiceModel.Configuration.Modules\BasicHttpsBindingModule.cs</Link>
+    <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration.Modules\BasicHttpsBindingModule.cs">
+      <Link>Mono.ServiceModel.Configuration.Modules\BasicHttpsBindingModule.cs</Link>
     </Compile>
-    <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration.Modules\BasicHttpsSecurityModule.cs">
-      <Link>Mono.System.ServiceModel.Configuration.Modules\BasicHttpsSecurityModule.cs</Link>
+    <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration.Modules\BasicHttpsSecurityModule.cs">
+      <Link>Mono.ServiceModel.Configuration.Modules\BasicHttpsSecurityModule.cs</Link>
     </Compile>
-    <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration.Modules\BinaryMessageEncodingModule.cs">
-      <Link>Mono.System.ServiceModel.Configuration.Modules\BinaryMessageEncodingModule.cs</Link>
+    <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration.Modules\BinaryMessageEncodingModule.cs">
+      <Link>Mono.ServiceModel.Configuration.Modules\BinaryMessageEncodingModule.cs</Link>
     </Compile>
-    <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration.Modules\BindingElementsModule.cs">
-      <Link>Mono.System.ServiceModel.Configuration.Modules\BindingElementsModule.cs</Link>
+    <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration.Modules\BindingElementsModule.cs">
+      <Link>Mono.ServiceModel.Configuration.Modules\BindingElementsModule.cs</Link>
     </Compile>
-    <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration.Modules\BindingsModule.cs">
-      <Link>Mono.System.ServiceModel.Configuration.Modules\BindingsModule.cs</Link>
+    <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration.Modules\BindingsModule.cs">
+      <Link>Mono.ServiceModel.Configuration.Modules\BindingsModule.cs</Link>
     </Compile>
-    <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration.Modules\CustomBindingModule.cs">
-      <Link>Mono.System.ServiceModel.Configuration.Modules\CustomBindingModule.cs</Link>
+    <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration.Modules\CustomBindingModule.cs">
+      <Link>Mono.ServiceModel.Configuration.Modules\CustomBindingModule.cs</Link>
     </Compile>
-    <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration.Modules\EndpointModule.cs">
-      <Link>Mono.System.ServiceModel.Configuration.Modules\EndpointModule.cs</Link>
+    <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration.Modules\EndpointModule.cs">
+      <Link>Mono.ServiceModel.Configuration.Modules\EndpointModule.cs</Link>
     </Compile>
-    <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration.Modules\EndpointsModule.cs">
-      <Link>Mono.System.ServiceModel.Configuration.Modules\EndpointsModule.cs</Link>
+    <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration.Modules\EndpointsModule.cs">
+      <Link>Mono.ServiceModel.Configuration.Modules\EndpointsModule.cs</Link>
     </Compile>
-    <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration.Modules\HttpTransportModule.cs">
-      <Link>Mono.System.ServiceModel.Configuration.Modules\HttpTransportModule.cs</Link>
+    <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration.Modules\HttpTransportModule.cs">
+      <Link>Mono.ServiceModel.Configuration.Modules\HttpTransportModule.cs</Link>
     </Compile>
-    <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration.Modules\HttpTransportSecurityModule.cs">
-      <Link>Mono.System.ServiceModel.Configuration.Modules\HttpTransportSecurityModule.cs</Link>
+    <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration.Modules\HttpTransportSecurityModule.cs">
+      <Link>Mono.ServiceModel.Configuration.Modules\HttpTransportSecurityModule.cs</Link>
     </Compile>
-    <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration.Modules\MessageVersionSerializer.cs">
-      <Link>Mono.System.ServiceModel.Configuration.Modules\MessageVersionSerializer.cs</Link>
+    <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration.Modules\MessageVersionSerializer.cs">
+      <Link>Mono.ServiceModel.Configuration.Modules\MessageVersionSerializer.cs</Link>
     </Compile>
-    <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration.Modules\MtomMessageEncodingModule.cs">
-      <Link>Mono.System.ServiceModel.Configuration.Modules\MtomMessageEncodingModule.cs</Link>
+    <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration.Modules\MtomMessageEncodingModule.cs">
+      <Link>Mono.ServiceModel.Configuration.Modules\MtomMessageEncodingModule.cs</Link>
     </Compile>
-    <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration.Modules\RootModule.cs">
-      <Link>Mono.System.ServiceModel.Configuration.Modules\RootModule.cs</Link>
+    <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration.Modules\RootModule.cs">
+      <Link>Mono.ServiceModel.Configuration.Modules\RootModule.cs</Link>
     </Compile>
-    <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration.Modules\TextMessageEncodingModule.cs">
-      <Link>Mono.System.ServiceModel.Configuration.Modules\TextMessageEncodingModule.cs</Link>
+    <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration.Modules\TextMessageEncodingModule.cs">
+      <Link>Mono.ServiceModel.Configuration.Modules\TextMessageEncodingModule.cs</Link>
     </Compile>
-    <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration\Value.cs">
-      <Link>Mono.System.ServiceModel.Configuration\Value.cs</Link>
+    <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration\Value.cs">
+      <Link>Mono.ServiceModel.Configuration\Value.cs</Link>
     </Compile>
-    <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration.Modules\BindingValue.cs">
-      <Link>Mono.System.ServiceModel.Configuration.Modules\BindingValue.cs</Link>
+    <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration.Modules\BindingValue.cs">
+      <Link>Mono.ServiceModel.Configuration.Modules\BindingValue.cs</Link>
     </Compile>
-    <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration.Modules\HttpBindingBaseValue.cs">
-      <Link>Mono.System.ServiceModel.Configuration.Modules\HttpBindingBaseValue.cs</Link>
+    <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration.Modules\HttpBindingBaseValue.cs">
+      <Link>Mono.ServiceModel.Configuration.Modules\HttpBindingBaseValue.cs</Link>
     </Compile>
-    <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration.Modules\TransportValue.cs">
-      <Link>Mono.System.ServiceModel.Configuration.Modules\TransportValue.cs</Link>
+    <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration.Modules\TransportValue.cs">
+      <Link>Mono.ServiceModel.Configuration.Modules\TransportValue.cs</Link>
     </Compile>
-    <Compile Include="..\WCF.Config\Mono.System.ServiceModel.Configuration\Test.cs">
-      <Link>Mono.System.ServiceModel.Configuration\Test.cs</Link>
+    <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration\Test.cs">
+      <Link>Mono.ServiceModel.Configuration\Test.cs</Link>
     </Compile>
   </ItemGroup>
 </Project>

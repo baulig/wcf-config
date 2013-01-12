@@ -1,10 +1,10 @@
 //
-// Main.cs
+// TransportModule.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
 //
-// Copyright (c) 2012 Xamarin Inc. (http://www.xamarin.com)
+// Copyright (c) 2013 Xamarin Inc. (http://www.xamarin.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,36 +24,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.IO;
-using System.Text;
-using System.Reflection;
-using System.Xml;
-using System.Xml.Schema;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
-using System.ServiceModel.Description;
 
-namespace WCF.Config.Helper {
+namespace Mono.ServiceModel.Configuration.Modules {
 
-	using Mono.ServiceModel.Configuration;
-	using Mono.ServiceModel.Configuration.Modules;
-
-	class MainClass {
-
-		public static void Main (string[] args)
+	public abstract class TransportValue<T> : Value<TransportBindingElement>
+	{
+		public TransportValue ()
 		{
-			Run ("test.xml", "test.xsd");
+			AddAttribute (
+				"manualAddressing", i => i.ManualAddressing,
+				(i,v) => i.ManualAddressing = v);
+			AddAttribute (
+				"maxBufferPoolSize", i => i.MaxBufferPoolSize,
+				(i,v) => i.MaxBufferPoolSize = v).
+				SetMinMax ("1", "9223372036854775807");
+			AddAttribute (
+				"maxReceiveMessageSize", i => i.MaxReceivedMessageSize,
+				(i,v) => i.MaxReceivedMessageSize = v).
+				SetMinMax ("1", "9223372036854775807");
 		}
 
-		static void Run (string xmlFilename, string xsdFilename)
-		{
-			if (File.Exists (xmlFilename) && File.Exists (xsdFilename)) {
-				Utils.ValidateSchema (xmlFilename, xsdFilename);
-			} else {
-				Test.Run (xmlFilename, xsdFilename);
-			}
-
-			Test.Deserialize (xmlFilename, xsdFilename);
-		}
 	}
+
 }
+

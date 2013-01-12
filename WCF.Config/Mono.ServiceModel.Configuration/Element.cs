@@ -1,10 +1,10 @@
 //
-// Main.cs
+// Element.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
 //
-// Copyright (c) 2012 Xamarin Inc. (http://www.xamarin.com)
+// Copyright (c) 2013 Xamarin Inc. (http://www.xamarin.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,36 +24,47 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.IO;
-using System.Text;
-using System.Reflection;
 using System.Xml;
-using System.Xml.Schema;
-using System.ServiceModel;
-using System.ServiceModel.Channels;
-using System.ServiceModel.Description;
+using System.Linq;
+using System.Collections.Generic;
 
-namespace WCF.Config.Helper {
+namespace Mono.ServiceModel.Configuration {
 
-	using Mono.ServiceModel.Configuration;
-	using Mono.ServiceModel.Configuration.Modules;
+	public interface IElement<in T> {
+		Module Module {
+			get;
+		}
+		
+		Type Type {
+			get;
+		}
+		
+		void Serialize (XmlWriter writer, T instance);
+		
+		void Deserialize (XmlReader reader, T instance);
+	}
 
-	class MainClass {
+	public abstract class Element<T> : IElement<T> {
 
-		public static void Main (string[] args)
-		{
-			Run ("test.xml", "test.xsd");
+		public Module Module {
+			get;
+			private set;
 		}
 
-		static void Run (string xmlFilename, string xsdFilename)
-		{
-			if (File.Exists (xmlFilename) && File.Exists (xsdFilename)) {
-				Utils.ValidateSchema (xmlFilename, xsdFilename);
-			} else {
-				Test.Run (xmlFilename, xsdFilename);
-			}
-
-			Test.Deserialize (xmlFilename, xsdFilename);
+		public Type Type {
+			get;
+			private set;
 		}
+
+		public abstract void Serialize (XmlWriter writer, T instance);
+		
+		public abstract void Deserialize (XmlReader reader, T instance);
+
+		public Element (Module module, Type type)
+		{
+			this.Module = module;
+			this.Type = type;
+		}
+
 	}
 }

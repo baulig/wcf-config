@@ -1,10 +1,10 @@
 //
-// Main.cs
+// BinaryMessageEncodingModule.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
 //
-// Copyright (c) 2012 Xamarin Inc. (http://www.xamarin.com)
+// Copyright (c) 2013 Xamarin Inc. (http://www.xamarin.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,36 +24,30 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.IO;
-using System.Text;
-using System.Reflection;
-using System.Xml;
-using System.Xml.Schema;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
-using System.ServiceModel.Description;
 
-namespace WCF.Config.Helper {
+namespace Mono.ServiceModel.Configuration.Modules {
 
-	using Mono.ServiceModel.Configuration;
-	using Mono.ServiceModel.Configuration.Modules;
-
-	class MainClass {
-
-		public static void Main (string[] args)
-		{
-			Run ("test.xml", "test.xsd");
+	public class BinaryMessageEncodingModule : ValueModule<BinaryMessageEncodingBindingElement> {
+		
+		public override string Name {
+			get { return "binaryMessageEncoding"; }
 		}
-
-		static void Run (string xmlFilename, string xsdFilename)
+		
+		protected override void Populate ()
 		{
-			if (File.Exists (xmlFilename) && File.Exists (xsdFilename)) {
-				Utils.ValidateSchema (xmlFilename, xsdFilename);
-			} else {
-				Test.Run (xmlFilename, xsdFilename);
-			}
+			AddAttribute (
+				"maxReadPoolSize", i => i.MaxReadPoolSize, (i,v) => i.MaxReadPoolSize = v).
+				SetMinMax ("1", int.MaxValue.ToString ());
+			AddAttribute (
+				"maxWritePoolSize", i => i.MaxWritePoolSize, (i,v) => i.MaxWritePoolSize = v).
+				SetMinMax ("1", int.MaxValue.ToString ());
+			AddAttribute (
+				"maxSessionSize", i => i.MaxSessionSize, (i,v) => i.MaxSessionSize = v).
+				SetMinMax ("0", int.MaxValue.ToString ());
 
-			Test.Deserialize (xmlFilename, xsdFilename);
+			base.Populate ();
 		}
 	}
 }

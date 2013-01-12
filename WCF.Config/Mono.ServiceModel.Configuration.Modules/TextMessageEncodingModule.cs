@@ -1,10 +1,10 @@
 //
-// Main.cs
+// TextMessageBindingElementModule.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
 //
-// Copyright (c) 2012 Xamarin Inc. (http://www.xamarin.com)
+// Copyright (c) 2013 Xamarin Inc. (http://www.xamarin.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,36 +24,33 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.IO;
-using System.Text;
-using System.Reflection;
-using System.Xml;
-using System.Xml.Schema;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
-using System.ServiceModel.Description;
 
-namespace WCF.Config.Helper {
+namespace Mono.ServiceModel.Configuration.Modules {
 
-	using Mono.ServiceModel.Configuration;
-	using Mono.ServiceModel.Configuration.Modules;
+	public class TextMessageEncodingModule : ValueModule<TextMessageEncodingBindingElement> {
 
-	class MainClass {
-
-		public static void Main (string[] args)
-		{
-			Run ("test.xml", "test.xsd");
+		public override string Name {
+			get { return "textMessageEncoding"; }
 		}
 
-		static void Run (string xmlFilename, string xsdFilename)
+		protected override void Populate ()
 		{
-			if (File.Exists (xmlFilename) && File.Exists (xsdFilename)) {
-				Utils.ValidateSchema (xmlFilename, xsdFilename);
-			} else {
-				Test.Run (xmlFilename, xsdFilename);
-			}
+			AddAttribute (
+				"messageVersion", i => i.MessageVersion, (i,v) => i.MessageVersion = v).
+				SetCustomSerializer<MessageVersionSerializer> ();
+			AddAttribute (
+				"maxReadPoolSize", i => i.MaxReadPoolSize, (i,v) => i.MaxReadPoolSize = v).
+				SetMinMax ("1", int.MaxValue.ToString ());
+			AddAttribute (
+				"maxWritePoolSize", i => i.MaxWritePoolSize, (i,v) => i.MaxWritePoolSize = v).
+				SetMinMax ("1", int.MaxValue.ToString ());
+			AddAttribute (
+				"writeEncoding", i => i.WriteEncoding, (i,v) => i.WriteEncoding = v);
 
-			Test.Deserialize (xmlFilename, xsdFilename);
+			base.Populate ();
 		}
 	}
 }
+

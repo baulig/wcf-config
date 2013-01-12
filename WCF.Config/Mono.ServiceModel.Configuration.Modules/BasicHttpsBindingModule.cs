@@ -1,10 +1,10 @@
 //
-// Main.cs
+// BasicHttpsBindingModule.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
 //
-// Copyright (c) 2012 Xamarin Inc. (http://www.xamarin.com)
+// Copyright (c) 2013 Xamarin Inc. (http://www.xamarin.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,37 +23,29 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
+#if !MOBILE || MOBILE_BAULIG
 using System;
-using System.IO;
-using System.Text;
-using System.Reflection;
 using System.Xml;
 using System.Xml.Schema;
+using System.Collections.Generic;
 using System.ServiceModel;
-using System.ServiceModel.Channels;
-using System.ServiceModel.Description;
 
-namespace WCF.Config.Helper {
-
-	using Mono.ServiceModel.Configuration;
-	using Mono.ServiceModel.Configuration.Modules;
-
-	class MainClass {
-
-		public static void Main (string[] args)
-		{
-			Run ("test.xml", "test.xsd");
+namespace Mono.ServiceModel.Configuration.Modules {
+	
+	public class BasicHttpsBindingModule : ValueModule<BasicHttpsBinding> {
+		
+		public override string Name {
+			get { return "basicHttpsBinding"; }
 		}
-
-		static void Run (string xmlFilename, string xsdFilename)
+		
+		protected override void Populate ()
 		{
-			if (File.Exists (xmlFilename) && File.Exists (xsdFilename)) {
-				Utils.ValidateSchema (xmlFilename, xsdFilename);
-			} else {
-				Test.Run (xmlFilename, xsdFilename);
-			}
-
-			Test.Deserialize (xmlFilename, xsdFilename);
+			Implement<BindingValue> ();
+			Implement<HttpBindingBaseValue> ();
+			AddAttribute ("messageEncoding", i => i.MessageEncoding, (i,v) => i.MessageEncoding = v);
+			AddElement<BasicHttpsSecurityModule,BasicHttpsSecurity> (i => i.Security);
+			base.Populate ();
 		}
 	}
 }
+#endif

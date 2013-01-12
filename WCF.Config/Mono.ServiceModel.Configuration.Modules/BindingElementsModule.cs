@@ -1,10 +1,10 @@
 //
-// Main.cs
+// BindingElementsModule.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
 //
-// Copyright (c) 2012 Xamarin Inc. (http://www.xamarin.com)
+// Copyright (c) 2013 Xamarin Inc. (http://www.xamarin.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,36 +24,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.IO;
-using System.Text;
-using System.Reflection;
-using System.Xml;
-using System.Xml.Schema;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
-using System.ServiceModel.Description;
 
-namespace WCF.Config.Helper {
+namespace Mono.ServiceModel.Configuration.Modules {
 
-	using Mono.ServiceModel.Configuration;
-	using Mono.ServiceModel.Configuration.Modules;
+	public class BindingElementsModule : CollectionModule<BindingElement> {
 
-	class MainClass {
-
-		public static void Main (string[] args)
-		{
-			Run ("test.xml", "test.xsd");
+		public override string Name {
+			get { return "elements"; }
 		}
 
-		static void Run (string xmlFilename, string xsdFilename)
+		protected override void Populate ()
 		{
-			if (File.Exists (xmlFilename) && File.Exists (xsdFilename)) {
-				Utils.ValidateSchema (xmlFilename, xsdFilename);
-			} else {
-				Test.Run (xmlFilename, xsdFilename);
-			}
-
-			Test.Deserialize (xmlFilename, xsdFilename);
+			AddElement<TextMessageEncodingModule,TextMessageEncodingBindingElement> ();
+			AddElement<BinaryMessageEncodingModule,BinaryMessageEncodingBindingElement> ();
+#if !MOBILE_FIXME
+			AddElement<MtomMessageEncodingModule,MtomMessageEncodingBindingElement> ();
+#endif
+			AddElement<HttpTransportModule,HttpTransportBindingElement> ();
+			base.Populate ();
 		}
+		
 	}
 }
+

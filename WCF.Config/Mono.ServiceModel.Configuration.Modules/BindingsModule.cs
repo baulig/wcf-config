@@ -1,5 +1,5 @@
 //
-// Main.cs
+// BindingModule.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,36 +24,30 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.IO;
-using System.Text;
-using System.Reflection;
+using System.Collections.Generic;
 using System.Xml;
 using System.Xml.Schema;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
-using System.ServiceModel.Description;
 
-namespace WCF.Config.Helper {
+namespace Mono.ServiceModel.Configuration.Modules {
 
-	using Mono.ServiceModel.Configuration;
-	using Mono.ServiceModel.Configuration.Modules;
+	public class BindingsModule : CollectionModule<Binding> {
 
-	class MainClass {
-
-		public static void Main (string[] args)
-		{
-			Run ("test.xml", "test.xsd");
+		public override string Name {
+			get { return "bindings"; }
 		}
 
-		static void Run (string xmlFilename, string xsdFilename)
+		protected override void Populate ()
 		{
-			if (File.Exists (xmlFilename) && File.Exists (xsdFilename)) {
-				Utils.ValidateSchema (xmlFilename, xsdFilename);
-			} else {
-				Test.Run (xmlFilename, xsdFilename);
-			}
-
-			Test.Deserialize (xmlFilename, xsdFilename);
+			AddElement<BasicHttpBindingModule, BasicHttpBinding> ();
+#if !MOBILE || MOBILE_BAULIG
+			AddElement<BasicHttpsBindingModule, BasicHttpsBinding> ();
+#endif
+			AddElement<CustomBindingModule, CustomBinding> ();
+			base.Populate ();
 		}
+
 	}
 }
+

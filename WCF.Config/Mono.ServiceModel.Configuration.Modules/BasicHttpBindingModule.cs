@@ -1,5 +1,5 @@
 //
-// Main.cs
+// BasicHttpBindingModule.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,36 +24,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.IO;
-using System.Text;
-using System.Reflection;
 using System.Xml;
 using System.Xml.Schema;
+using System.Collections.Generic;
 using System.ServiceModel;
-using System.ServiceModel.Channels;
-using System.ServiceModel.Description;
 
-namespace WCF.Config.Helper {
+namespace Mono.ServiceModel.Configuration.Modules {
 
-	using Mono.ServiceModel.Configuration;
-	using Mono.ServiceModel.Configuration.Modules;
+	public class BasicHttpBindingModule : ValueModule<BasicHttpBinding> {
 
-	class MainClass {
-
-		public static void Main (string[] args)
-		{
-			Run ("test.xml", "test.xsd");
+		public override string Name {
+			get { return "basicHttpBinding"; }
 		}
 
-		static void Run (string xmlFilename, string xsdFilename)
+		protected override void Populate ()
 		{
-			if (File.Exists (xmlFilename) && File.Exists (xsdFilename)) {
-				Utils.ValidateSchema (xmlFilename, xsdFilename);
-			} else {
-				Test.Run (xmlFilename, xsdFilename);
-			}
-
-			Test.Deserialize (xmlFilename, xsdFilename);
+			Implement<BindingValue> ();
+			Implement<HttpBindingBaseValue> ();
+			AddAttribute ("messageEncoding", i => i.MessageEncoding, (i,v) => i.MessageEncoding = v);
+#if !MOBILE || MOBILE_BAULIG
+			AddElement<BasicHttpSecurityModule,BasicHttpSecurity> (i => i.Security);
+#endif
+			base.Populate ();
 		}
 	}
 }
