@@ -101,14 +101,12 @@ namespace Mono.System.ServiceModel.Configuration {
 			}
 		}
 
-#if !MOBILE
 		public static T GetModule<T,V> ()
 			where T : Module<V>, new()
 			where V : class, new()
 		{
 			return GetModule<T> ();
 		}
-#endif
 
 		internal static string SerializeValue (object value)
 		{

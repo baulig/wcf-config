@@ -17,7 +17,7 @@
     <DebugType>full</DebugType>
     <Optimize>False</Optimize>
     <OutputPath>bin\</OutputPath>
-    <DefineConstants>DEBUG;MOBILE;MOBILE_FIXME</DefineConstants>
+    <DefineConstants>DEBUG;MOBILE;MOBILE_FIXME;MOBILE_BAULIG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>False</ConsolePause>

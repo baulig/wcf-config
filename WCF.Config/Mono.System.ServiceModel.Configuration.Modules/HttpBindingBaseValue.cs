@@ -31,10 +31,10 @@ using System.ServiceModel;
 
 namespace Mono.System.ServiceModel.Configuration.Modules {
 	
-#if MOBILE_FIXME
-	public class HttpBindingBaseValue : Value<BasicHttpBinding>
-#else
+#if MOBILE_BAULIG
 	public class HttpBindingBaseValue : Value<HttpBindingBase>
+#else
+	public class HttpBindingBaseValue : Value<BasicHttpBinding>
 #endif
 	{
 		public HttpBindingBaseValue ()

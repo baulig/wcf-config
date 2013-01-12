@@ -42,7 +42,7 @@ namespace Mono.System.ServiceModel.Configuration.Modules {
 			Implement<BindingValue> ();
 			Implement<HttpBindingBaseValue> ();
 			AddAttribute ("messageEncoding", i => i.MessageEncoding, (i,v) => i.MessageEncoding = v);
-#if !MOBILE_FIXME
+#if MOBILE_BAULIG
 			AddElement<BasicHttpSecurityModule,BasicHttpSecurity> (i => i.Security);
 #endif
 			base.Populate ();
