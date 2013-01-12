@@ -89,6 +89,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
+    <None Include="Service References\MyService\MyService.wsdl" />
+    <None Include="Service References\MyService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
@@ -96,6 +101,9 @@
     <Compile Include="WCF_Config_MonoTouch_TestViewController.cs" />
     <Compile Include="WCF_Config_MonoTouch_TestViewController.designer.cs">
       <DependentUpon>WCF_Config_MonoTouch_TestViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\MyService\Reference.cs">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -108,5 +116,11 @@
       <Project>{03379936-1CA9-4CEF-82F9-162E8558452B}</Project>
       <Name>WCF.Config.MonoTouch</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\MyService" />
   </ItemGroup>
 </Project>

@@ -68,6 +68,14 @@ namespace WCF.Config.MonoTouch.Test {
 		{
 			C.Test.Run ("test.xml", "test.xsd");
 			C.Test.Deserialize ("test.xml", "test.xsd");
+			TestService ();
+		}
+
+		static void TestService ()
+		{
+			C.ConfigurationHost.Install ();
+			var client = new MyService.MyServiceClient ();
+			client.Hello ();
 		}
 	}
 }
