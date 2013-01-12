@@ -41,6 +41,7 @@ namespace Mono.ServiceModel.Configuration {
 #endif
 	{
 		static ConfigurationHost instance;
+		Configuration config;
 
 		private ConfigurationHost ()
 		{
@@ -79,12 +80,29 @@ namespace Mono.ServiceModel.Configuration {
 #endif
 			
 			Console.WriteLine ("Custom configuration handler installed.");
+
+			config = new Configuration ();
+
+			DownloadFromMyMac ("config.xml");
+			DownloadFromMyMac ("config.xsd");
+
+			config.Deserialize ("config.xml", "config.xsd");
+			Test.Dump (config);
+			Console.WriteLine ("Configuration loaded.");
+		}
+
+		void DownloadFromMyMac (string filename)
+		{
+			var root = new Uri ("http://192.168.16.104/~martin/work/");
+			Utils.DownloadXml (new Uri (root, filename), filename);
 		}
 
 		public bool ConfigureEndpoint (ChannelFactory factory,
 		                               ref ServiceEndpoint endpoint, string endpointConfig)
 		{
-			Console.WriteLine ("CONFIGURE ENDPOINT: {0} {1}", factory, endpointConfig);
+			Console.WriteLine ("CONFIGURE ENDPOINT: {0} {1} {2} {3} {4}",
+			                   factory, endpointConfig, endpoint.Contract.Name,
+			                   endpoint.Binding != null, endpoint.Address != null);
 			return false;
 		}
 

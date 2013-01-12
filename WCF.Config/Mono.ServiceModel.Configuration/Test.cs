@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 using System;
 using System.IO;
+using System.Net;
 using System.Text;
 using System.Reflection;
 using System.Xml;
@@ -41,6 +42,22 @@ namespace Mono.ServiceModel.Configuration {
 		{
 			Run ("test.xml", "test.xsd");
 		}
+
+#if !MOBILE
+		public static void GenerateFromWsdl (Uri uri, string wsdlFilename,
+		                                     string xmlFilename, string xsdFilename)
+		{
+			var doc = Utils.LoadMetadata (uri, wsdlFilename);
+			var importer = new WsdlImporter (doc);
+			var endpoints = importer.ImportAllEndpoints ();
+
+			var config = new Configuration ();
+			foreach (var endpoint in endpoints)
+				config.AddEndpoint (endpoint);
+
+			Generator.Write (xmlFilename, xsdFilename, config);
+		}
+#endif
 
 		public static void Run (string xmlFilename, string xsdFilename)
 		{
@@ -98,6 +115,11 @@ namespace Mono.ServiceModel.Configuration {
 			config.Deserialize (xmlFilename, xsdFilename);
 			Console.WriteLine ("READ CONFIG FROM XML");
 
+			Dump (config);
+		}
+
+		public static void Dump (Configuration config)
+		{
 			foreach (var binding in config.Bindings) {
 				Console.WriteLine ("BINDING: {0}", binding);
 				var http = binding as BasicHttpBinding;

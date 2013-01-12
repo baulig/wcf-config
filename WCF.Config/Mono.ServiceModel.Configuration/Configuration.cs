@@ -61,21 +61,6 @@ namespace Mono.ServiceModel.Configuration {
 			endpoints.Add (endpoint);
 		}
 
-		public string Serialize ()
-		{
-			var settings = new XmlWriterSettings ();
-			settings.ConformanceLevel = ConformanceLevel.Document;
-			settings.Encoding = Encoding.UTF8;
-			settings.Indent = true;
-
-			var output = new StringBuilder ();
-			using (var writer = XmlTextWriter.Create (output, settings)) {
-				Serialize (writer);
-			}
-			
-			return output.ToString ();
-		}
-
 		public void Serialize (XmlWriter writer)
 		{
 			Generator.RootModule.Serialize (writer, this);

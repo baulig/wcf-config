@@ -43,6 +43,10 @@ namespace WCF.Config.Helper {
 		public static void Main (string[] args)
 		{
 			Run ("test.xml", "test.xsd");
+			if (!File.Exists ("config.wsdl")) {
+				var uri = new Uri ("http://provcon-faust/TestWCF/Service/MyService.svc?singleWsdl");
+				Test.GenerateFromWsdl (uri, "config.wsdl", "config.xml", "config.xsd");
+			}
 			TestService ();
 		}
 
