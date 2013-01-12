@@ -31,7 +31,7 @@ using System.ServiceModel;
 
 namespace Mono.System.ServiceModel.Configuration.Modules {
 	
-#if MOBILE_BAULIG
+#if !MOBILE || MOBILE_BAULIG
 	public class HttpBindingBaseValue : Value<HttpBindingBase>
 #else
 	public class HttpBindingBaseValue : Value<BasicHttpBinding>

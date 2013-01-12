@@ -41,7 +41,7 @@ namespace Mono.System.ServiceModel.Configuration.Modules {
 		protected override void Populate ()
 		{
 			AddElement<BasicHttpBindingModule, BasicHttpBinding> ();
-#if MOBILE_BAULIG
+#if !MOBILE || MOBILE_BAULIG
 			AddElement<BasicHttpsBindingModule, BasicHttpsBinding> ();
 #endif
 			AddElement<CustomBindingModule, CustomBinding> ();
