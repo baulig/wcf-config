@@ -24,6 +24,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Net;
 using System.Threading;
 using System.Collections.Generic;
 using System.Linq;
@@ -74,7 +75,8 @@ namespace WCF.Config.MonoTouch.Test {
 		static void TestService ()
 		{
 			C.ConfigurationHost.Install ();
-			var client = new MyService.MyServiceClient ("*", "http://192.168.16.101/TestWCF/Service/MyService.svc");
+			WebRequest.DefaultWebProxy = new WebProxy ("http://192.168.16.104:3128");
+			var client = new MyService.MyServiceClient ("*", "http://provcon-faust/TestWCF/Service/MyService.svc");
 			client.Hello ();
 		}
 	}

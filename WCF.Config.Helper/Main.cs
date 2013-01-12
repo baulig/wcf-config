@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 using System;
 using System.IO;
+using System.Net;
 using System.Text;
 using System.Reflection;
 using System.Xml;
@@ -64,7 +65,8 @@ namespace WCF.Config.Helper {
 		static void TestService ()
 		{
 			ConfigurationHost.Install ();
-			var client = new MyService.MyServiceClient ("*", "http://192.168.16.101/TestWCF/Service/MyService.svc");
+			WebRequest.DefaultWebProxy = new WebProxy ("http://192.168.16.104:3128");
+			var client = new MyService.MyServiceClient ("*", "http://provcon-faust/TestWCF/Service/MyService.svc");
 			client.Hello ();
 		}
 	}
