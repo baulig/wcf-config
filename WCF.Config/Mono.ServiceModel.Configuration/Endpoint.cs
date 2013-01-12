@@ -24,6 +24,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.ServiceModel.Description;
 
 namespace Mono.ServiceModel.Configuration {
 
@@ -38,6 +39,10 @@ namespace Mono.ServiceModel.Configuration {
 		}
 
 		public string Binding {
+			get; set;
+		}
+
+		internal ServiceEndpoint ServiceEndpoint {
 			get; set;
 		}
 

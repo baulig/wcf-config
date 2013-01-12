@@ -111,8 +111,7 @@ namespace Mono.ServiceModel.Configuration {
 
 		public static void Deserialize (string xmlFilename, string xsdFilename)
 		{
-			var config = new Configuration ();
-			config.Deserialize (xmlFilename, xsdFilename);
+			var config = new Configuration (xmlFilename, xsdFilename);
 			Console.WriteLine ("READ CONFIG FROM XML");
 
 			Dump (config);

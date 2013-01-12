@@ -24,6 +24,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.Linq;
 #if !MOBILE
 using System.Reflection;
 #endif
@@ -81,12 +82,11 @@ namespace Mono.ServiceModel.Configuration {
 			
 			Console.WriteLine ("Custom configuration handler installed.");
 
-			config = new Configuration ();
-
 			DownloadFromMyMac ("config.xml");
 			DownloadFromMyMac ("config.xsd");
+			
+			config = new Configuration ("config.xml", "config.xsd");
 
-			config.Deserialize ("config.xml", "config.xsd");
 			Test.Dump (config);
 			Console.WriteLine ("Configuration loaded.");
 		}
@@ -103,7 +103,21 @@ namespace Mono.ServiceModel.Configuration {
 			Console.WriteLine ("CONFIGURE ENDPOINT: {0} {1} {2} {3} {4}",
 			                   factory, endpointConfig, endpoint.Contract.Name,
 			                   endpoint.Binding != null, endpoint.Address != null);
-			return false;
+
+			if (endpoint.Binding != null)
+				throw new NotSupportedException ();
+			if (endpoint.Address == null)
+				throw new NotSupportedException ();
+
+			var address = endpoint.Address;
+			var endpoints = config.GetEndpoints (endpoint.Contract);
+			Console.WriteLine ("GOT ENDPOINTS: {0}", endpoints.Count);
+			if (endpoints.Count != 1)
+				return false;
+
+			endpoint = endpoints [0];
+			endpoint.Address = address;
+			return true;
 		}
 
 		public static void Install ()

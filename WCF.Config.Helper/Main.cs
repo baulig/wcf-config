@@ -64,7 +64,7 @@ namespace WCF.Config.Helper {
 		static void TestService ()
 		{
 			ConfigurationHost.Install ();
-			var client = new MyService.MyServiceClient ();
+			var client = new MyService.MyServiceClient ("*", "http://192.168.16.101/TestWCF/Service/MyService.svc");
 			client.Hello ();
 		}
 	}

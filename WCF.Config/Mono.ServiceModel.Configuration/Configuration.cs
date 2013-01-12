@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Xml.Schema;
@@ -38,19 +39,23 @@ namespace Mono.ServiceModel.Configuration {
 
 	public class Configuration {
 
+		bool deserialized;
 		Collection<Binding> bindings = new Collection<Binding> ();
 		Collection<Endpoint> endpoints = new Collection<Endpoint> ();
 
-		public Collection<Binding> Bindings {
+		internal Collection<Binding> Bindings {
 			get { return bindings; }
 		}
 
-		public Collection<Endpoint> Endpoints {
+		internal Collection<Endpoint> Endpoints {
 			get { return endpoints; }
 		}
 
 		public void AddEndpoint (ServiceEndpoint sep)
 		{
+			if (deserialized)
+				throw new InvalidOperationException ();
+
 			if (!bindings.Contains (sep.Binding))
 				bindings.Add (sep.Binding);
 
@@ -58,7 +63,32 @@ namespace Mono.ServiceModel.Configuration {
 			endpoint.Name = sep.Name;
 			endpoint.Contract = sep.Contract.Name;
 			endpoint.Binding = sep.Binding.Name;
+			endpoint.ServiceEndpoint = sep;
 			endpoints.Add (endpoint);
+		}
+
+		public IList<ServiceEndpoint> GetEndpoints (ContractDescription contract)
+		{
+			var list = new List<ServiceEndpoint> ();
+			foreach (var endpoint in endpoints) {
+				if (endpoint.ServiceEndpoint != null) {
+					if (endpoint.ServiceEndpoint.Contract == contract)
+						list.Add (endpoint.ServiceEndpoint);
+					continue;
+				}
+
+				// var name = contract.ConfigurationName ?? contract.Name;
+				var name = contract.Name;
+				if (!endpoint.Contract.Equals (name))
+					continue;
+
+				var binding = Bindings.First (b => b.Name.Equals (endpoint.Binding));
+				endpoint.ServiceEndpoint = new ServiceEndpoint (contract);
+				endpoint.ServiceEndpoint.Binding = binding;
+				list.Add (endpoint.ServiceEndpoint);
+			}
+
+			return list.AsReadOnly ();
 		}
 
 		public void Serialize (XmlWriter writer)
@@ -70,8 +100,10 @@ namespace Mono.ServiceModel.Configuration {
 		{
 		}
 
-		public void Deserialize (string xmlFilename, string schemaFilename)
+		public Configuration (string xmlFilename, string schemaFilename)
 		{
+			deserialized = true;
+
 			var schema = new XmlSchemaSet ();
 			schema.Add (Generator.Namespace, Utils.GetFilename (schemaFilename));
 			schema.Compile ();
