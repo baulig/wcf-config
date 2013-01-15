@@ -43,6 +43,7 @@
     <Compile Include="Service References\MyService\Reference.cs">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Options.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

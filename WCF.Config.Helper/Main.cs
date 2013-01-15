@@ -28,6 +28,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Reflection;
+using System.Collections.Generic;
 using System.Xml;
 using System.Xml.Schema;
 using System.ServiceModel;
@@ -37,19 +38,88 @@ using System.ServiceModel.Description;
 using Mono.ServiceModel.Configuration;
 using Mono.ServiceModel.Configuration.Modules;
 using WCF.Config.Test;
+using Mono.Options;
 
 namespace WCF.Config.Helper {
 
 	class MainClass {
 
+		enum Mode {
+			Default,
+			Xml,
+			Validate,
+			Download,
+			Service
+		}
+
 		public static void Main (string[] args)
 		{
-			Run ("test.xml", "test.xsd");
-			if (!File.Exists ("config.wsdl")) {
-				var uri = new Uri ("http://provcon-faust/TestWCF/Service/MyService.svc?singleWsdl");
-				TestUtils.GenerateFromWsdl (uri, "config.wsdl", "config.xml", "config.xsd");
+			Uri service = null;
+			string xml = null, xsd = null, wsdl = null;
+			var mode = Mode.Default;
+			var options = new OptionSet ();
+			options.Add ("mode=", m => {
+				if (Enum.TryParse<Mode> (m, true, out mode))
+					return;
+				throw new ArgumentException ("Invalid -mode= argument.");
+			});
+			options.Add ("xml=", m => xml = m);
+			options.Add ("xsd=", m => xsd = m);
+			options.Add ("wsdl=", m => wsdl = m);
+			options.Add ("service=", m => service = new Uri (m));
+
+			IList<string> extraArgs;
+			try {
+				extraArgs = options.Parse (args);
+			} catch (Exception ex) {
+				Console.Error.WriteLine ("ERROR: {0}", ex.Message);
+				return;
 			}
-			TestService ();
+
+			if (xml == null)
+				xml = "test.xml";
+			if (xsd == null)
+				xsd = Path.GetFileNameWithoutExtension (xml) + ".xsd";
+			if (wsdl == null)
+				wsdl = Path.GetFileNameWithoutExtension (xml) + ".wsdl";
+
+			foreach (var arg in extraArgs)
+				Console.WriteLine (arg);
+
+			Console.WriteLine ("MODE: {0} {1} - {2} {3}", mode, extraArgs.Count, xml, xsd);
+
+			switch (mode) {
+			case Mode.Xml:
+				BindingTests.Run (xml, xsd);
+				TestUtils.Deserialize (xml, xsd);
+				break;
+
+			case Mode.Validate:
+				Utils.ValidateSchema (xml, xsd);
+				break;
+
+			case Mode.Default:
+				if (File.Exists (xml))
+					goto case Mode.Validate;
+				else
+					goto case Mode.Xml;
+
+			case Mode.Download:
+				if (service == null) {
+					Console.Error.WriteLine ("Missing -service=<url> argument.");
+					return;
+				}
+
+				TestUtils.GenerateFromWsdl (service, wsdl, xml, xsd);
+				break;
+
+			case Mode.Service:
+				TestService ();
+				break;
+
+			default:
+				throw new InvalidOperationException ();
+			}
 		}
 
 		static void Run (string xmlFilename, string xsdFilename)
