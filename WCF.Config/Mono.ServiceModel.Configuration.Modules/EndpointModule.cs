@@ -41,6 +41,7 @@ namespace Mono.ServiceModel.Configuration.Modules {
 		protected override void Populate ()
 		{
 			AddAttribute ("name", true, i => i.Name, (i,v) => i.Name = v);
+			AddAttribute ("address", true, i => i.Address, (i,v) => i.Address = v);
 			AddAttribute ("contract", true, i => i.Contract, (i,v) => i.Contract = v);
 			AddAttribute ("binding", true, i => i.Binding, (i,v) => i.Binding = v);
 			base.Populate ();

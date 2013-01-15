@@ -55,7 +55,7 @@ namespace WCF.Config.Helper {
 		public static void Main (string[] args)
 		{
 			Uri service = null;
-			string xml = null, xsd = null, wsdl = null;
+			string xml = null, xsd = null, wsdl = null, dir = null;
 			var mode = Mode.Default;
 			var options = new OptionSet ();
 			options.Add ("mode=", m => {
@@ -67,6 +67,7 @@ namespace WCF.Config.Helper {
 			options.Add ("xsd=", m => xsd = m);
 			options.Add ("wsdl=", m => wsdl = m);
 			options.Add ("service=", m => service = new Uri (m));
+			options.Add ("dir=", m => dir = m);
 
 			IList<string> extraArgs;
 			try {
@@ -83,10 +84,16 @@ namespace WCF.Config.Helper {
 			if (wsdl == null)
 				wsdl = Path.GetFileNameWithoutExtension (xml) + ".wsdl";
 
-			foreach (var arg in extraArgs)
-				Console.WriteLine (arg);
+			if (extraArgs.Count > 0) {
+				Console.Error.WriteLine ("Unexpected extra arguments.");
+				return;
+			}
 
-			Console.WriteLine ("MODE: {0} {1} - {2} {3}", mode, extraArgs.Count, xml, xsd);
+			if (dir != null) {
+				xml = Path.Combine (dir, xml);
+				xsd = Path.Combine (dir, xsd);
+				wsdl = Path.Combine (dir, wsdl);
+			}
 
 			switch (mode) {
 			case Mode.Xml:
@@ -114,7 +121,7 @@ namespace WCF.Config.Helper {
 				break;
 
 			case Mode.Service:
-				TestService ();
+				TestService (xml, xsd);
 				break;
 
 			default:
@@ -133,11 +140,10 @@ namespace WCF.Config.Helper {
 			TestUtils.Deserialize (xmlFilename, xsdFilename);
 		}
 
-		static void TestService ()
+		static void TestService (string xmlFilename, string xsdFilename)
 		{
-			ConfigurationHost.Install ();
-			WebRequest.DefaultWebProxy = new WebProxy ("http://192.168.16.104:3128");
-			var client = new MyService.MyServiceClient ("*", "http://provcon-faust/TestWCF/Service/MyService.svc");
+			ConfigurationHost.Install (xmlFilename, xsdFilename);
+			var client = new MyService.MyServiceClient ();
 			var hello = client.Hello ();
 			Console.WriteLine ("Got response from service: {0}", hello);
 		}

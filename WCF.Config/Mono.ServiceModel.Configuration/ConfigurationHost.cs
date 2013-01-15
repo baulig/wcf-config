@@ -44,7 +44,7 @@ namespace Mono.ServiceModel.Configuration {
 		static ConfigurationHost instance;
 		Configuration config;
 
-		private ConfigurationHost ()
+		private ConfigurationHost (string xmlFilename, string xsdFilename)
 		{
 #if MOBILE
 			/*
@@ -82,19 +82,10 @@ namespace Mono.ServiceModel.Configuration {
 			
 			Console.WriteLine ("Custom configuration handler installed.");
 
-			DownloadFromMyMac ("config.xml");
-			DownloadFromMyMac ("config.xsd");
-			
-			config = new Configuration ("config.xml", "config.xsd");
+			config = new Configuration (xmlFilename, xsdFilename);
 
 			DebugUtils.Dump (config);
 			Console.WriteLine ("Configuration loaded.");
-		}
-
-		void DownloadFromMyMac (string filename)
-		{
-			var root = new Uri ("http://192.168.16.104/~martin/work/");
-			Utils.DownloadXml (new Uri (root, filename), filename);
 		}
 
 		public bool ConfigureEndpoint (ChannelFactory factory,
@@ -106,24 +97,23 @@ namespace Mono.ServiceModel.Configuration {
 
 			if (endpoint.Binding != null)
 				throw new NotSupportedException ();
-			if (endpoint.Address == null)
-				throw new NotSupportedException ();
 
-			var address = endpoint.Address;
 			var endpoints = config.GetEndpoints (endpoint.Contract);
 			Console.WriteLine ("GOT ENDPOINTS: {0}", endpoints.Count);
 			if (endpoints.Count != 1)
 				return false;
 
+			if ((endpoint.Address != null) && !endpoint.Address.Equals (endpoints [0].Address))
+				return false;
+
 			endpoint = endpoints [0];
-			endpoint.Address = address;
 			return true;
 		}
 
-		public static void Install ()
+		public static void Install (string xmlFilename, string xsdFilename)
 		{
 			if (instance == null)
-				instance = new ConfigurationHost ();
+				instance = new ConfigurationHost (xmlFilename, xsdFilename);
 		}
 	}
 }

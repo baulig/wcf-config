@@ -51,16 +51,28 @@ namespace Mono.ServiceModel.Configuration {
 			get { return endpoints; }
 		}
 
+		public void AddBinding (Binding binding)
+		{
+			if (deserialized)
+				throw new InvalidOperationException ();
+
+			if (!bindings.Contains (binding))
+				bindings.Add (binding);
+		}
+
 		public void AddEndpoint (ServiceEndpoint sep)
 		{
 			if (deserialized)
 				throw new InvalidOperationException ();
 
-			if (!bindings.Contains (sep.Binding))
-				bindings.Add (sep.Binding);
+			AddBinding (sep.Binding);
+
+			if (sep.Address == null || sep.Address.Uri.AbsoluteUri == null)
+				throw new InvalidOperationException ();
 
 			var endpoint = new Endpoint ();
 			endpoint.Name = sep.Name;
+			endpoint.Address = sep.Address.Uri.ToString ();
 			endpoint.Contract = sep.Contract.Name;
 			endpoint.Binding = sep.Binding.Name;
 			endpoint.ServiceEndpoint = sep;
@@ -85,6 +97,7 @@ namespace Mono.ServiceModel.Configuration {
 				var binding = Bindings.First (b => b.Name.Equals (endpoint.Binding));
 				endpoint.ServiceEndpoint = new ServiceEndpoint (contract);
 				endpoint.ServiceEndpoint.Binding = binding;
+				endpoint.ServiceEndpoint.Address = new EndpointAddress (endpoint.Address);
 				list.Add (endpoint.ServiceEndpoint);
 			}
 

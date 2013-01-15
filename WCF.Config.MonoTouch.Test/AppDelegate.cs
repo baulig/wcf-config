@@ -74,11 +74,20 @@ namespace WCF.Config.MonoTouch.Test {
 			TestService ();
 		}
 
+		static void DownloadFromMyMac (string filename)
+		{
+			var root = new Uri ("http://192.168.16.104/~martin/work/");
+			C.Utils.DownloadXml (new Uri (root, filename), filename);
+		}
+		
 		static void TestService ()
 		{
-			C.ConfigurationHost.Install ();
+			DownloadFromMyMac ("config.xml");
+			DownloadFromMyMac ("config.xsd");
+			
+			C.ConfigurationHost.Install ("config.xml", "config.xsd");
 			WebRequest.DefaultWebProxy = new WebProxy ("http://192.168.16.104:3128");
-			var client = new MyService.MyServiceClient ("*", "http://provcon-faust/TestWCF/Service/MyService.svc");
+			var client = new MyService.MyServiceClient ();
 			var hello = client.Hello ();
 			Console.WriteLine ("Got response from service: {0}", hello);
 		}

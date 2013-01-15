@@ -71,7 +71,7 @@ namespace Mono.ServiceModel.Configuration {
 		{
 #if MOBILE
 			var documents = Environment.GetFolderPath (Environment.SpecialFolder.MyDocuments);
-			return Path.Combine (documents, filename);
+			return Path.Combine (documents, Path.GetFileName (filename));
 #else
 			return filename;
 #endif

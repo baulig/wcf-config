@@ -34,6 +34,10 @@ namespace Mono.ServiceModel.Configuration {
 			get; set;
 		}
 
+		public string Address {
+			get; set;
+		}
+
 		public string Contract {
 			get; set;
 		}
@@ -49,7 +53,8 @@ namespace Mono.ServiceModel.Configuration {
 		public override string ToString ()
 		{
 			return string.Format (
-				"[Endpoint: Name={0}, Contract={1}, Binding={2}]", Name, Contract, Binding);
+				"[Endpoint: Name={0}, Contract={1}, Binding={2}, Address={3}]",
+				Name, Contract, Binding, Address);
 		}
 
 	}
