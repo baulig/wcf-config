@@ -52,7 +52,6 @@
     <Compile Include="Mono.ServiceModel.Configuration\SchemaTypeMap.cs" />
     <Compile Include="Mono.ServiceModel.Configuration\Endpoint.cs" />
     <Compile Include="Mono.ServiceModel.Configuration\Value.cs" />
-    <Compile Include="Mono.ServiceModel.Configuration\Test.cs" />
     <Compile Include="Mono.ServiceModel.Configuration.Modules\BasicHttpBindingModule.cs" />
     <Compile Include="Mono.ServiceModel.Configuration.Modules\BasicHttpSecurityModule.cs" />
     <Compile Include="Mono.ServiceModel.Configuration.Modules\BindingElementsModule.cs" />
@@ -73,6 +72,7 @@
     <Compile Include="Mono.ServiceModel.Configuration.Modules\HttpBindingBaseValue.cs" />
     <Compile Include="Mono.ServiceModel.Configuration.Modules\TransportValue.cs" />
     <Compile Include="Mono.ServiceModel.Configuration\ConfigurationHost.cs" />
+    <Compile Include="Mono.ServiceModel.Configuration\DebugUtils.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

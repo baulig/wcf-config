@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WCF.Config.MonoTouch", "WCF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WCF.Config.MonoTouch.Test", "WCF.Config.MonoTouch.Test\WCF.Config.MonoTouch.Test.csproj", "{42B00D16-A053-4479-B9B8-5C6B9E3A89E4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WCF.Config.Test", "WCF.Config.Test\WCF.Config.Test.csproj", "{9BB9121F-0953-46AD-9454-834E94A0AAD2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -49,8 +51,24 @@ Global
 		{87D6C4EC-09FF-4972-9526-4D16CC5F88E3}.Debug|x86.Build.0 = Debug|x86
 		{87D6C4EC-09FF-4972-9526-4D16CC5F88E3}.Release|x86.ActiveCfg = Release|x86
 		{87D6C4EC-09FF-4972-9526-4D16CC5F88E3}.Release|x86.Build.0 = Release|x86
+		{9BB9121F-0953-46AD-9454-834E94A0AAD2}.Ad-Hoc|iPhone.ActiveCfg = Debug|Any CPU
+		{9BB9121F-0953-46AD-9454-834E94A0AAD2}.Ad-Hoc|iPhone.Build.0 = Debug|Any CPU
+		{9BB9121F-0953-46AD-9454-834E94A0AAD2}.AppStore|iPhone.ActiveCfg = Debug|Any CPU
+		{9BB9121F-0953-46AD-9454-834E94A0AAD2}.AppStore|iPhone.Build.0 = Debug|Any CPU
+		{9BB9121F-0953-46AD-9454-834E94A0AAD2}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{9BB9121F-0953-46AD-9454-834E94A0AAD2}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{9BB9121F-0953-46AD-9454-834E94A0AAD2}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{9BB9121F-0953-46AD-9454-834E94A0AAD2}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{9BB9121F-0953-46AD-9454-834E94A0AAD2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9BB9121F-0953-46AD-9454-834E94A0AAD2}.Debug|x86.Build.0 = Debug|Any CPU
+		{9BB9121F-0953-46AD-9454-834E94A0AAD2}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{9BB9121F-0953-46AD-9454-834E94A0AAD2}.Release|iPhone.Build.0 = Release|Any CPU
+		{9BB9121F-0953-46AD-9454-834E94A0AAD2}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{9BB9121F-0953-46AD-9454-834E94A0AAD2}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{9BB9121F-0953-46AD-9454-834E94A0AAD2}.Release|x86.ActiveCfg = Release|Any CPU
+		{9BB9121F-0953-46AD-9454-834E94A0AAD2}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = WCF.Config.MonoTouch.Test\WCF.Config.MonoTouch.Test.csproj
+		StartupItem = WCF.Config.Helper\WCF.Config.Helper.csproj
 	EndGlobalSection
 EndGlobal

@@ -1,5 +1,5 @@
 //
-// Test.cs
+// DebugUtils.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,99 +24,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.IO;
-using System.Net;
-using System.Text;
-using System.Reflection;
-using System.Xml;
-using System.Xml.Schema;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
-using System.ServiceModel.Description;
 
 namespace Mono.ServiceModel.Configuration {
 
-	public static class Test {
-
-		public static void Run ()
-		{
-			Run ("test.xml", "test.xsd");
-		}
-
-#if !MOBILE
-		public static void GenerateFromWsdl (Uri uri, string wsdlFilename,
-		                                     string xmlFilename, string xsdFilename)
-		{
-			var doc = Utils.LoadMetadata (uri, wsdlFilename);
-			var importer = new WsdlImporter (doc);
-			var endpoints = importer.ImportAllEndpoints ();
-
-			var config = new Configuration ();
-			foreach (var endpoint in endpoints)
-				config.AddEndpoint (endpoint);
-
-			Generator.Write (xmlFilename, xsdFilename, config);
-		}
-#endif
-
-		public static void Run (string xmlFilename, string xsdFilename)
-		{
-			var http = new BasicHttpBinding ();
-			http.OpenTimeout = TimeSpan.FromHours (3);
-			http.MaxBufferSize = 8192;
-			http.HostNameComparisonMode = HostNameComparisonMode.WeakWildcard;
-			http.AllowCookies = true;
-			http.Security.Mode = BasicHttpSecurityMode.Transport;
-			http.TransferMode = TransferMode.StreamedRequest;
-
-#if !MOBILE || MOBILE_BAULIG
-			var https = new BasicHttpsBinding ();
-			https.MaxBufferSize = 32768;
-#endif
-
-#if !MOBILE_FIXME
-			var netTcp = new NetTcpBinding ();
-#endif
-			
-			var custom = new CustomBinding ();
-			custom.Name = "myCustomBinding";
-			var text = new TextMessageEncodingBindingElement ();
-			text.MessageVersion = MessageVersion.Soap12WSAddressingAugust2004;
-			custom.Elements.Add (text);
-			custom.Elements.Add (new HttpTransportBindingElement ());
-			
-			var root = new Configuration ();
-			root.Bindings.Add (http);
-#if !MOBILE || MOBILE_BAULIG
-			root.Bindings.Add (https);
-#endif
-#if !MOBILE_FIXME
-			root.Bindings.Add (netTcp);
-#endif
-			root.Bindings.Add (custom);
-			
-			var contract = new ContractDescription ("MyContract");
-			var endpointUri = "custom://localhost:8888/MyService";
-			var endpoint = new ServiceEndpoint (contract, custom, new EndpointAddress (endpointUri));
-			
-			root.AddEndpoint (endpoint);
-			
-			Generator.Write (xmlFilename, xsdFilename, root);
-			
-			Utils.Dump (xsdFilename);
-			Utils.Dump (xmlFilename);
-			
-			Utils.ValidateSchema (xmlFilename, xsdFilename);
-		}
-
-		public static void Deserialize (string xmlFilename, string xsdFilename)
-		{
-			var config = new Configuration (xmlFilename, xsdFilename);
-			Console.WriteLine ("READ CONFIG FROM XML");
-
-			Dump (config);
-		}
-
+	public static class DebugUtils {
 		public static void Dump (Configuration config)
 		{
 			foreach (var binding in config.Bindings) {
@@ -137,14 +50,14 @@ namespace Mono.ServiceModel.Configuration {
 				Console.WriteLine ("ENDPOINT: {0}", endpoint);
 			}
 		}
-
+		
 		public static void Dump (BasicHttpBinding binding)
 		{
 			Console.WriteLine ("HTTP: {0} {1} {2} {3}",
 			                   binding.Name, binding.OpenTimeout, binding.Security.Mode,
 			                   binding.TransferMode);
 		}
-
+		
 #if !MOBILE || MOBILE_BAULIG
 		public static void Dump (BasicHttpsBinding binding)
 		{
@@ -157,11 +70,10 @@ namespace Mono.ServiceModel.Configuration {
 		public static void Dump (CustomBinding binding)
 		{
 			Console.WriteLine ("CUSTOM: {0}", binding.Name);
-
+			
 			foreach (var element in binding.Elements)
 				Console.WriteLine ("ELEMENT: {0}", element);
 		}
-
 	}
 }
 

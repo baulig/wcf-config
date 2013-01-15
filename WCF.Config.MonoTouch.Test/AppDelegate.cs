@@ -32,6 +32,8 @@ using System.Linq;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 
+using WCF.Config.Test;
+
 using C = Mono.ServiceModel.Configuration;
 
 namespace WCF.Config.MonoTouch.Test {
@@ -67,8 +69,8 @@ namespace WCF.Config.MonoTouch.Test {
 
 		static void Run ()
 		{
-			C.Test.Run ("test.xml", "test.xsd");
-			C.Test.Deserialize ("test.xml", "test.xsd");
+			BindingTests.Run ("test.xml", "test.xsd");
+			TestUtils.Deserialize ("test.xml", "test.xsd");
 			TestService ();
 		}
 

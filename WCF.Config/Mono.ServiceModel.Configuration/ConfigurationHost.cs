@@ -87,7 +87,7 @@ namespace Mono.ServiceModel.Configuration {
 			
 			config = new Configuration ("config.xml", "config.xsd");
 
-			Test.Dump (config);
+			DebugUtils.Dump (config);
 			Console.WriteLine ("Configuration loaded.");
 		}
 

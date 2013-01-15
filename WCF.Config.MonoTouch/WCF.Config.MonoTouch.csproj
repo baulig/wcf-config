@@ -135,11 +135,11 @@
     <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration.Modules\TransportValue.cs">
       <Link>Mono.ServiceModel.Configuration.Modules\TransportValue.cs</Link>
     </Compile>
-    <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration\Test.cs">
-      <Link>Mono.ServiceModel.Configuration\Test.cs</Link>
-    </Compile>
     <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration\ConfigurationHost.cs">
       <Link>Mono.ServiceModel.Configuration\ConfigurationHost.cs</Link>
+    </Compile>
+    <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration\DebugUtils.cs">
+      <Link>Mono.ServiceModel.Configuration\DebugUtils.cs</Link>
     </Compile>
   </ItemGroup>
 </Project>

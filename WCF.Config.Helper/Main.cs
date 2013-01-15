@@ -34,10 +34,11 @@ using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 
-namespace WCF.Config.Helper {
+using Mono.ServiceModel.Configuration;
+using Mono.ServiceModel.Configuration.Modules;
+using WCF.Config.Test;
 
-	using Mono.ServiceModel.Configuration;
-	using Mono.ServiceModel.Configuration.Modules;
+namespace WCF.Config.Helper {
 
 	class MainClass {
 
@@ -46,7 +47,7 @@ namespace WCF.Config.Helper {
 			Run ("test.xml", "test.xsd");
 			if (!File.Exists ("config.wsdl")) {
 				var uri = new Uri ("http://provcon-faust/TestWCF/Service/MyService.svc?singleWsdl");
-				Test.GenerateFromWsdl (uri, "config.wsdl", "config.xml", "config.xsd");
+				TestUtils.GenerateFromWsdl (uri, "config.wsdl", "config.xml", "config.xsd");
 			}
 			TestService ();
 		}
@@ -56,10 +57,10 @@ namespace WCF.Config.Helper {
 			if (File.Exists (xmlFilename) && File.Exists (xsdFilename)) {
 				Utils.ValidateSchema (xmlFilename, xsdFilename);
 			} else {
-				Test.Run (xmlFilename, xsdFilename);
+				BindingTests.Run (xmlFilename, xsdFilename);
 			}
 
-			Test.Deserialize (xmlFilename, xsdFilename);
+			TestUtils.Deserialize (xmlFilename, xsdFilename);
 		}
 
 		static void TestService ()

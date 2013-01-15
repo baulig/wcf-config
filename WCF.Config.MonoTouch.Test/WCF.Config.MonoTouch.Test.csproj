@@ -39,7 +39,7 @@
     <DebugType>full</DebugType>
     <Optimize>False</Optimize>
     <OutputPath>bin\iPhone\Debug</OutputPath>
-    <DefineConstants>DEBUG;MOBILE</DefineConstants>
+    <DefineConstants>DEBUG;MOBILE;MOBILE_FIXME;MOBILE_BAULIG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodesignKey>iPhone Developer</CodesignKey>
@@ -86,6 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
+    <Folder Include="WCF.Config.Test\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
@@ -104,6 +105,12 @@
     </Compile>
     <Compile Include="Service References\MyService\Reference.cs">
       <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="..\WCF.Config.Test\BindingTests.cs">
+      <Link>WCF.Config.Test\BindingTests.cs</Link>
+    </Compile>
+    <Compile Include="..\WCF.Config.Test\TestUtils.cs">
+      <Link>WCF.Config.Test\TestUtils.cs</Link>
     </Compile>
   </ItemGroup>
   <ItemGroup>

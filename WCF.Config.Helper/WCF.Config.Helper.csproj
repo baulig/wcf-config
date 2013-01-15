@@ -50,6 +50,10 @@
       <Project>{2720F0E6-84F7-4D89-83AD-568D6423522A}</Project>
       <Name>WCF.Config</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WCF.Config.Test\WCF.Config.Test.csproj">
+      <Project>{9BB9121F-0953-46AD-9454-834E94A0AAD2}</Project>
+      <Name>WCF.Config.Test</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References" />
