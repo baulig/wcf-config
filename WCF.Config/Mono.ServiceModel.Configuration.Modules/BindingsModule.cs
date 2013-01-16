@@ -43,6 +43,7 @@ namespace Mono.ServiceModel.Configuration.Modules {
 			AddElement<BasicHttpBindingModule, BasicHttpBinding> ();
 #if !MOBILE || MOBILE_BAULIG
 			AddElement<BasicHttpsBindingModule, BasicHttpsBinding> ();
+			AddElement<NetTcpBindingModule, NetTcpBinding> ();
 #endif
 			AddElement<CustomBindingModule, CustomBinding> ();
 			base.Populate ();

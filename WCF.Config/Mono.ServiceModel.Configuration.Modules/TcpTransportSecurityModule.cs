@@ -1,5 +1,5 @@
 //
-// HttpTransportSecurityModule.cs
+// TcpTransportSecurityModule.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -25,36 +25,34 @@
 // THE SOFTWARE.
 #if !MOBILE || MOBILE_BAULIG
 using System;
+using System.Net.Security;
 using System.ServiceModel;
 
 namespace Mono.ServiceModel.Configuration.Modules {
-
-	public class HttpTransportSecurityModule : ValueModule<HttpTransportSecurity> {
+	
+	public class TcpTransportSecurityModule : ValueModule<TcpTransportSecurity> {
 		
 		public override string Name {
 			get { return "transport"; }
 		}
-
+		
 		protected override void Populate ()
 		{
 			AddAttribute (
 				"clientCredentialType", i => i.ClientCredentialType,
 				(i,v) => i.ClientCredentialType = v);
 			AddAttribute (
-				"proxyCredentialType", i => i.ProxyCredentialType,
-				(i,v) => i.ProxyCredentialType = v);
-			AddAttribute ("realm", i => i.Realm, (i,v) => i.Realm = v);
+				"protectionLevel", i => i.ProtectionLevel,
+				(i,v) => i.ProtectionLevel = v);
 			base.Populate ();
 		}
-
-		public override bool IsDefault (HttpTransportSecurity instance)
-		{
-			return instance.ClientCredentialType == HttpClientCredentialType.None &&
-				instance.ProxyCredentialType == HttpProxyCredentialType.None &&
-				string.IsNullOrEmpty (instance.Realm);
-		}
 		
+		public override bool IsDefault (TcpTransportSecurity instance)
+		{
+			return instance.ClientCredentialType == TcpClientCredentialType.None &&
+				instance.ProtectionLevel == ProtectionLevel.None;
+		}
 	}
-
+	
 }
 #endif

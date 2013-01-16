@@ -1,5 +1,5 @@
 //
-// HttpTransportSecurityModule.cs
+// NetTcpSecurityModule.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -28,33 +28,28 @@ using System;
 using System.ServiceModel;
 
 namespace Mono.ServiceModel.Configuration.Modules {
-
-	public class HttpTransportSecurityModule : ValueModule<HttpTransportSecurity> {
+	
+	public class NetTcpSecurityModule : ValueModule<NetTcpSecurity> {
 		
 		public override string Name {
-			get { return "transport"; }
+			get { return "netTcpSecurity"; }
 		}
-
+		
 		protected override void Populate ()
 		{
-			AddAttribute (
-				"clientCredentialType", i => i.ClientCredentialType,
-				(i,v) => i.ClientCredentialType = v);
-			AddAttribute (
-				"proxyCredentialType", i => i.ProxyCredentialType,
-				(i,v) => i.ProxyCredentialType = v);
-			AddAttribute ("realm", i => i.Realm, (i,v) => i.Realm = v);
+			AddAttribute ("mode", i => i.Mode, (i,v) => i.Mode = v);
+			AddElement<TcpTransportSecurityModule, TcpTransportSecurity> (i => i.Transport);
 			base.Populate ();
 		}
-
-		public override bool IsDefault (HttpTransportSecurity instance)
+		
+		public override bool IsDefault (NetTcpSecurity instance)
 		{
-			return instance.ClientCredentialType == HttpClientCredentialType.None &&
-				instance.ProxyCredentialType == HttpProxyCredentialType.None &&
-				string.IsNullOrEmpty (instance.Realm);
+			if (instance.Mode != SecurityMode.None)
+				return false;
+			var transport = Generator.GetModule<TcpTransportSecurityModule, TcpTransportSecurity> ();
+			return transport.IsDefault (instance.Transport);
 		}
 		
 	}
-
 }
 #endif

@@ -117,6 +117,9 @@ namespace WCF.Config.Helper {
 					return;
 				}
 
+				if (File.Exists (wsdl))
+					File.Delete (wsdl);
+
 				TestUtils.GenerateFromWsdl (service, wsdl, xml, xsd);
 				break;
 

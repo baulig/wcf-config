@@ -141,5 +141,14 @@
     <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration\DebugUtils.cs">
       <Link>Mono.ServiceModel.Configuration\DebugUtils.cs</Link>
     </Compile>
+    <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration.Modules\NetTcpBindingModule.cs">
+      <Link>Mono.ServiceModel.Configuration.Modules\NetTcpBindingModule.cs</Link>
+    </Compile>
+    <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration.Modules\NetTcpSecurityModule.cs">
+      <Link>Mono.ServiceModel.Configuration.Modules\NetTcpSecurityModule.cs</Link>
+    </Compile>
+    <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration.Modules\TcpTransportSecurityModule.cs">
+      <Link>Mono.ServiceModel.Configuration.Modules\TcpTransportSecurityModule.cs</Link>
+    </Compile>
   </ItemGroup>
 </Project>

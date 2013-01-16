@@ -73,6 +73,9 @@
     <Compile Include="Mono.ServiceModel.Configuration.Modules\TransportValue.cs" />
     <Compile Include="Mono.ServiceModel.Configuration\ConfigurationHost.cs" />
     <Compile Include="Mono.ServiceModel.Configuration\DebugUtils.cs" />
+    <Compile Include="Mono.ServiceModel.Configuration.Modules\NetTcpBindingModule.cs" />
+    <Compile Include="Mono.ServiceModel.Configuration.Modules\NetTcpSecurityModule.cs" />
+    <Compile Include="Mono.ServiceModel.Configuration.Modules\TcpTransportSecurityModule.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

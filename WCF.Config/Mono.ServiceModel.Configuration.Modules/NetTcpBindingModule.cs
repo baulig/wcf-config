@@ -1,5 +1,5 @@
 //
-// HttpTransportSecurityModule.cs
+// NetTcpBindingModule.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -23,38 +23,48 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-#if !MOBILE || MOBILE_BAULIG
 using System;
+using System.Xml;
+using System.Xml.Schema;
+using System.Collections.Generic;
 using System.ServiceModel;
 
 namespace Mono.ServiceModel.Configuration.Modules {
-
-	public class HttpTransportSecurityModule : ValueModule<HttpTransportSecurity> {
+	
+	public class NetTcpBindingModule : ValueModule<NetTcpBinding> {
 		
 		public override string Name {
-			get { return "transport"; }
-		}
-
-		protected override void Populate ()
-		{
-			AddAttribute (
-				"clientCredentialType", i => i.ClientCredentialType,
-				(i,v) => i.ClientCredentialType = v);
-			AddAttribute (
-				"proxyCredentialType", i => i.ProxyCredentialType,
-				(i,v) => i.ProxyCredentialType = v);
-			AddAttribute ("realm", i => i.Realm, (i,v) => i.Realm = v);
-			base.Populate ();
-		}
-
-		public override bool IsDefault (HttpTransportSecurity instance)
-		{
-			return instance.ClientCredentialType == HttpClientCredentialType.None &&
-				instance.ProxyCredentialType == HttpProxyCredentialType.None &&
-				string.IsNullOrEmpty (instance.Realm);
+			get { return "netTcpBinding"; }
 		}
 		
+		protected override void Populate ()
+		{
+			Implement<BindingValue> ();
+			AddAttribute (
+				"hostNameComparisonMode", i => i.HostNameComparisonMode,
+				(i,v) => i.HostNameComparisonMode = v);
+			AddAttribute (
+				"listenBacklog", i => i.ListenBacklog,
+				(i,v) => i.ListenBacklog = v);
+			AddAttribute (
+				"maxBufferPoolSize", i => i.MaxBufferPoolSize,
+				(i,v) => i.MaxBufferPoolSize = v).SetMinMax ("0", "9223372036854775807");
+			AddAttribute (
+				"maxBufferSize", i => i.MaxBufferSize,
+				(i,v) => i.MaxBufferSize = v).SetMinMax ("1", int.MaxValue.ToString ());
+			AddAttribute (
+				"maxConnections", i => i.MaxConnections,
+				(i,v) => i.MaxConnections = v).SetMinMax ("1", int.MaxValue.ToString ());
+			AddAttribute (
+				"maxReceiveMessageSize", i => i.MaxReceivedMessageSize,
+				(i,v) => i.MaxReceivedMessageSize = v).SetMinMax ("0", "9223372036854775807");
+			AddAttribute (
+				"portSharingEnabled", i => i.PortSharingEnabled,
+				(i,v) => i.PortSharingEnabled = v);
+			AddAttribute ("transferMode", i => i.TransferMode, (i,v) => i.TransferMode = v);
+
+			base.Populate ();
+		}
 	}
 
 }
-#endif
