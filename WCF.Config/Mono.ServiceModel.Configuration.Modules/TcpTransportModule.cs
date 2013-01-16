@@ -1,5 +1,5 @@
 //
-// NetTcpBindingModule.cs
+// TcpTransportModule.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,51 +24,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Xml;
-using System.Xml.Schema;
-using System.Collections.Generic;
 using System.ServiceModel;
+using System.ServiceModel.Channels;
 
 namespace Mono.ServiceModel.Configuration.Modules {
 	
-	public class NetTcpBindingModule : ValueModule<NetTcpBinding> {
+	public class TcpTransportModule : ValueModule<TcpTransportBindingElement> {
 		
 		public override string Name {
-			get { return "netTcpBinding"; }
+			get { return "tcpTransport"; }
 		}
-		
+
 		protected override void Populate ()
 		{
-			Implement<BindingValue> ();
-#if !MOBILE || MOBILE_BAULIG
-			AddElement<NetTcpSecurityModule, NetTcpSecurity> (i => i.Security);
-#endif
-
-			AddAttribute (
-				"hostNameComparisonMode", i => i.HostNameComparisonMode,
-				(i,v) => i.HostNameComparisonMode = v);
-			AddAttribute (
-				"listenBacklog", i => i.ListenBacklog,
-				(i,v) => i.ListenBacklog = v);
-			AddAttribute (
-				"maxBufferPoolSize", i => i.MaxBufferPoolSize,
-				(i,v) => i.MaxBufferPoolSize = v).SetMinMax ("0", "9223372036854775807");
-			AddAttribute (
-				"maxBufferSize", i => i.MaxBufferSize,
-				(i,v) => i.MaxBufferSize = v).SetMinMax ("1", int.MaxValue.ToString ());
-			AddAttribute (
-				"maxConnections", i => i.MaxConnections,
-				(i,v) => i.MaxConnections = v).SetMinMax ("1", int.MaxValue.ToString ());
-			AddAttribute (
-				"maxReceiveMessageSize", i => i.MaxReceivedMessageSize,
-				(i,v) => i.MaxReceivedMessageSize = v).SetMinMax ("0", "9223372036854775807");
-			AddAttribute (
-				"portSharingEnabled", i => i.PortSharingEnabled,
-				(i,v) => i.PortSharingEnabled = v);
-			AddAttribute ("transferMode", i => i.TransferMode, (i,v) => i.TransferMode = v);
-
+			Implement<TransportValue> ();
+			Implement<ConnectionOrientedTransportValue> ();
+			Implement<TcpTransportValue> ();
 			base.Populate ();
 		}
+		
 	}
-
 }

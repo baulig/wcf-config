@@ -37,44 +37,8 @@ namespace Mono.ServiceModel.Configuration.Modules {
 
 		protected override void Populate ()
 		{
-			AddAttribute (
-				"allowCookies", i => i.AllowCookies, (i,v) => i.AllowCookies = v);
-			AddAttribute (
-				"authenticationSchema", i => i.AuthenticationScheme,
-				(i,v) => i.AuthenticationScheme = v);
-			AddAttribute (
-				"bypassProxyOnLocal", i => i.BypassProxyOnLocal,
-				(i,v) => i.BypassProxyOnLocal = v);
-			AddAttribute (
-				"hostNameComparisonMode", i => i.HostNameComparisonMode,
-				(i,v) => i.HostNameComparisonMode = v);
-			AddAttribute (
-				"keepAliveEnabled", i => i.KeepAliveEnabled,
-				(i,v) => i.KeepAliveEnabled = v);
-			AddAttribute (
-				"maxBufferSize", i => i.MaxBufferSize,
-				(i,v) => i.MaxBufferSize = v).SetMinMax ("1", int.MaxValue.ToString ());
-#if !MOBILE_FIXME
-			AddAttribute (
-				"decompressionEnabled", i => i.DecompressionEnabled,
-				(i,v) => i.DecompressionEnabled = v);
-#endif
-
-			AddAttribute (
-				"proxyAddress", i => i.ProxyAddress, (i,v) => i.ProxyAddress = v);
-			AddAttribute (
-				"proxyAuthenticationScheme", i => i.ProxyAuthenticationScheme,
-				(i,v) => i.ProxyAuthenticationScheme = v);
-			AddAttribute (
-				"useDefaultWebProxy", i => i.UseDefaultWebProxy,
-				(i,v) => i.UseDefaultWebProxy = v);
-			AddAttribute (
-				"realm", i => i.Realm, (i,v) => i.Realm = v);
-			AddAttribute (
-				"transferMode", i => i.TransferMode, (i,v) => i.TransferMode = v);
-			AddAttribute (
-				"unsafeConnectionNtlmAuthentication", i => i.UnsafeConnectionNtlmAuthentication,
-				(i,v) => i.UnsafeConnectionNtlmAuthentication = v);
+			Implement<TransportValue> ();
+			Implement<HttpTransportValue> ();
 			base.Populate ();
 		}
 

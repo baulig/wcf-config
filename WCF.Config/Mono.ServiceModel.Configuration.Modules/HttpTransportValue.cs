@@ -1,5 +1,5 @@
 //
-// NetTcpBindingModule.cs
+// HttpTransportValue.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,51 +24,54 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Xml;
-using System.Xml.Schema;
-using System.Collections.Generic;
-using System.ServiceModel;
+using System.ServiceModel.Channels;
 
 namespace Mono.ServiceModel.Configuration.Modules {
-	
-	public class NetTcpBindingModule : ValueModule<NetTcpBinding> {
-		
-		public override string Name {
-			get { return "netTcpBinding"; }
-		}
-		
-		protected override void Populate ()
-		{
-			Implement<BindingValue> ();
-#if !MOBILE || MOBILE_BAULIG
-			AddElement<NetTcpSecurityModule, NetTcpSecurity> (i => i.Security);
-#endif
 
+	public class HttpTransportValue : Value<HttpTransportBindingElement> {
+
+		public HttpTransportValue ()
+		{
+			AddAttribute (
+				"allowCookies", i => i.AllowCookies, (i,v) => i.AllowCookies = v);
+			AddAttribute (
+				"authenticationSchema", i => i.AuthenticationScheme,
+				(i,v) => i.AuthenticationScheme = v);
+			AddAttribute (
+				"bypassProxyOnLocal", i => i.BypassProxyOnLocal,
+				(i,v) => i.BypassProxyOnLocal = v);
 			AddAttribute (
 				"hostNameComparisonMode", i => i.HostNameComparisonMode,
 				(i,v) => i.HostNameComparisonMode = v);
 			AddAttribute (
-				"listenBacklog", i => i.ListenBacklog,
-				(i,v) => i.ListenBacklog = v);
-			AddAttribute (
-				"maxBufferPoolSize", i => i.MaxBufferPoolSize,
-				(i,v) => i.MaxBufferPoolSize = v).SetMinMax ("0", "9223372036854775807");
+				"keepAliveEnabled", i => i.KeepAliveEnabled,
+				(i,v) => i.KeepAliveEnabled = v);
 			AddAttribute (
 				"maxBufferSize", i => i.MaxBufferSize,
 				(i,v) => i.MaxBufferSize = v).SetMinMax ("1", int.MaxValue.ToString ());
+#if !MOBILE_FIXME
 			AddAttribute (
-				"maxConnections", i => i.MaxConnections,
-				(i,v) => i.MaxConnections = v).SetMinMax ("1", int.MaxValue.ToString ());
+				"decompressionEnabled", i => i.DecompressionEnabled,
+				(i,v) => i.DecompressionEnabled = v);
+#endif
+			
 			AddAttribute (
-				"maxReceiveMessageSize", i => i.MaxReceivedMessageSize,
-				(i,v) => i.MaxReceivedMessageSize = v).SetMinMax ("0", "9223372036854775807");
+				"proxyAddress", i => i.ProxyAddress, (i,v) => i.ProxyAddress = v);
 			AddAttribute (
-				"portSharingEnabled", i => i.PortSharingEnabled,
-				(i,v) => i.PortSharingEnabled = v);
-			AddAttribute ("transferMode", i => i.TransferMode, (i,v) => i.TransferMode = v);
-
-			base.Populate ();
+				"proxyAuthenticationScheme", i => i.ProxyAuthenticationScheme,
+				(i,v) => i.ProxyAuthenticationScheme = v);
+			AddAttribute (
+				"useDefaultWebProxy", i => i.UseDefaultWebProxy,
+				(i,v) => i.UseDefaultWebProxy = v);
+			AddAttribute (
+				"realm", i => i.Realm, (i,v) => i.Realm = v);
+			AddAttribute (
+				"transferMode", i => i.TransferMode, (i,v) => i.TransferMode = v);
+			AddAttribute (
+				"unsafeConnectionNtlmAuthentication", i => i.UnsafeConnectionNtlmAuthentication,
+				(i,v) => i.UnsafeConnectionNtlmAuthentication = v);
 		}
-	}
 
+	}
 }
+

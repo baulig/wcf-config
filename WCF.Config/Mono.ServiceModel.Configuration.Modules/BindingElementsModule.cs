@@ -43,6 +43,7 @@ namespace Mono.ServiceModel.Configuration.Modules {
 			AddElement<MtomMessageEncodingModule,MtomMessageEncodingBindingElement> ();
 #endif
 			AddElement<HttpTransportModule,HttpTransportBindingElement> ();
+			AddElement<TcpTransportModule,TcpTransportBindingElement> ();
 			base.Populate ();
 		}
 		

@@ -29,7 +29,7 @@ using System.ServiceModel.Channels;
 
 namespace Mono.ServiceModel.Configuration.Modules {
 
-	public abstract class TransportValue<T> : Value<TransportBindingElement>
+	public class TransportValue : Value<TransportBindingElement>
 	{
 		public TransportValue ()
 		{

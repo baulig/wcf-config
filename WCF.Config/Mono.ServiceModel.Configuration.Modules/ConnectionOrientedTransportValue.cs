@@ -1,5 +1,5 @@
 //
-// NetTcpBindingModule.cs
+// ConnectionOrientedTransportValue.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,51 +24,39 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Xml;
-using System.Xml.Schema;
-using System.Collections.Generic;
-using System.ServiceModel;
+using System.ServiceModel.Channels;
 
 namespace Mono.ServiceModel.Configuration.Modules {
-	
-	public class NetTcpBindingModule : ValueModule<NetTcpBinding> {
-		
-		public override string Name {
-			get { return "netTcpBinding"; }
-		}
-		
-		protected override void Populate ()
-		{
-			Implement<BindingValue> ();
-#if !MOBILE || MOBILE_BAULIG
-			AddElement<NetTcpSecurityModule, NetTcpSecurity> (i => i.Security);
-#endif
 
+	public class ConnectionOrientedTransportValue : Value<ConnectionOrientedTransportBindingElement> {
+
+		public ConnectionOrientedTransportValue ()
+		{
+			AddAttribute (
+				"channelInitializationTimeout",
+				i => i.ChannelInitializationTimeout, (i,v) => i.ChannelInitializationTimeout = v);
+			AddAttribute (
+				"connectionBufferSize",
+				i => i.ConnectionBufferSize, (i,v) => i.ConnectionBufferSize = v).
+				SetMinMax ("1", int.MaxValue.ToString ());
 			AddAttribute (
 				"hostNameComparisonMode", i => i.HostNameComparisonMode,
 				(i,v) => i.HostNameComparisonMode = v);
 			AddAttribute (
-				"listenBacklog", i => i.ListenBacklog,
-				(i,v) => i.ListenBacklog = v);
-			AddAttribute (
-				"maxBufferPoolSize", i => i.MaxBufferPoolSize,
-				(i,v) => i.MaxBufferPoolSize = v).SetMinMax ("0", "9223372036854775807");
-			AddAttribute (
 				"maxBufferSize", i => i.MaxBufferSize,
 				(i,v) => i.MaxBufferSize = v).SetMinMax ("1", int.MaxValue.ToString ());
 			AddAttribute (
-				"maxConnections", i => i.MaxConnections,
-				(i,v) => i.MaxConnections = v).SetMinMax ("1", int.MaxValue.ToString ());
+				"maxOutputDelay", i => i.MaxOutputDelay,
+				(i,v) => i.MaxOutputDelay = v);
 			AddAttribute (
-				"maxReceiveMessageSize", i => i.MaxReceivedMessageSize,
-				(i,v) => i.MaxReceivedMessageSize = v).SetMinMax ("0", "9223372036854775807");
+				"maxPendingAccepts", i => i.MaxPendingAccepts,
+				(i,v) => i.MaxPendingAccepts = v).SetMinMax ("1", int.MaxValue.ToString ());
 			AddAttribute (
-				"portSharingEnabled", i => i.PortSharingEnabled,
-				(i,v) => i.PortSharingEnabled = v);
+				"maxPendingConnections", i => i.MaxPendingConnections,
+				(i,v) => i.MaxPendingConnections = v).SetMinMax ("1", int.MaxValue.ToString ());
 			AddAttribute ("transferMode", i => i.TransferMode, (i,v) => i.TransferMode = v);
-
-			base.Populate ();
 		}
-	}
 
+	}
 }
+

@@ -67,6 +67,8 @@ namespace Mono.ServiceModel.Configuration {
 
 			AddBinding (sep.Binding);
 
+			Console.WriteLine ("ADD ENDPOINT: {0} {1}", sep.Binding, sep.Address);
+
 			if (sep.Address == null || sep.Address.Uri.AbsoluteUri == null)
 				throw new InvalidOperationException ();
 

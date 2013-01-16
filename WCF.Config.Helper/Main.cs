@@ -49,7 +49,8 @@ namespace WCF.Config.Helper {
 			Xml,
 			Validate,
 			Download,
-			Service
+			Service,
+			Client
 		}
 
 		public static void Main (string[] args)
@@ -105,12 +106,6 @@ namespace WCF.Config.Helper {
 				Utils.ValidateSchema (xml, xsd);
 				break;
 
-			case Mode.Default:
-				if (File.Exists (xml))
-					goto case Mode.Validate;
-				else
-					goto case Mode.Xml;
-
 			case Mode.Download:
 				if (service == null) {
 					Console.Error.WriteLine ("Missing -service=<url> argument.");
@@ -126,6 +121,13 @@ namespace WCF.Config.Helper {
 			case Mode.Service:
 				TestService (xml, xsd);
 				break;
+
+			case Mode.Client:
+				TestClient ();
+				break;
+
+			case Mode.Default:
+				goto case Mode.Client;
 
 			default:
 				throw new InvalidOperationException ();
@@ -147,6 +149,23 @@ namespace WCF.Config.Helper {
 		{
 			ConfigurationHost.Install (xmlFilename, xsdFilename);
 			var client = new MyService.MyServiceClient ();
+			var hello = client.Hello ();
+			Console.WriteLine ("Got response from service: {0}", hello);
+		}
+
+		static void TestClient ()
+		{
+#if FIXME
+			var netTcp = new NetTcpBinding (SecurityMode.Transport, false);
+			netTcp.TransferMode = TransferMode.Streamed;
+#endif
+
+			var binding = new CustomBinding ();
+			binding.Elements.Add (new TextMessageEncodingBindingElement ());
+			binding.Elements.Add (new TcpTransportBindingElement ());
+
+			var address = new EndpointAddress ("net.tcp://192.168.16.101:8888/MyService/");
+			var client = new MyService.MyServiceClient (binding, address);
 			var hello = client.Hello ();
 			Console.WriteLine ("Got response from service: {0}", hello);
 		}

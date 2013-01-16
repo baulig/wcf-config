@@ -32,7 +32,7 @@ namespace Mono.ServiceModel.Configuration.Modules {
 	public class HttpTransportSecurityModule : ValueModule<HttpTransportSecurity> {
 		
 		public override string Name {
-			get { return "transport"; }
+			get { return "httpTransportSecurity"; }
 		}
 
 		protected override void Populate ()

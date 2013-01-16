@@ -150,5 +150,17 @@
     <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration.Modules\TcpTransportSecurityModule.cs">
       <Link>Mono.ServiceModel.Configuration.Modules\TcpTransportSecurityModule.cs</Link>
     </Compile>
+    <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration.Modules\TcpTransportModule.cs">
+      <Link>Mono.ServiceModel.Configuration.Modules\TcpTransportModule.cs</Link>
+    </Compile>
+    <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration.Modules\ConnectionOrientedTransportValue.cs">
+      <Link>Mono.ServiceModel.Configuration.Modules\ConnectionOrientedTransportValue.cs</Link>
+    </Compile>
+    <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration.Modules\TcpTransportValue.cs">
+      <Link>Mono.ServiceModel.Configuration.Modules\TcpTransportValue.cs</Link>
+    </Compile>
+    <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration.Modules\HttpTransportValue.cs">
+      <Link>Mono.ServiceModel.Configuration.Modules\HttpTransportValue.cs</Link>
+    </Compile>
   </ItemGroup>
 </Project>
