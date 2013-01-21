@@ -1,5 +1,5 @@
 //
-// TextMessageBindingElementModule.cs
+// TextMessageEncodingModule.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>

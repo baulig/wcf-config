@@ -37,13 +37,18 @@ namespace Mono.ServiceModel.Configuration.Modules {
 
 		protected override void Populate ()
 		{
+			// Message Encoding Modules
 			AddElement<TextMessageEncodingModule,TextMessageEncodingBindingElement> ();
 			AddElement<BinaryMessageEncodingModule,BinaryMessageEncodingBindingElement> ();
-#if !MOBILE_FIXME
+#if !MOBILE
 			AddElement<MtomMessageEncodingModule,MtomMessageEncodingBindingElement> ();
 #endif
+
+			// Transport Modules
 			AddElement<HttpTransportModule,HttpTransportBindingElement> ();
+#if !MOBILE
 			AddElement<TcpTransportModule,TcpTransportBindingElement> ();
+#endif
 			base.Populate ();
 		}
 		

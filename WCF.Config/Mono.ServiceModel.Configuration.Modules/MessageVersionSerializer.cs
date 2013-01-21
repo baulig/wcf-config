@@ -1,5 +1,5 @@
 //
-// MessageVersionModule.cs
+// MessageVersionSerializer.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>

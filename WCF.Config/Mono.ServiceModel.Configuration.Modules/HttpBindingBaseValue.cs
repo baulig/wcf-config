@@ -1,5 +1,5 @@
 //
-// HttpBindingBaseModule.cs
+// HttpBindingBaseValue.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -31,11 +31,7 @@ using System.ServiceModel;
 
 namespace Mono.ServiceModel.Configuration.Modules {
 	
-#if !MOBILE || MOBILE_BAULIG
 	public class HttpBindingBaseValue : Value<HttpBindingBase>
-#else
-	public class HttpBindingBaseValue : Value<BasicHttpBinding>
-#endif
 	{
 		public HttpBindingBaseValue ()
 		{

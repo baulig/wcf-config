@@ -49,7 +49,7 @@ namespace Mono.ServiceModel.Configuration.Modules {
 			AddAttribute (
 				"maxBufferSize", i => i.MaxBufferSize,
 				(i,v) => i.MaxBufferSize = v).SetMinMax ("1", int.MaxValue.ToString ());
-#if !MOBILE_FIXME
+#if !MOBILE
 			AddAttribute (
 				"decompressionEnabled", i => i.DecompressionEnabled,
 				(i,v) => i.DecompressionEnabled = v);

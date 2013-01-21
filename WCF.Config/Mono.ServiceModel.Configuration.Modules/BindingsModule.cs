@@ -1,5 +1,5 @@
 //
-// BindingModule.cs
+// BindingsModule.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -41,8 +41,8 @@ namespace Mono.ServiceModel.Configuration.Modules {
 		protected override void Populate ()
 		{
 			AddElement<BasicHttpBindingModule, BasicHttpBinding> ();
-#if !MOBILE || MOBILE_BAULIG
 			AddElement<BasicHttpsBindingModule, BasicHttpsBinding> ();
+#if !MOBILE
 			AddElement<NetTcpBindingModule, NetTcpBinding> ();
 #endif
 			AddElement<CustomBindingModule, CustomBinding> ();
