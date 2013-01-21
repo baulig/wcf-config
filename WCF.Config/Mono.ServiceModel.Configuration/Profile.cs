@@ -1,5 +1,5 @@
 //
-// Context.cs
+// Profile.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,45 +24,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.ServiceModel;
 
 namespace Mono.ServiceModel.Configuration {
 
-	public sealed class Context {
+	public abstract class Profile {
 
-		public Context (Profile profile)
-		{
-			this.Profile = profile;
-		}
-
-		List<ConfigurationError> errors = new List<ConfigurationError> ();
-
-		public Profile Profile {
+		public abstract string Name {
 			get;
-			private set;
 		}
 
-		public IEnumerable<ConfigurationError> Errors {
-			get { return errors.Where (e => !e.IsWarning); }
+		public static readonly Profile Default = new DefaultProfile ();
+		public static readonly Profile Mobile = new MobileProfile ();
+
+		class DefaultProfile : Profile {
+			public override string Name {
+				get { return "default"; }
+			}
 		}
 
-		public IEnumerable<ConfigurationError> Warnings {
-			get { return errors.Where (e => e.IsWarning); }
-		}
-
-		public bool HasErrors {
-			get { return errors.Any (e => !e.IsWarning); }
-		}
-
-		public bool HasWarnings {
-			get { return errors.Any (e => e.IsWarning); }
-		}
-
-		internal void AddError (string message, params object[] args)
-		{
-			errors.Add (new ConfigurationError (message, args));
+		class MobileProfile : Profile {
+			public override string Name {
+				get { return "mobile"; }
+			}
 		}
 	}
 }

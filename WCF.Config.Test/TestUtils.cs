@@ -50,7 +50,8 @@ namespace WCF.Config.Test {
 
 		public static void Deserialize (string xmlFilename, string xsdFilename)
 		{
-			var config = new Configuration (Context.Default, xmlFilename, xsdFilename);
+			var context = new Context (Profile.Default);
+			var config = new Configuration (context, xmlFilename, xsdFilename);
 			Console.WriteLine ("READ CONFIG FROM XML");
 			
 			DebugUtils.Dump (config);

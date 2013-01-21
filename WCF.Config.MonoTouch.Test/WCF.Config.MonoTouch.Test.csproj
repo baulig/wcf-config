@@ -81,8 +81,10 @@
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
-    <Reference Include="monotouch" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="monotouch, Version=0.0.0.0, Culture=neutral, PublicKeyToken=84e04ff9cfb79065">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -118,12 +120,6 @@
     <InterfaceDefinition Include="WCF_Config_MonoTouch_TestViewController_iPad.xib" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <ProjectReference Include="..\WCF.Config.MonoTouch\WCF.Config.MonoTouch.csproj">
-      <Project>{03379936-1CA9-4CEF-82F9-162E8558452B}</Project>
-      <Name>WCF.Config.MonoTouch</Name>
-    </ProjectReference>
-  </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References" />
   </ItemGroup>
