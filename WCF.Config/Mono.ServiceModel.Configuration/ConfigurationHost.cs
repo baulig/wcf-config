@@ -45,9 +45,9 @@ namespace Mono.ServiceModel.Configuration {
 		Configuration config;
 		Context context;
 
-		private ConfigurationHost (Profile profile, string xmlFilename, string xsdFilename)
+		private ConfigurationHost (string xmlFilename, string xsdFilename)
 		{
-			context = new Context (profile);
+			context = new Context ();
 
 #if MOBILE
 			/*
@@ -124,7 +124,7 @@ namespace Mono.ServiceModel.Configuration {
 		public static void Install (string xmlFilename, string xsdFilename)
 		{
 			if (instance == null)
-				instance = new ConfigurationHost (Profile.Default, xmlFilename, xsdFilename);
+				instance = new ConfigurationHost (xmlFilename, xsdFilename);
 		}
 	}
 }

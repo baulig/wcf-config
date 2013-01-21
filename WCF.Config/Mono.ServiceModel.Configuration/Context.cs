@@ -32,17 +32,7 @@ namespace Mono.ServiceModel.Configuration {
 
 	public sealed class Context {
 
-		public Context (Profile profile)
-		{
-			this.Profile = profile;
-		}
-
 		List<ConfigurationError> errors = new List<ConfigurationError> ();
-
-		public Profile Profile {
-			get;
-			private set;
-		}
 
 		public IEnumerable<ConfigurationError> Errors {
 			get { return errors.Where (e => !e.IsWarning); }

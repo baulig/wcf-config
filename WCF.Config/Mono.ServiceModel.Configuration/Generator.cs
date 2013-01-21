@@ -68,7 +68,7 @@ namespace Mono.ServiceModel.Configuration {
 				stream.WriteLine ();
 			}
 
-			var context = new Context (Profile.Default);
+			var context = new Context ();
 
 			using (var stream = new StreamWriter (Utils.GetFilename (xmlFilename))) {
 				using (var writer = XmlWriter.Create (stream, settings)) {
