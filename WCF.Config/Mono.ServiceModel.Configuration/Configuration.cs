@@ -106,16 +106,16 @@ namespace Mono.ServiceModel.Configuration {
 			return list.AsReadOnly ();
 		}
 
-		public void Serialize (XmlWriter writer)
+		public void Serialize (Context context, XmlWriter writer)
 		{
-			Generator.RootModule.Serialize (writer, this);
+			Generator.RootModule.Serialize (context, writer, this);
 		}
 
 		public Configuration ()
 		{
 		}
 
-		public Configuration (string xmlFilename, string schemaFilename)
+		public Configuration (Context context, string xmlFilename, string schemaFilename)
 		{
 			deserialized = true;
 
@@ -135,7 +135,7 @@ namespace Mono.ServiceModel.Configuration {
 			settings.Schemas.Add (schema);
 
 			using (var xml = XmlReader.Create (Utils.GetFilename (xmlFilename), settings)) {
-				Generator.RootModule.Deserialize (xml, this);
+				Generator.RootModule.Deserialize (context, xml, this);
 			}
 		}
 

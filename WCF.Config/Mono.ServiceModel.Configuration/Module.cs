@@ -50,9 +50,9 @@ namespace Mono.ServiceModel.Configuration {
 
 		internal abstract XmlSchemaElement CreateSchemaElement (SchemaTypeMap map);
 
-		public abstract void Serialize (XmlWriter writer, object obj);
+		public abstract void Serialize (Context context, XmlWriter writer, object obj);
 
-		public abstract void Deserialize (XmlReader reader, object obj);
+		public abstract void Deserialize (Context context, XmlReader reader, object obj);
 	}
 
 	public abstract class Module<T> : Module
@@ -167,11 +167,28 @@ namespace Mono.ServiceModel.Configuration {
 		{
 		}
 
-		public override void Serialize (XmlWriter writer, object obj)
+		protected abstract bool IsSupported (Context context, T instance);
+
+		protected virtual void PreSerialize (Context context, T instance)
 		{
-			var instance = (T) obj;
+		}
+
+		protected virtual void PostDeserialize (Context context, T instance)
+		{
+		}
+
+		public override void Serialize (Context context, XmlWriter writer, object obj)
+		{
+			var instance = (T)obj;
 			if (IsDefault (instance))
 				return;
+
+			PreSerialize (context, instance);
+
+			if (!IsSupported (context, instance)) {
+				context.AddError ("Module '{0}' is not supported in current context.", Name);
+				return;
+			}
 
 			writer.WriteStartElement (Generator.Prefix, Name, Generator.Namespace);
 
@@ -188,19 +205,20 @@ namespace Mono.ServiceModel.Configuration {
 			}
 				
 			foreach (var element in Elements) {
-				element.Serialize (writer, instance);
+				element.Serialize (context, writer, instance);
 			}
 
 			writer.WriteEndElement ();
 		}
 
-		public override void Deserialize (XmlReader reader, object obj)
+		public override void Deserialize (Context context, XmlReader reader, object obj)
 		{
 			var instance = (T)obj;
-			Deserialize (reader, instance);
+			Deserialize (context, reader, instance);
+			PostDeserialize (context, instance);
 		}
 
-		void Deserialize (XmlReader reader, T instance)
+		void Deserialize (Context context, XmlReader reader, T instance)
 		{
 			bool empty = reader.IsEmptyElement;
 
@@ -226,7 +244,7 @@ namespace Mono.ServiceModel.Configuration {
 				}
 
 				var element = Elements.First (t => t.Module.Name.Equals (reader.LocalName));
-				element.Deserialize (reader, instance);
+				element.Deserialize (context, reader, instance);
 			} while (reader.MoveToContent () != XmlNodeType.EndElement);
 
 			reader.ReadEndElement ();

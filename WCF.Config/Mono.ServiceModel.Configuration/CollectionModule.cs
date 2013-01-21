@@ -53,21 +53,21 @@ namespace Mono.ServiceModel.Configuration {
 			{
 			}
 			
-			public override void Serialize (XmlWriter writer, Collection<T> instance)
+			public override void Serialize (Context context, XmlWriter writer, Collection<T> instance)
 			{
 				foreach (var item in instance) {
 					var value = item as V;
 					if (value == null)
 						continue;
-					Module.Serialize (writer, value);
+					Module.Serialize (context, writer, value);
 				}
 			}
 			
-			public override void Deserialize (XmlReader reader, Collection<T> instance)
+			public override void Deserialize (Context context, XmlReader reader, Collection<T> instance)
 			{
 				var item = new V ();
 				instance.Add (item);
-				Module.Deserialize (reader, item);
+				Module.Deserialize (context, reader, item);
 			}
 		}
 
@@ -90,6 +90,11 @@ namespace Mono.ServiceModel.Configuration {
 				sequence.Items.Add (item);
 			}
 			type.Particle = sequence;
+		}
+
+		protected override bool IsSupported (Context context, Collection<T> instance)
+		{
+			return true;
 		}
 	}
 }

@@ -69,6 +69,13 @@ namespace Mono.ServiceModel.Configuration.Modules {
 
 			base.Populate ();
 		}
+
+		protected override bool IsSupported (Context context, NetTcpBinding instance)
+		{
+			if (!context.Check (instance.TransferMode))
+				return false;
+			return base.IsSupported (context, instance);
+		}
 	}
 
 }

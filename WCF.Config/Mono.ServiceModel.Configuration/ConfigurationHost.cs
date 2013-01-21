@@ -43,9 +43,12 @@ namespace Mono.ServiceModel.Configuration {
 	{
 		static ConfigurationHost instance;
 		Configuration config;
+		Context context;
 
-		private ConfigurationHost (string xmlFilename, string xsdFilename)
+		private ConfigurationHost (Context context, string xmlFilename, string xsdFilename)
 		{
+			this.context = context;
+
 #if MOBILE
 			/*
 			 * The Mono.ServiceModel.Configuration.IMonoConfigurationHost
@@ -82,7 +85,15 @@ namespace Mono.ServiceModel.Configuration {
 			
 			Console.WriteLine ("Custom configuration handler installed.");
 
-			config = new Configuration (xmlFilename, xsdFilename);
+			config = new Configuration (context, xmlFilename, xsdFilename);
+
+			foreach (var warning in context.Warnings)
+				Console.WriteLine ("WARNING: {0}", warning.Message);
+			foreach (var error in context.Errors)
+				Console.WriteLine ("ERROR: {0}", error.Message);
+
+			if (context.HasErrors)
+				Console.WriteLine ("Failed to load configuration!");
 
 			DebugUtils.Dump (config);
 			Console.WriteLine ("Configuration loaded.");
@@ -113,7 +124,7 @@ namespace Mono.ServiceModel.Configuration {
 		public static void Install (string xmlFilename, string xsdFilename)
 		{
 			if (instance == null)
-				instance = new ConfigurationHost (xmlFilename, xsdFilename);
+				instance = new ConfigurationHost (Context.Default, xmlFilename, xsdFilename);
 		}
 	}
 }

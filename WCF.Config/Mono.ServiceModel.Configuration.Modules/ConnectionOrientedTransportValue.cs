@@ -24,6 +24,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+using System.ServiceModel;
 using System.ServiceModel.Channels;
 
 namespace Mono.ServiceModel.Configuration.Modules {
@@ -55,6 +56,13 @@ namespace Mono.ServiceModel.Configuration.Modules {
 				"maxPendingConnections", i => i.MaxPendingConnections,
 				(i,v) => i.MaxPendingConnections = v).SetMinMax ("1", int.MaxValue.ToString ());
 			AddAttribute ("transferMode", i => i.TransferMode, (i,v) => i.TransferMode = v);
+		}
+
+		public override bool IsSupported (Context context, ConnectionOrientedTransportBindingElement instance)
+		{
+			if (!context.Check (instance.TransferMode))
+				return false;
+			return base.IsSupported (context, instance);
 		}
 
 	}

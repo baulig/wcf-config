@@ -61,6 +61,12 @@ namespace Mono.ServiceModel.Configuration {
 		IElementList<T> Elements {
 			get;
 		}
+
+		string Name {
+			get;
+		}
+
+		bool IsSupported (Context context, T instance);
 	}
 	
 	public abstract class Value<T> : IValue<T>, IAttributeList<T>, IElementList<T>
@@ -68,6 +74,10 @@ namespace Mono.ServiceModel.Configuration {
 	{
 		List<IElement<T>> elements = new List<IElement<T>> ();
 		List<IAttribute<T>> attributes = new List<IAttribute<T>> ();
+
+		public string Name {
+			get { return typeof (T).Name; }
+		}
 
 		protected void AddElement (IElement<T> element)
 		{
@@ -91,6 +101,11 @@ namespace Mono.ServiceModel.Configuration {
 			AddAttribute (attribute);
 			return attribute;
 		}
+
+		public virtual bool IsSupported (Context context, T instance)
+		{
+			return true;
+		}
 		
 		protected class ValueElement<U,V> : Element<T>
 			where U : Module<V>, new()
@@ -107,18 +122,18 @@ namespace Mono.ServiceModel.Configuration {
 				private set;
 			}
 			
-			public override void Serialize (XmlWriter writer, T instance)
+			public override void Serialize (Context context, XmlWriter writer, T instance)
 			{
 				var value = ValueGetter (instance);
 				if (value == null)
 					return;
 				
-				Module.Serialize (writer, value);
+				Module.Serialize (context, writer, value);
 			}
 			
-			public override void Deserialize (XmlReader reader, T instance)
+			public override void Deserialize (Context context, XmlReader reader, T instance)
 			{
-				Module.Deserialize (reader, ValueGetter (instance));
+				Module.Deserialize (context, reader, ValueGetter (instance));
 			}
 		}
 		

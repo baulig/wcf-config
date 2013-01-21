@@ -1,5 +1,5 @@
 //
-// TestUtils.cs
+// ConfigurationError.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -24,37 +24,37 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
-using System.ServiceModel;
-using System.ServiceModel.Description;
 
-using Mono.ServiceModel.Configuration;
+namespace Mono.ServiceModel.Configuration {
 
-namespace WCF.Config.Test {
+	public class ConfigurationError {
 
-	public static class TestUtils {
-#if !MOBILE
-		public static void GenerateFromWsdl (Uri uri, string wsdlFilename,
-		                                     string xmlFilename, string xsdFilename)
-		{
-			var doc = Utils.LoadMetadata (uri, wsdlFilename);
-			var importer = new WsdlImporter (doc);
-			var endpoints = importer.ImportAllEndpoints ();
-			
-			var config = new Configuration ();
-			foreach (var endpoint in endpoints)
-				config.AddEndpoint (endpoint);
-			
-			Generator.Write (xmlFilename, xsdFilename, config);
+		public string Message {
+			get;
+			private set;
 		}
-#endif
 
-		public static void Deserialize (string xmlFilename, string xsdFilename)
-		{
-			var config = new Configuration (Context.Default, xmlFilename, xsdFilename);
-			Console.WriteLine ("READ CONFIG FROM XML");
-			
-			DebugUtils.Dump (config);
+		public bool IsWarning {
+			get;
+			private set;
 		}
+
+		public ConfigurationError (string message, params object[] args)
+			: this (false, message, args)
+		{
+		}
+
+		public ConfigurationError (bool isWarning, string message, params object[] args)
+		{
+			this.IsWarning = isWarning;
+			this.Message = string.Format (message, args);
+		}
+
+		public override string ToString ()
+		{
+			return string.Format ("[ConfigurationError: Message={0}, IsWarning={1}]", Message, IsWarning);
+		}
+
 	}
 }
 

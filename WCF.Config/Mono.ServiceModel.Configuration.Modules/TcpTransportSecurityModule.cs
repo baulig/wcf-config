@@ -49,8 +49,8 @@ namespace Mono.ServiceModel.Configuration.Modules {
 		
 		public override bool IsDefault (TcpTransportSecurity instance)
 		{
-			return instance.ClientCredentialType == TcpClientCredentialType.None &&
-				instance.ProtectionLevel == ProtectionLevel.None;
+			return instance.ClientCredentialType == TcpClientCredentialType.Windows &&
+				instance.ProtectionLevel == ProtectionLevel.EncryptAndSign;
 		}
 	}
 	

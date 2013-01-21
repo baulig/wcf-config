@@ -162,5 +162,11 @@
     <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration.Modules\HttpTransportValue.cs">
       <Link>Mono.ServiceModel.Configuration.Modules\HttpTransportValue.cs</Link>
     </Compile>
+    <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration\Context.cs">
+      <Link>Mono.ServiceModel.Configuration\Context.cs</Link>
+    </Compile>
+    <Compile Include="..\WCF.Config\Mono.ServiceModel.Configuration\ConfigurationError.cs">
+      <Link>Mono.ServiceModel.Configuration\ConfigurationError.cs</Link>
+    </Compile>
   </ItemGroup>
 </Project>

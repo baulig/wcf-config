@@ -68,12 +68,23 @@ namespace Mono.ServiceModel.Configuration {
 				stream.WriteLine ();
 			}
 
+			var context = Context.Default;
+
 			using (var stream = new StreamWriter (Utils.GetFilename (xmlFilename))) {
 				using (var writer = XmlWriter.Create (stream, settings)) {
-					config.Serialize (writer);
+					config.Serialize (context, writer);
 					writer.WriteEndDocument ();
 				}
 				stream.WriteLine ();
+			}
+
+			foreach (var warning in context.Warnings)
+				Console.WriteLine ("WARNING: {0}", warning.Message);
+
+			if (context.HasErrors) {
+				foreach (var error in context.Errors)
+					Console.WriteLine ("ERROR: {0}", error.Message);
+				Console.WriteLine ("SERIALIZATION FAILED");
 			}
 		}
 

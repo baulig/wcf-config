@@ -39,9 +39,9 @@ namespace Mono.ServiceModel.Configuration {
 			get;
 		}
 		
-		void Serialize (XmlWriter writer, T instance);
+		void Serialize (Context context, XmlWriter writer, T instance);
 		
-		void Deserialize (XmlReader reader, T instance);
+		void Deserialize (Context context, XmlReader reader, T instance);
 	}
 
 	public abstract class Element<T> : IElement<T> {
@@ -56,9 +56,9 @@ namespace Mono.ServiceModel.Configuration {
 			private set;
 		}
 
-		public abstract void Serialize (XmlWriter writer, T instance);
+		public abstract void Serialize (Context context, XmlWriter writer, T instance);
 		
-		public abstract void Deserialize (XmlReader reader, T instance);
+		public abstract void Deserialize (Context context, XmlReader reader, T instance);
 
 		public Element (Module module, Type type)
 		{

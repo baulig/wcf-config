@@ -80,6 +80,8 @@
     <Compile Include="Mono.ServiceModel.Configuration.Modules\ConnectionOrientedTransportValue.cs" />
     <Compile Include="Mono.ServiceModel.Configuration.Modules\TcpTransportValue.cs" />
     <Compile Include="Mono.ServiceModel.Configuration.Modules\HttpTransportValue.cs" />
+    <Compile Include="Mono.ServiceModel.Configuration\Context.cs" />
+    <Compile Include="Mono.ServiceModel.Configuration\ConfigurationError.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

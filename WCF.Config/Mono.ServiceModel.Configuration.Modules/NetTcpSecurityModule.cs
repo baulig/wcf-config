@@ -49,6 +49,15 @@ namespace Mono.ServiceModel.Configuration.Modules {
 			var transport = Generator.GetModule<TcpTransportSecurityModule, TcpTransportSecurity> ();
 			return transport.IsDefault (instance.Transport);
 		}
+
+		protected override bool IsSupported (Context context, NetTcpSecurity instance)
+		{
+			if (instance.Mode != SecurityMode.None) {
+				context.AddError ("SecurityMode '{0}' is not supported.", instance.Mode);
+				return false;
+			}
+			return base.IsSupported (context, instance);
+		}
 		
 	}
 }

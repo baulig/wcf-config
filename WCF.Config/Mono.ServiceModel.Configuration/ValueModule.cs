@@ -85,6 +85,19 @@ namespace Mono.ServiceModel.Configuration {
 				type.Particle = all;
 			}
 		}
+
+		protected override bool IsSupported (Context context, T instance)
+		{
+			bool ok = true;
+			foreach (var value in values) {
+				if (value.IsSupported (context, instance))
+					continue;
+				context.AddError ("Value '{0}' is not supported in current context.", value.Name);
+				ok = false;
+			}
+
+			return ok;
+		}
 	}
 
 }

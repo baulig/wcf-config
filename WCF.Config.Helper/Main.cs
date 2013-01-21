@@ -34,6 +34,8 @@ using System.Xml.Schema;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
+using System.ServiceModel.Security;
+using System.Security.Cryptography.X509Certificates;
 
 using Mono.ServiceModel.Configuration;
 using Mono.ServiceModel.Configuration.Modules;
@@ -155,17 +157,19 @@ namespace WCF.Config.Helper {
 
 		static void TestClient ()
 		{
-#if FIXME
-			var netTcp = new NetTcpBinding (SecurityMode.Transport, false);
+			var netTcp = new NetTcpBinding (SecurityMode.TransportWithMessageCredential, false);
 			netTcp.TransferMode = TransferMode.Streamed;
-#endif
+			netTcp.Security.Transport.ClientCredentialType = TcpClientCredentialType.None;
 
-			var binding = new CustomBinding ();
-			binding.Elements.Add (new TextMessageEncodingBindingElement ());
-			binding.Elements.Add (new TcpTransportBindingElement ());
+			// var binding = new CustomBinding ();
+			// binding.Elements.Add (new TextMessageEncodingBindingElement ());
+			// binding.Elements.Add (new TcpTransportBindingElement ());
 
-			var address = new EndpointAddress ("net.tcp://192.168.16.101:8888/MyService/");
-			var client = new MyService.MyServiceClient (binding, address);
+			var address = new EndpointAddress ("net.tcp://provcon-faust:8888/MyService/");
+			var client = new MyService.MyServiceClient (netTcp, address);
+			var serviceAuth = client.ClientCredentials.ServiceCertificate.Authentication;
+			serviceAuth.CertificateValidationMode = X509CertificateValidationMode.PeerOrChainTrust;
+			serviceAuth.TrustedStoreLocation = StoreLocation.LocalMachine;
 			var hello = client.Hello ();
 			Console.WriteLine ("Got response from service: {0}", hello);
 		}
