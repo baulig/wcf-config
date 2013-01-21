@@ -32,7 +32,7 @@ using System.ServiceModel.Channels;
 
 namespace Mono.ServiceModel.Configuration.Modules {
 
-	public class CustomBindingModule : ValueModule<CustomBinding> {
+	class CustomBindingModule : ValueModule<CustomBinding> {
 
 		public override string Name {
 			get { return "customBinding"; }

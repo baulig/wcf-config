@@ -30,13 +30,13 @@ using System.Xml.Schema;
 
 namespace Mono.ServiceModel.Configuration {
 
-	public abstract class ValueSerializer {
+	abstract class ValueSerializer {
 
 		public abstract XmlQualifiedName GetSchemaType (SchemaTypeMap map);
 
 	}
 
-	public abstract class ValueSerializer<T> : ValueSerializer {
+	abstract class ValueSerializer<T> : ValueSerializer {
 
 		public abstract string Serialize (T instance);
 

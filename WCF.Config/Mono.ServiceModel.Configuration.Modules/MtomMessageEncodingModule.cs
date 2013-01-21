@@ -30,7 +30,7 @@ using System.ServiceModel.Channels;
 
 namespace Mono.ServiceModel.Configuration.Modules {
 	
-	public class MtomMessageEncodingModule : ValueModule<MtomMessageEncodingBindingElement> {
+	class MtomMessageEncodingModule : ValueModule<MtomMessageEncodingBindingElement> {
 		
 		public override string Name {
 			get { return "mtomMessageEncoding"; }

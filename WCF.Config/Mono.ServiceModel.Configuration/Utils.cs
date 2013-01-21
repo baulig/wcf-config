@@ -40,7 +40,7 @@ using WS = System.Web.Services.Description;
 
 namespace Mono.ServiceModel.Configuration {
 
-	public static class Utils {
+	static class Utils {
 
 		public static void Dump (string filename)
 		{

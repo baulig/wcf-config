@@ -28,7 +28,7 @@ using System.ServiceModel;
 
 namespace Mono.ServiceModel.Configuration.Modules {
 
-	public class HttpTransportSecurityModule : ValueModule<HttpTransportSecurity> {
+	class HttpTransportSecurityModule : ValueModule<HttpTransportSecurity> {
 		
 		public override string Name {
 			get { return "httpTransportSecurity"; }

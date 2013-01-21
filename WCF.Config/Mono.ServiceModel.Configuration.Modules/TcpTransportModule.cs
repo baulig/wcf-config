@@ -30,7 +30,7 @@ using System.ServiceModel.Channels;
 
 namespace Mono.ServiceModel.Configuration.Modules {
 	
-	public class TcpTransportModule : ValueModule<TcpTransportBindingElement> {
+	class TcpTransportModule : ValueModule<TcpTransportBindingElement> {
 		
 		public override string Name {
 			get { return "tcpTransport"; }

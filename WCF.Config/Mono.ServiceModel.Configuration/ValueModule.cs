@@ -39,7 +39,7 @@ namespace Mono.ServiceModel.Configuration {
 	 * not run on the device!
 	 * 
 	 */
-	public abstract class ValueModule<T> : Module<T>
+	abstract class ValueModule<T> : Module<T>
 		where T : class, new()
 	{
 		readonly List<IValue<T>> values = new List<IValue<T>> ();

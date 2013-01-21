@@ -32,7 +32,7 @@ using System.ServiceModel;
 
 namespace Mono.ServiceModel.Configuration.Modules {
 	
-	public class NetTcpBindingModule : ValueModule<NetTcpBinding> {
+	class NetTcpBindingModule : ValueModule<NetTcpBinding> {
 		
 		public override string Name {
 			get { return "netTcpBinding"; }

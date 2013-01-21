@@ -28,7 +28,7 @@ using System.ServiceModel.Channels;
 
 namespace Mono.ServiceModel.Configuration.Modules {
 
-	public class HttpTransportValue : Value<HttpTransportBindingElement> {
+	class HttpTransportValue : Value<HttpTransportBindingElement> {
 
 		public HttpTransportValue ()
 		{

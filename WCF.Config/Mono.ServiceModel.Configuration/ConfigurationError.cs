@@ -27,7 +27,7 @@ using System;
 
 namespace Mono.ServiceModel.Configuration {
 
-	public class ConfigurationError {
+	class ConfigurationError {
 
 		public string Message {
 			get;

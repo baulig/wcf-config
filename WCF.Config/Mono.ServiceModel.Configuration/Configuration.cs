@@ -37,7 +37,7 @@ using System.ServiceModel.Description;
 
 namespace Mono.ServiceModel.Configuration {
 
-	public class Configuration {
+	internal class Configuration {
 
 		bool deserialized;
 		Collection<Binding> bindings = new Collection<Binding> ();

@@ -32,7 +32,7 @@ using QName = System.Xml.XmlQualifiedName;
 
 namespace Mono.ServiceModel.Configuration {
 
-	public class SchemaTypeMap {
+	class SchemaTypeMap {
 
 		XmlSchema schema;
 		Dictionary<Type, XmlSchemaComplexType> moduleMap = new Dictionary<Type, XmlSchemaComplexType> ();

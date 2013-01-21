@@ -30,7 +30,7 @@ using System.ServiceModel;
 
 namespace Mono.ServiceModel.Configuration.Modules {
 	
-	public class TcpTransportSecurityModule : ValueModule<TcpTransportSecurity> {
+	class TcpTransportSecurityModule : ValueModule<TcpTransportSecurity> {
 		
 		public override string Name {
 			get { return "tcpTransportSecurity"; }

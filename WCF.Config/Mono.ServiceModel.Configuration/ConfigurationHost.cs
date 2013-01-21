@@ -36,7 +36,7 @@ namespace Mono.ServiceModel.Configuration {
 	/*
 	 * Mono-only class.
 	 */
-	public class ConfigurationHost
+	class ConfigurationHost
 #if MOBILE
 		: IMonoConfigurationHost
 #endif

@@ -33,7 +33,7 @@ using System.ServiceModel;
 
 namespace Mono.ServiceModel.Configuration {
 
-	public abstract class Module {
+	abstract class Module {
 
 		protected Module ()
 		{
@@ -55,7 +55,7 @@ namespace Mono.ServiceModel.Configuration {
 		public abstract void Deserialize (Context context, XmlReader reader, object obj);
 	}
 
-	public abstract class Module<T> : Module
+	abstract class Module<T> : Module
 		where T : class, new()
 	{
 		List<IElement<T>> elements;

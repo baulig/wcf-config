@@ -31,7 +31,7 @@ using System.ServiceModel.Channels;
 
 namespace Mono.ServiceModel.Configuration.Modules {
 
-	public class MessageVersionSerializer : ValueSerializer<MessageVersion> {
+	class MessageVersionSerializer : ValueSerializer<MessageVersion> {
 
 		public override MessageVersion Deserialize (string text)
 		{

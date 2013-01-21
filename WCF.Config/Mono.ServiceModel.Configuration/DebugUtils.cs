@@ -29,7 +29,7 @@ using System.ServiceModel.Channels;
 
 namespace Mono.ServiceModel.Configuration {
 
-	public static class DebugUtils {
+	static class DebugUtils {
 		public static void Dump (Configuration config)
 		{
 			foreach (var binding in config.Bindings) {

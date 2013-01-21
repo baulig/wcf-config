@@ -30,7 +30,7 @@ using System.ServiceModel;
 
 namespace Mono.ServiceModel.Configuration {
 
-	public sealed class Context {
+	sealed class Context {
 
 		List<ConfigurationError> errors = new List<ConfigurationError> ();
 

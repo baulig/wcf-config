@@ -31,7 +31,7 @@ using System.ServiceModel;
 
 namespace Mono.ServiceModel.Configuration.Modules {
 
-	public class BasicHttpBindingModule : ValueModule<BasicHttpBinding> {
+	class BasicHttpBindingModule : ValueModule<BasicHttpBinding> {
 
 		public override string Name {
 			get { return "basicHttpBinding"; }

@@ -30,7 +30,7 @@ using System.ServiceModel.Channels;
 
 namespace Mono.ServiceModel.Configuration.Modules {
 
-	public class ConnectionOrientedTransportValue : Value<ConnectionOrientedTransportBindingElement> {
+	class ConnectionOrientedTransportValue : Value<ConnectionOrientedTransportBindingElement> {
 
 		public ConnectionOrientedTransportValue ()
 		{

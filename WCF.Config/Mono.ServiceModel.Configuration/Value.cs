@@ -32,7 +32,7 @@ using System.Collections.Generic;
 
 namespace Mono.ServiceModel.Configuration {
 
-	public interface IAttributeList<in T> {
+	interface IAttributeList<in T> {
 		int Count {
 			get;
 		}
@@ -42,7 +42,7 @@ namespace Mono.ServiceModel.Configuration {
 		}
 	}
 	
-	public interface IElementList<in T> {
+	interface IElementList<in T> {
 		int Count {
 			get;
 		}
@@ -52,7 +52,7 @@ namespace Mono.ServiceModel.Configuration {
 		}
 	}
 	
-	public interface IValue<in T>
+	interface IValue<in T>
 	{
 		IAttributeList<T> Attributes {
 			get;
@@ -69,7 +69,7 @@ namespace Mono.ServiceModel.Configuration {
 		bool IsSupported (Context context, T instance);
 	}
 	
-	public abstract class Value<T> : IValue<T>, IAttributeList<T>, IElementList<T>
+	abstract class Value<T> : IValue<T>, IAttributeList<T>, IElementList<T>
 		where T : class
 	{
 		List<IElement<T>> elements = new List<IElement<T>> ();

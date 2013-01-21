@@ -32,7 +32,7 @@ using System.ServiceModel.Channels;
 
 namespace Mono.ServiceModel.Configuration.Modules {
 
-	public class BindingValue : Value<Binding>
+	class BindingValue : Value<Binding>
 	{
 		public BindingValue ()
 		{

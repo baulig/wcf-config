@@ -37,7 +37,7 @@ namespace Mono.ServiceModel.Configuration {
 
 	using Modules;
 
-	public static class Generator {
+	internal static class Generator {
 		static readonly XmlSchema schema;
 		static readonly RootModule rootModule;
 		static readonly Dictionary<Type, Module> moduleMap;

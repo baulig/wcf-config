@@ -31,7 +31,7 @@ using System.ServiceModel;
 
 namespace Mono.ServiceModel.Configuration.Modules {
 	
-	public class HttpBindingBaseValue : Value<HttpBindingBase>
+	class HttpBindingBaseValue : Value<HttpBindingBase>
 	{
 		public HttpBindingBaseValue ()
 		{

@@ -29,7 +29,7 @@ using System.ServiceModel.Channels;
 
 namespace Mono.ServiceModel.Configuration.Modules {
 	
-	public class HttpTransportModule : ValueModule<HttpTransportBindingElement> {
+	class HttpTransportModule : ValueModule<HttpTransportBindingElement> {
 
 		public override string Name {
 			get { return "httpTransport"; }

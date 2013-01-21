@@ -30,7 +30,7 @@ using System.Xml.Schema;
 
 namespace Mono.ServiceModel.Configuration {
 
-	public interface IAttribute<in T> {
+	interface IAttribute<in T> {
 		string Name {
 			get;
 		}
@@ -52,7 +52,7 @@ namespace Mono.ServiceModel.Configuration {
 		string Serialize (T instance);
 	}
 
-	public abstract class Attribute<T> : IAttribute<T> {
+	abstract class Attribute<T> : IAttribute<T> {
 
 		public string Name {
 			get;
@@ -106,7 +106,7 @@ namespace Mono.ServiceModel.Configuration {
 		}
 	}
 
-	public class Attribute<T,U> : Attribute<T>
+	class Attribute<T,U> : Attribute<T>
 	{
 		public Attribute (string name, Func<T, U> getter, Action<T, U> setter)
 			: this (name, false, getter, setter)

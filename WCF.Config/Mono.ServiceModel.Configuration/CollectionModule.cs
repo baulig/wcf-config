@@ -42,7 +42,7 @@ namespace Mono.ServiceModel.Configuration {
 	 * not run on the device!
 	 * 
 	 */
-	public abstract class CollectionModule<T> : Module<Collection<T>>
+	abstract class CollectionModule<T> : Module<Collection<T>>
 	{
 		protected class CollectionElement<U,V> : Element<Collection<T>>
 			where U : Module<V>, new()

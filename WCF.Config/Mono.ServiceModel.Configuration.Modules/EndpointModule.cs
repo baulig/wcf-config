@@ -32,7 +32,7 @@ using System.ServiceModel.Description;
 
 namespace Mono.ServiceModel.Configuration.Modules {
 
-	public class EndpointModule : ValueModule<Endpoint> {
+	class EndpointModule : ValueModule<Endpoint> {
 
 		public override string Name {
 			get { return "endpoint"; }

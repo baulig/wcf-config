@@ -29,7 +29,7 @@ using System.ServiceModel;
 
 namespace Mono.ServiceModel.Configuration.Modules {
 	
-	public class NetTcpSecurityModule : ValueModule<NetTcpSecurity> {
+	class NetTcpSecurityModule : ValueModule<NetTcpSecurity> {
 		
 		public override string Name {
 			get { return "netTcpSecurity"; }

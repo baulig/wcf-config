@@ -28,7 +28,7 @@ using System.ServiceModel;
 
 namespace Mono.ServiceModel.Configuration.Modules {
 
-	public class BasicHttpSecurityModule : ValueModule<BasicHttpSecurity> {
+	class BasicHttpSecurityModule : ValueModule<BasicHttpSecurity> {
 
 		public override string Name {
 			get { return "httpSecurity"; }

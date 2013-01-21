@@ -28,7 +28,7 @@ using System.ServiceModel.Description;
 
 namespace Mono.ServiceModel.Configuration {
 
-	public class Endpoint {
+	class Endpoint {
 
 		public string Name {
 			get; set;

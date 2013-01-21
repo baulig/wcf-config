@@ -33,7 +33,7 @@ using QName = System.Xml.XmlQualifiedName;
 
 namespace Mono.ServiceModel.Configuration.Modules {
 
-	public class RootModule : ValueModule<Configuration> {
+	class RootModule : ValueModule<Configuration> {
 		public override string Name {
 			get { return "wcf-config"; }
 		}
