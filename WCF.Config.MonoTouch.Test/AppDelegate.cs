@@ -32,9 +32,10 @@ using System.Linq;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 
+#if FIXME
 using WCF.Config.Test;
-
 using C = Mono.ServiceModel.Configuration;
+#endif
 
 namespace WCF.Config.MonoTouch.Test {
 	// The UIApplicationDelegate for the application. This class is responsible for launching the 
@@ -69,6 +70,12 @@ namespace WCF.Config.MonoTouch.Test {
 
 		static void Run ()
 		{
+			TestGenerics.Run ();
+		}
+
+#if FIXME
+		static void Run ()
+		{
 			BindingTests.Run ("test.xml", "test.xsd");
 			TestUtils.Deserialize ("test.xml", "test.xsd");
 			TestService ();
@@ -91,6 +98,7 @@ namespace WCF.Config.MonoTouch.Test {
 			var hello = client.Hello ();
 			Console.WriteLine ("Got response from service: {0}", hello);
 		}
+#endif
 	}
 }
 

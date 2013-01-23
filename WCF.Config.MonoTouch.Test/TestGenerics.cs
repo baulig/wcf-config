@@ -1,5 +1,5 @@
 //
-// TestUtils.cs
+// TestGenerics.cs
 //
 // Author:
 //       Martin Baulig <martin.baulig@xamarin.com>
@@ -23,41 +23,36 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-#if FIXME
 using System;
-using System.ServiceModel;
-using System.ServiceModel.Description;
 
-using Mono.ServiceModel.Configuration;
+namespace WCF.Config.MonoTouch.Test {
 
-namespace WCF.Config.Test {
+	public interface IFoo<T> {
+		void SomeMethod (T t);
+	}
 
-	public static class TestUtils {
-#if !MOBILE
-		public static void GenerateFromWsdl (Uri uri, string wsdlFilename,
-		                                     string xmlFilename, string xsdFilename)
+	public class Generic {
+
+		public void Test<T> (IFoo<T> foo, T t)
 		{
-			var doc = Utils.LoadMetadata (uri, wsdlFilename);
-			var importer = new WsdlImporter (doc);
-			var endpoints = importer.ImportAllEndpoints ();
-			
-			var config = new Configuration ();
-			foreach (var endpoint in endpoints)
-				config.AddEndpoint (endpoint);
-			
-			Generator.Write (xmlFilename, xsdFilename, config);
+			foo.SomeMethod (t);
 		}
-#endif
 
-		public static void Deserialize (string xmlFilename, string xsdFilename)
+	}
+
+	public static class TestGenerics {
+		public static void Run ()
 		{
-			var context = new Context ();
-			var config = new Configuration (context, xmlFilename, xsdFilename);
-			Console.WriteLine ("READ CONFIG FROM XML");
-			
-			DebugUtils.Dump (config);
+			var generic = new Generic ();
+			generic.Test (new Foo (), "Hello World");
+		}
+	}
+
+	public class Foo : IFoo<string> {
+		public void SomeMethod (string t)
+		{
+			Console.WriteLine (t);
 		}
 	}
 }
 
-#endif

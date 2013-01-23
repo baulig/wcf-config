@@ -41,10 +41,4 @@
     <Compile Include="BindingTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <ProjectReference Include="..\WCF.Config\WCF.Config.csproj">
-      <Project>{2720F0E6-84F7-4D89-83AD-568D6423522A}</Project>
-      <Name>WCF.Config</Name>
-    </ProjectReference>
-  </ItemGroup>
 </Project>

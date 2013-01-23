@@ -39,7 +39,9 @@ using System.Security.Cryptography.X509Certificates;
 
 using Mono.ServiceModel.Configuration;
 using Mono.ServiceModel.Configuration.Modules;
+#if FIXME
 using WCF.Config.Test;
+#endif
 using Mono.Options;
 
 namespace WCF.Config.Helper {

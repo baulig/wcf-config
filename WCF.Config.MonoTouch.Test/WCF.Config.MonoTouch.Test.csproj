@@ -82,9 +82,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceModel" />
-    <Reference Include="monotouch, Version=0.0.0.0, Culture=neutral, PublicKeyToken=84e04ff9cfb79065">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
+    <Reference Include="monotouch" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -114,6 +112,7 @@
     <Compile Include="..\WCF.Config.Test\TestUtils.cs">
       <Link>WCF.Config.Test\TestUtils.cs</Link>
     </Compile>
+    <Compile Include="TestGenerics.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="WCF_Config_MonoTouch_TestViewController_iPhone.xib" />
